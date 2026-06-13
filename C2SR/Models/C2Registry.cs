@@ -6,7 +6,7 @@ namespace C2SR.Models
     {
         public C2Registry()
         {
-            mainKey = Registry.CurrentUser.CreateSubKey(@"Software\Cytus II Rating");
+            mainKey = Registry.CurrentUser.CreateSubKey(@"Software\Cytus II Skill Rate");
             settingsKey = mainKey.CreateSubKey("Settings");
             isDisposed = false;
         }

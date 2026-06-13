@@ -1,4 +1,5 @@
 ﻿using C2SR.Models;
+using C2SR.Views;
 using System.Windows;
 
 namespace C2SR
@@ -20,10 +21,9 @@ namespace C2SR
                 fileName = string.Empty;
             }
 
+            C2Registry reg = new();
             try
             {
-                var reg = RegistryLoader.Instance;
-
                 // TODO
 
                 MainWindow view = new(fileName);
@@ -35,12 +35,10 @@ namespace C2SR
                 Shutdown(-1);
                 return;
             }
-        }
-
-        private void Application_Exit(object sender, ExitEventArgs e)
-        {
-            // Dispose singleton instances at the end of application
-            RegistryLoader.Instance.Dispose();
+            finally
+            {
+                reg.Dispose();
+            }
         }
     }
 }

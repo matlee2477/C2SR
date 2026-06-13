@@ -93,36 +93,36 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant}" HorizontalAlignment="Center"
-                                           Foreground="{Binding LevelConstantColor}" FontWeight="{Binding LevelConstantFontWeight}"/>
+                                           Foreground="{Binding LevelConstantBrush}" FontWeight="{Binding LevelConstantFontWeight}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="MM">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMillionMaster}" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsMM}" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="TP">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Padding="0 0 2 0" Text="{Binding TechnicalPoint}" Width="50" HorizontalContentAlignment="Right"/>
+                                <TextBox Padding="0 0 2 0" Text="{Binding TP}" Width="50" HorizontalContentAlignment="Right"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="MxM">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMaxMaster}" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsMxm}" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Rate">
+                    <GridViewColumn Header="Skill Rate">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Rate}" HorizontalAlignment="Center"
-                                           FontWeight="{Binding RateFontWeight}"/>
+                                <TextBlock Padding="0 0 2 0" Text="{Binding SkillRate}" HorizontalAlignment="Center"
+                                           FontWeight="{Binding SkillRateFontWeight}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

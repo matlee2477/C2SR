@@ -2,10 +2,14 @@
 {
     public interface IUndoableCommand
     {
-        // Executes the command.
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
         void Execute();
 
-        // Reverts the effects of Execute.
+        /// <summary>
+        /// Reverts the effects of Execute.
+        /// </summary>
         void Unexecute();
     }
 }

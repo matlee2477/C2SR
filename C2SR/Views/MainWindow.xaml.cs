@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
+﻿using C2SR.Models;
+using C2SR.ViewModels;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace C2SR.Views
 {
@@ -9,9 +12,55 @@ namespace C2SR.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(string fileName)
         {
             InitializeComponent();
+
+            // Set view model
+            vm = new(this);
+            DataContext = vm;
+
+            // Set shortcuts
+            {
+                KeyGesture newCommandGesture = new(Key.N, ModifierKeys.Control);
+                KeyGesture loadCommandGesture = new(Key.O, ModifierKeys.Control);
+                KeyGesture saveCommandGesture = new(Key.S, ModifierKeys.Control);
+                KeyGesture saveAsCommandGesture = new(Key.S, ModifierKeys.Control | ModifierKeys.Shift);
+                KeyGesture undoCommandGesture = new(Key.Z, ModifierKeys.Control);
+                KeyGesture redoCommandGesture = new(Key.Y, ModifierKeys.Control);
+                KeyGesture cutCommandGesture = new(Key.X, ModifierKeys.Control);
+                KeyGesture copyCommandGesture = new(Key.C, ModifierKeys.Control);
+                KeyGesture pasteCommandGesture = new(Key.V, ModifierKeys.Control);
+                KeyGesture setSelectionCommandGesture = new(Key.T, ModifierKeys.Control);
+                KeyGesture deleteSelectionCommandGesture = new(Key.Delete);
+                KeyGesture selectAllCommandGesture = new(Key.A, ModifierKeys.Control);
+                KeyGesture clearCommandGesture = new(Key.Delete, ModifierKeys.Control);
+                KeyGesture exitCommandGesture = new(Key.F4, ModifierKeys.Alt);
+                InputBindings.Add(new InputBinding(vm.InitializeCommand, newCommandGesture));
+                InputBindings.Add(new InputBinding(vm.LoadCommand, loadCommandGesture));
+                InputBindings.Add(new InputBinding(vm.SaveCommand, saveCommandGesture));
+                InputBindings.Add(new InputBinding(vm.SaveAsCommand, saveAsCommandGesture));
+                InputBindings.Add(new InputBinding(vm.UndoCommand, undoCommandGesture));
+                InputBindings.Add(new InputBinding(vm.RedoCommand, redoCommandGesture));
+                InputBindings.Add(new InputBinding(vm.CutCommand, cutCommandGesture));
+                InputBindings.Add(new InputBinding(vm.CopyCommand, copyCommandGesture));
+                InputBindings.Add(new InputBinding(vm.PasteCommand, pasteCommandGesture));
+                InputBindings.Add(new InputBinding(vm.SetSelectionCommand, setSelectionCommandGesture));
+                InputBindings.Add(new InputBinding(vm.DeleteSelectionCommand, deleteSelectionCommandGesture));
+                InputBindings.Add(new InputBinding(vm.SelectAllCommand, selectAllCommandGesture));
+                InputBindings.Add(new InputBinding(vm.ClearCommand, clearCommandGesture));
+                InputBindings.Add(new InputBinding(vm.ExitCommand, exitCommandGesture));
+            }
+
+            // Load registry
+            {
+                C2Registry reg = new();
+                Left = reg.WindowLeft;
+                Top = reg.WindowTop;
+                Width = reg.WindowWidth;
+                Height = reg.WindowHeight;
+                WindowState = reg.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+            }
         }
 
         // Fields
@@ -26,7 +75,7 @@ namespace C2SR.Views
         // Event Handlers
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            vm.SelectedSongs = listView.SelectedItems.Cast<Cytus2SongViewModel>();
+            vm.SelectedSongs = listView.SelectedItems.Cast<C2SongViewModel>();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -38,7 +87,7 @@ namespace C2SR.Views
         private void Window_Closed(object sender, EventArgs e)
         {
             // Save registry
-            var reg = RegistryLoader.Instance;
+            C2Registry reg = new();
             reg.WindowLeft = (int)Left;
             reg.WindowTop = (int)Top;
             reg.WindowWidth = (int)Width;

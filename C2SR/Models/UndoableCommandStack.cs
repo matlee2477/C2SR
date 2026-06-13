@@ -23,11 +23,6 @@
             redoStack.Clear();
         }
 
-        public void AddRedoCommand(IUndoableCommand command)
-        {
-            redoStack.Push(command);
-        }
-
         public void Undo()
         {
             if (CanUndo)

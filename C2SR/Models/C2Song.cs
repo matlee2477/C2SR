@@ -2,7 +2,7 @@
 {
     class C2Song
     {
-        public C2Song(int id, string name, string artist, int chapter, int chartType, decimal level, decimal levelConstant)
+        public C2Song(int id, string name, string artist, string chapter, string chartType, decimal level, decimal levelConstant)
         {
             ID = id;
             Name = name;
@@ -20,8 +20,8 @@
         public int ID { get; }
         public string Name { get; }
         public string Artist { get; }
-        public int Chapter { get; }
-        public int ChartType { get; }
+        public string Chapter { get; }
+        public string ChartType { get; }
         public decimal Level { get; }
         public decimal LevelConstant { get; }
 
@@ -29,13 +29,13 @@
         public decimal TP { get; set; }
         public bool IsMxm { get; set; }
 
-        public decimal Rate
+        public decimal SkillRate
         {
             get
             {
-                decimal rate = Math.Floor(TP * LevelConstant * 10) / 1000;
+                decimal rate = TP * LevelConstant / 100;
                 if (IsMM) rate += 0.3m;
-                if (TP == 100m) rate += 0.2m;
+                if (TP == 100) rate += 0.2m;
                 return rate;
             }
         }
