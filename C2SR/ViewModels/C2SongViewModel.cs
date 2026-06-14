@@ -13,8 +13,6 @@ namespace C2SR.ViewModels
             Song = song;
         }
 
-        // Fields
-
         #region Properties
         public C2Song Song { get; }
 

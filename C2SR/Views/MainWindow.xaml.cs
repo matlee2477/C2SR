@@ -16,7 +16,6 @@ namespace C2SR.Views
         {
             InitializeComponent();
 
-            // Set view model
             vm = new(this);
             DataContext = vm;
 

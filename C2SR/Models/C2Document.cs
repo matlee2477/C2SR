@@ -51,10 +51,9 @@ namespace C2SR.Models
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonObject obj in arr.OfType<JsonObject>())
                 {
-                    string name = obj["name"]!.GetValue<string>();
-                    string artist = obj["artist"]!.GetValue<string>();
+                    long id = obj["ID"]!.GetValue<long>();
 
-                    C2Song? song = Songs.FirstOrDefault(s => s.Name == name && s.Artist == artist);
+                    C2Song? song = Songs.FirstOrDefault(s => s.ID == id);
                     if (song != null)
                     {
                         song.IsMM = obj["MM"]!.GetValue<bool>();

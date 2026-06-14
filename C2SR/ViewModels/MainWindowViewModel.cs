@@ -16,7 +16,9 @@ namespace C2SR.ViewModels
             doc = C2Document.Instance;
             songs = [];
             clipboard = [];
+            SelectedSongs = [];
 
+            // Set commands
             InitializeCommand = new(Initialize);
             LoadCommand = new(Load);
             SaveCommand = new(Save);
@@ -34,8 +36,6 @@ namespace C2SR.ViewModels
             ViewResultsCommand = new(ViewResults);
             AboutCommand = new(About);
             ExitCommand = new(Exit);
-
-            SelectedSongs = [];
         }
 
         // Fields
