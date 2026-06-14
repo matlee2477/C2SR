@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace C2SR.Models
+namespace C2SR.Services
 {
     public class UndoableCommandCollection : IUndoableCommand, ICollection<IUndoableCommand>
     {

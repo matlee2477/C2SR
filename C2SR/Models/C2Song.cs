@@ -2,11 +2,13 @@
 {
     class C2Song
     {
-        public C2Song(int id, string name, string artist, string chapter, string chartType, decimal level, decimal levelConstant)
+        public C2Song(long id, string name, string artist, decimal bpm, string version, string chapter, string chartType, decimal level, decimal levelConstant)
         {
             ID = id;
             Name = name;
             Artist = artist;
+            Bpm = bpm;
+            Version = version;
             Chapter = chapter;
             ChartType = chartType;
             Level = level;
@@ -17,9 +19,11 @@
         }
 
         // Properties
-        public int ID { get; }
+        public long ID { get; }
         public string Name { get; }
         public string Artist { get; }
+        public decimal Bpm { get; }
+        public string Version { get; }
         public string Chapter { get; }
         public string ChartType { get; }
         public decimal Level { get; }

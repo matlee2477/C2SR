@@ -1,4 +1,4 @@
-﻿using C2SR.Models;
+﻿using C2SR.Services;
 using C2SR.ViewModels;
 using System.ComponentModel;
 using System.Windows;
@@ -16,8 +16,12 @@ namespace C2SR.Views
         {
             InitializeComponent();
 
-            vm = new(this);
+            C2DialogService dialogService = new(this);
+            vm = new(dialogService);
             DataContext = vm;
+            vm.Initialize(fileName);
+            vm.SelectAllExecuted += (s, e) => listView.SelectAll();
+            vm.ExitExecuted += (s, e) => Close();
 
             // Set shortcuts
             {
@@ -30,12 +34,12 @@ namespace C2SR.Views
                 KeyGesture cutCommandGesture = new(Key.X, ModifierKeys.Control);
                 KeyGesture copyCommandGesture = new(Key.C, ModifierKeys.Control);
                 KeyGesture pasteCommandGesture = new(Key.V, ModifierKeys.Control);
-                KeyGesture setSelectionCommandGesture = new(Key.T, ModifierKeys.Control);
+                KeyGesture setSelectionCommandGesture = new(Key.F2);
                 KeyGesture deleteSelectionCommandGesture = new(Key.Delete);
                 KeyGesture selectAllCommandGesture = new(Key.A, ModifierKeys.Control);
                 KeyGesture clearCommandGesture = new(Key.Delete, ModifierKeys.Control);
                 KeyGesture exitCommandGesture = new(Key.F4, ModifierKeys.Alt);
-                InputBindings.Add(new InputBinding(vm.InitializeCommand, newCommandGesture));
+                InputBindings.Add(new InputBinding(vm.NewDocumentCommand, newCommandGesture));
                 InputBindings.Add(new InputBinding(vm.LoadCommand, loadCommandGesture));
                 InputBindings.Add(new InputBinding(vm.SaveCommand, saveCommandGesture));
                 InputBindings.Add(new InputBinding(vm.SaveAsCommand, saveAsCommandGesture));
@@ -53,7 +57,7 @@ namespace C2SR.Views
 
             // Load registry
             {
-                C2Registry reg = new();
+                using C2RegistryService reg = new();
                 Left = reg.WindowLeft;
                 Top = reg.WindowTop;
                 Width = reg.WindowWidth;
@@ -64,12 +68,6 @@ namespace C2SR.Views
 
         // Fields
         readonly MainWindowViewModel vm;
-
-        // Methods
-        public void SelectAll()
-        {
-            listView.SelectAll();
-        }
 
         // Event Handlers
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -86,7 +84,7 @@ namespace C2SR.Views
         private void Window_Closed(object sender, EventArgs e)
         {
             // Save registry
-            C2Registry reg = new();
+            using C2RegistryService reg = new();
             reg.WindowLeft = (int)Left;
             reg.WindowTop = (int)Top;
             reg.WindowWidth = (int)Width;

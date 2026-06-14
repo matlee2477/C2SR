@@ -1,25 +1,25 @@
 ﻿using C2SR.Models;
+using C2SR.Services;
 using C2SR.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json.Nodes;
 using System.Windows;
 
 namespace C2SR.ViewModels
 {
     class MainWindowViewModel : ObservableObject
     {
-        public MainWindowViewModel(MainWindow view)
+        public MainWindowViewModel(IDialogService dialogService)
         {
-            this.view = view;
             doc = C2Document.Instance;
             songs = [];
             clipboard = [];
-            SelectedSongs = [];
+            this.dialogService = dialogService;
 
-            // Set commands
-            InitializeCommand = new(Initialize);
+            NewDocumentCommand = new(NewDocument);
             LoadCommand = new(Load);
             SaveCommand = new(Save);
             SaveAsCommand = new(SaveAs);
@@ -33,17 +33,19 @@ namespace C2SR.ViewModels
             DeleteSelectionCommand = new(DeleteSelection, CanEdit);
             SelectAllCommand = new(SelectAll);
             ClearCommand = new(Clear);
-            ViewResultsCommand = new(ViewResults);
+            ViewStatisticsCommand = new(ViewStatistics);
             AboutCommand = new(About);
             ExitCommand = new(Exit);
+
+            SelectedSongs = [];
         }
 
         // Fields
-        readonly MainWindow view;
         readonly C2Document doc;
         readonly ObservableCollection<C2SongViewModel> songs;
         readonly UndoableCommandStack undoStack = UndoableCommandStack.Instance;
         C2ClipboardField[] clipboard;
+        readonly IDialogService dialogService;
 
         #region Properties
         public IEnumerable<C2SongViewModel> Songs => songs;
@@ -101,12 +103,70 @@ namespace C2SR.ViewModels
 
         #endregion
 
+        // Events
+        public event EventHandler? SelectAllExecuted;
+        public event EventHandler? ExitExecuted;
+
         #region Methods
+        public void Initialize(string fileName)
+        {
+            // Load song data
+            {
+                try
+                {
+                    using FileStream fs = new(".\\data\\songs.json", FileMode.Open, FileAccess.Read);
+                    using StreamReader reader = new(fs);
+                    string code = reader.ReadToEnd();
+
+                    JsonArray arr = JsonNode.Parse(code)!.AsArray();
+                    foreach (JsonObject obj in arr.OfType<JsonObject>())
+                    {
+                        if (obj.ContainsKey("comment")) continue;
+
+                        long id = obj["ID"]!.GetValue<long>();
+                        string name = obj["name"]!.GetValue<string>();
+                        string artist = obj["artist"]!.GetValue<string>();
+                        decimal bpm = obj["BPM"]!.GetValue<decimal>();
+                        string version = obj["version"]!.GetValue<string>();
+                        string chapter = obj["chapter"]!.GetValue<string>();
+                        string chartType = obj["chart"]!.GetValue<string>();
+                        decimal level = obj["level"]!.GetValue<decimal>();
+                        decimal levelConstant = obj["const"]!.GetValue<decimal>();
+
+                        C2SongViewModel song = new(new(id, name, artist, bpm, version, chapter, chartType, level, levelConstant));
+                        song.MMChanging += C2SongViewModel_MMChanging;
+                        song.TPChanging += C2SongViewModel_TPChanging;
+                        song.MxmChanging += C2SongViewModel_MxmChanging;
+                        song.MMChanged += C2SongViewModel_PropertyChanged;
+                        song.TPChanged += C2SongViewModel_TPChanged;
+                        song.MxmChanged += C2SongViewModel_MxmChanged;
+                        songs.Add(song);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("An error occurred while loading the game data.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            // Load document
+            {
+                if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+                {
+                    doc.Load(fileName);
+                }
+                else
+                {
+
+                }
+            }
+        }
+
         public void QuerySaveChanges(out bool cancel)
         {
             if (!doc.IsSaved)
             {
-                switch (MessageBox.Show(MSG_SAVE_CHANGES, TITLE, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
+                switch (dialogService.QuerySaveChangesDialog())
                 {
                     case MessageBoxResult.Yes:
                         Save();
@@ -216,7 +276,7 @@ namespace C2SR.ViewModels
         #endregion
 
         #region Commands
-        public RelayCommand InitializeCommand { get; }
+        public RelayCommand NewDocumentCommand { get; }
         public RelayCommand LoadCommand { get; }
         public RelayCommand SaveCommand { get; }
         public RelayCommand SaveAsCommand { get; }
@@ -230,7 +290,7 @@ namespace C2SR.ViewModels
         public RelayCommand DeleteSelectionCommand { get; }
         public RelayCommand SelectAllCommand { get; }
         public RelayCommand ClearCommand { get; }
-        public RelayCommand ViewResultsCommand { get; }
+        public RelayCommand ViewStatisticsCommand { get; }
         public RelayCommand AboutCommand { get; }
         public RelayCommand ExitCommand { get; }
 
@@ -239,30 +299,46 @@ namespace C2SR.ViewModels
         bool CanRedo() => undoStack.CanRedo;
         bool CanPaste() => CanEdit() && clipboard.Length > 0;
 
-        void Initialize()
+        void NewDocument()
         {
             QuerySaveChanges(out bool cancel);
             if (!cancel)
             {
-                MessageBox.Show("New command executed");
+                doc.FileName = string.Empty;
+                doc.IsSaved = false;
+                foreach (var song in Songs)
+                {
+                    song.SetMM(false, C2SongSetPropertyOption.Silent);
+                    song.SetTP(0, C2SongSetPropertyOption.Silent);
+                    song.SetMxm(false, C2SongSetPropertyOption.Silent);
+                }
             }
         }
 
         void Load()
         {
             QuerySaveChanges(out bool cancel);
-            if (!cancel)
+            if (cancel) return;
+
+            if (dialogService.ShowOpenFileDialog(out string fileName) == true)
             {
-                OpenFileDialog dialog = new()
+                try
                 {
-                    Title = "Open",
-                    Filter = "Cytus II Rating Files (*.c2sr)|*.c2r|JSON Files|*.json|All Files (*.*)|*.*",
-                    DefaultExt = ".c2sr",
-                    Multiselect = false
-                };
-                if (dialog.ShowDialog() == true)
+                    var fileData = doc.Load(fileName);
+                    foreach (var data in fileData)
+                    {
+                        var song = Songs.FirstOrDefault(s => s.Song.ID == data.ID);
+                        if (song != null)
+                        {
+                            song.SetMM(data.IsMM, C2SongSetPropertyOption.Silent);
+                            song.SetTP(data.TP, C2SongSetPropertyOption.Silent);
+                            song.SetMxm(data.IsMxm, C2SongSetPropertyOption.Silent);
+                        }
+                    }
+                }
+                catch
                 {
-                    doc.Load(dialog.FileName);
+                    dialogService.ShowOpenErrorDialog();
                 }
             }
         }
@@ -275,23 +351,29 @@ namespace C2SR.ViewModels
             }
             else
             {
-                doc.Save(doc.FileName);
+                try
+                {
+                    doc.Save(doc.FileName, [.. Songs.Select(s => s.Song)]);
+                }
+                catch
+                {
+                    dialogService.ShowSaveErrorDialog();
+                }
             }
         }
 
         void SaveAs()
         {
-            SaveFileDialog dialog = new()
+            if (dialogService.ShowSaveFileDialog(out string fileName) == true)
             {
-                Title = "Save As",
-                Filter = "Cytus II Rating Files (*.c2sr)|*.c2r|JSON Files|*.json|All Files (*.*)|*.*",
-                DefaultExt = ".c2sr",
-                AddExtension = true,
-                OverwritePrompt = true
-            };
-            if (dialog.ShowDialog() == true)
-            {
-                doc.Save(dialog.FileName);
+                try
+                {
+                    doc.Save(fileName, [.. Songs.Select(s => s.Song)]);
+                }
+                catch
+                {
+                    dialogService.ShowSaveErrorDialog();
+                }
             }
         }
 
@@ -372,7 +454,7 @@ namespace C2SR.ViewModels
 
         void SetSelection()
         {
-            SetValueDialog dialog = new() { Owner = view };
+            SetValueDialog dialog = new();
             if (dialog.ShowDialog() == true)
             {
                 SetValue(SelectedSongs,
@@ -389,7 +471,7 @@ namespace C2SR.ViewModels
 
         void SelectAll()
         {
-            view.SelectAll();
+            SelectAllExecuted?.Invoke(this, EventArgs.Empty);
         }
 
         void Clear()
@@ -397,32 +479,21 @@ namespace C2SR.ViewModels
             SetValue(Songs, isMM: false, tp: 0, isMxm: false);
         }
 
-        void ViewResults()
+        void ViewStatistics()
         {
-            songs.RemoveAt(0);
+
         }
 
         void About()
         {
-            C2SongViewModel song = new(new C2Song(0, "12123543214123543", "", "", "", 16, 16.5m));
-            song.MMChanging += C2SongViewModel_MMChanging;
-            song.TPChanging += C2SongViewModel_TPChanging;
-            song.MxmChanging += C2SongViewModel_MxmChanging;
-            song.MMChanged += C2SongViewModel_PropertyChanged;
-            song.TPChanged += C2SongViewModel_TPChanged;
-            song.MxmChanged += C2SongViewModel_MxmChanged;
-            songs.Add(song);
+
         }
 
         void Exit()
         {
-            view.Close();
+            ExitExecuted?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
-
-        // Constants
-        const string TITLE = "Cytus II Rating";
-        const string MSG_SAVE_CHANGES = "Save changes to the current document? All unsaved data will be discarded.";
     }
 }

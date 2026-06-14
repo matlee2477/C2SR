@@ -7,8 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <NoWarn>IDE0017, IDE0290, IDE1006</NoWarn>
-    
-    <Title>Cytus II Skill Rate</Title>
+
+    <!-- Assembly Info -->
+    <Product>Cytus II Skill Rate</Product>
+    <Company>matlee2477</Company>
     <Version>0.0.0</Version>
   </PropertyGroup>
 

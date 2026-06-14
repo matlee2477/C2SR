@@ -1,4 +1,4 @@
-﻿using C2SR.Models;
+﻿using C2SR.Services;
 using C2SR.Views;
 using System.Windows;
 
@@ -21,7 +21,7 @@ namespace C2SR
                 fileName = string.Empty;
             }
 
-            C2Registry reg = new();
+            C2RegistryService reg = new();
             try
             {
                 // TODO

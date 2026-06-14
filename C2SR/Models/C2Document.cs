@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Text.Json.Nodes;
-using System.Windows;
 
 namespace C2SR.Models
 {
@@ -10,28 +9,14 @@ namespace C2SR.Models
         {
             FileName = fileName;
             IsSaved = true;
-            Songs = [];
         }
 
         // Properties
         public string FileName { get; set; }
         public bool IsSaved { get; set; }
-        public List<C2Song> Songs { get; }
 
         // Methods
-        public void Initialize()
-        {
-            FileName = string.Empty;
-            IsSaved = false;
-            foreach (var song in Songs)
-            {
-                song.IsMM = false;
-                song.TP = 0;
-                song.IsMxm = false;
-            }
-        }
-
-        public void Load(string fileName)
+        public C2FileData[] Load(string fileName)
         {
             try
             {
@@ -39,47 +24,38 @@ namespace C2SR.Models
                 using StreamReader reader = new(fs);
                 string code = reader.ReadToEnd();
 
-                FileName = fileName;
-                IsSaved = true;
-                foreach (var song in Songs)
-                {
-                    song.IsMM = false;
-                    song.TP = 0;
-                    song.IsMxm = false;
-                }
-
+                List<C2FileData> fileData = [];
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonObject obj in arr.OfType<JsonObject>())
                 {
                     long id = obj["ID"]!.GetValue<long>();
-
-                    C2Song? song = Songs.FirstOrDefault(s => s.ID == id);
-                    if (song != null)
-                    {
-                        song.IsMM = obj["MM"]!.GetValue<bool>();
-                        song.TP = obj["TP"]!.GetValue<decimal>();
-                        song.IsMxm = obj["MxM"]!.GetValue<bool>();
-                    }
+                    bool isMM = obj["MM"]!.GetValue<bool>();
+                    decimal tp = obj["TP"]!.GetValue<decimal>();
+                    bool isMxm = obj["MxM"]!.GetValue<bool>();
+                    C2FileData data = new() { ID = id, IsMM = isMM, TP = tp, IsMxm = isMxm };
+                    fileData.Add(data);
                 }
+
+                FileName = fileName;
+                IsSaved = true;
+                return [.. fileData];
             }
             catch
             {
-                MessageBox.Show("An error occurred while loading the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Initialize();
+                throw;
             }
         }
 
-        public void Save(string fileName)
+        public void Save(string fileName, C2Song[] songs)
         {
             try
             {
                 JsonArray arr = [];
-                foreach (var song in Songs)
+                foreach (var song in songs)
                 {
                     JsonObject obj = new()
                     {
-                        ["name"] = song.Name,
-                        ["artist"] = song.Artist,
+                        ["ID"] = song.ID,
                         ["MM"] = song.IsMM,
                         ["TP"] = song.TP,
                         ["MxM"] = song.IsMxm
@@ -96,7 +72,7 @@ namespace C2SR.Models
             }
             catch
             {
-                MessageBox.Show("An error occurred while saving the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 

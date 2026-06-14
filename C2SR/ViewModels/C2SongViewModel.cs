@@ -18,6 +18,7 @@ namespace C2SR.ViewModels
 
         public string Name => Song.Name;
         public string Artist => Song.Artist;
+        public string Bpm => Song.Bpm.ToString();
         public string Chapter => Song.Chapter;
         public string ChartType => Song.ChartType;
         public string Level => GetLevelString();
@@ -150,6 +151,7 @@ namespace C2SR.ViewModels
                     OnPropertyChanging(nameof(IsMM));
                     Song.IsMM = isMM;
                     OnPropertyChanged(nameof(IsMM));
+                    OnPropertyChanged(nameof(SkillRate));
                 }
             }
         }
@@ -163,12 +165,18 @@ namespace C2SR.ViewModels
                     OnTPChanging(Song.TP, tp);
                     Song.TP = tp;
                     OnTPChanged(tp);
+
+                    if (tp == 100)
+                    {
+                        SetMM(true);
+                    }
                 }
                 else
                 {
                     OnPropertyChanging(nameof(TP));
                     Song.TP = tp;
                     OnPropertyChanged(nameof(TP));
+                    OnPropertyChanged(nameof(SkillRate));
                 }
             }
         }
@@ -182,12 +190,18 @@ namespace C2SR.ViewModels
                     OnMxmChanging(Song.IsMxm, isMxm);
                     Song.IsMxm = isMxm;
                     OnMxmChanged(isMxm);
+
+                    if (isMxm)
+                    {
+                        SetTP(100);
+                    }
                 }
                 else
                 {
                     OnPropertyChanging(nameof(IsMxm));
                     Song.IsMxm = isMxm;
                     OnPropertyChanged(nameof(IsMxm));
+                    OnPropertyChanged(nameof(SkillRate));
                 }
             }
         }

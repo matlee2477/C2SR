@@ -1,4 +1,4 @@
-﻿namespace C2SR.Models
+﻿namespace C2SR.Services
 {
     public class UndoableCommandStack
     {

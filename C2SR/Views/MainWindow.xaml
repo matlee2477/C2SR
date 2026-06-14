@@ -10,7 +10,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Command="{Binding InitializeCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_New" Command="{Binding NewDocumentCommand}" InputGestureText="Ctrl+N"/>
                 <MenuItem Header="_Open..." Command="{Binding LoadCommand}" InputGestureText="Ctrl+O"/>
                 <Separator/>
                 <MenuItem Header="_Save..." Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
@@ -39,7 +39,7 @@
                 <MenuItem Header="Show S_earch Bar" IsCheckable="True" IsChecked="{Binding IsSearchBarVisible}"/>
                 <MenuItem Header="Show S_tatus Bar" IsCheckable="True" IsChecked="{Binding IsStatusBarVisible}"/>
                 <Separator/>
-                <MenuItem Header="_Statistics..." Command="{Binding ViewResultsCommand}" InputGestureText="F5"/>
+                <MenuItem Header="_Statistics..." Command="{Binding ViewStatisticsCommand}" InputGestureText="F5"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About Cytus II Rating..." Command="{Binding AboutCommand}"/>
@@ -72,6 +72,13 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Padding="0 0 2 0" Text="{Binding Artist}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="BPM">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Padding="0 0 2 0" Text="{Binding Bpm}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
