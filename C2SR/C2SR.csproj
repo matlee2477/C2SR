@@ -9,8 +9,10 @@
     <NoWarn>IDE0017, IDE0290, IDE1006</NoWarn>
 
     <!-- Assembly Info -->
-    <Product>Cytus II Skill Rate</Product>
+    <AssemblyTitle>Cytus II Skill Rate</AssemblyTitle>
+    <ProductName>Cytus II Skill Rate</ProductName>
     <Company>matlee2477</Company>
+    <Copyright>Copyright (c) 2024 matlee2477</Copyright>
     <Version>0.0.0</Version>
   </PropertyGroup>
 

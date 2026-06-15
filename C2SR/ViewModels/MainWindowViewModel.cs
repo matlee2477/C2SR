@@ -1,8 +1,7 @@
-﻿using C2SR.Models;
-using C2SR.Services;
-using C2SR.Views;
+﻿using C2SR.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json.Nodes;
@@ -14,34 +13,34 @@ namespace C2SR.ViewModels
     {
         public MainWindowViewModel(IDialogService dialogService)
         {
-            doc = C2Document.Instance;
             songs = [];
             clipboard = [];
             this.dialogService = dialogService;
+            FileName = string.Empty;
+            IsSaved = true;
 
-            NewDocumentCommand = new(NewDocument);
-            LoadCommand = new(Load);
-            SaveCommand = new(Save);
-            SaveAsCommand = new(SaveAs);
-            SettingsCommand = new(Settings);
-            UndoCommand = new(Undo, CanUndo);
-            RedoCommand = new(Redo, CanRedo);
-            CutCommand = new(Cut, CanEdit);
-            CopyCommand = new(Copy, CanEdit);
-            PasteCommand = new(Paste, CanPaste);
-            SetSelectionCommand = new(SetSelection, CanEdit);
-            DeleteSelectionCommand = new(DeleteSelection, CanEdit);
-            SelectAllCommand = new(SelectAll);
-            ClearCommand = new(Clear);
-            ViewStatisticsCommand = new(ViewStatistics);
-            AboutCommand = new(About);
-            ExitCommand = new(Exit);
+            NewDocumentCommand = new(ExecuteNewDocument);
+            LoadCommand = new(ExecuteLoad);
+            SaveCommand = new(ExecuteSave);
+            SaveAsCommand = new(ExecuteSaveAs);
+            SettingsCommand = new(ExecuteSettings);
+            UndoCommand = new(ExecuteUndo, CanUndo);
+            RedoCommand = new(ExecuteRedo, CanRedo);
+            CutCommand = new(ExecuteCut, CanEdit);
+            CopyCommand = new(ExecuteCopy, CanEdit);
+            PasteCommand = new(ExecutePaste, CanPaste);
+            SetSelectionCommand = new(ExecuteSetSelection, CanEdit);
+            DeleteSelectionCommand = new(ExecuteDeleteSelection, CanEdit);
+            SelectAllCommand = new(ExecuteSelectAll);
+            ClearCommand = new(ExecuteClear);
+            ViewStatisticsCommand = new(ExecuteViewStatistics);
+            AboutCommand = new(ExecuteAbout);
+            ExitCommand = new(ExecuteExit);
 
             SelectedSongs = [];
         }
 
         // Fields
-        readonly C2Document doc;
         readonly ObservableCollection<C2SongViewModel> songs;
         readonly UndoableCommandStack undoStack = UndoableCommandStack.Instance;
         C2ClipboardField[] clipboard;
@@ -49,6 +48,26 @@ namespace C2SR.ViewModels
 
         #region Properties
         public IEnumerable<C2SongViewModel> Songs => songs;
+
+        public string FileName
+        {
+            get;
+            set
+            {
+                field = value;
+                ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
+            }
+        }
+
+        public bool IsSaved
+        {
+            get;
+            set
+            {
+                field = value;
+                ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
+            }
+        }
 
         public IEnumerable<C2SongViewModel> SelectedSongs
         {
@@ -104,6 +123,7 @@ namespace C2SR.ViewModels
         #endregion
 
         // Events
+        public event ChangeTitleRequestedEventHandler? ChangeTitleRequested;
         public event EventHandler? SelectAllExecuted;
         public event EventHandler? ExitExecuted;
 
@@ -119,11 +139,11 @@ namespace C2SR.ViewModels
                     string code = reader.ReadToEnd();
 
                     JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                    foreach (JsonObject obj in arr.OfType<JsonObject>())
+                    foreach (JsonNode node in arr.OfType<JsonObject>())
                     {
-                        if (obj.ContainsKey("comment")) continue;
+                        if (node is not JsonObject obj) continue;
 
-                        long id = obj["ID"]!.GetValue<long>();
+                        long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
                         string name = obj["name"]!.GetValue<string>();
                         string artist = obj["artist"]!.GetValue<string>();
                         decimal bpm = obj["BPM"]!.GetValue<decimal>();
@@ -146,6 +166,7 @@ namespace C2SR.ViewModels
                 catch
                 {
                     MessageBox.Show("An error occurred while loading the game data.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ExecuteExit();
                 }
             }
 
@@ -153,24 +174,88 @@ namespace C2SR.ViewModels
             {
                 if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
                 {
-                    doc.Load(fileName);
+                    Load(fileName);
                 }
                 else
                 {
-
+                    // TODO
                 }
             }
         }
 
+        void NewDocument()
+        {
+            foreach (var song in Songs)
+            {
+                song.SetMM(false, C2SongSetPropertyOption.Silent);
+                song.SetTP(0, C2SongSetPropertyOption.Silent);
+                song.SetMxm(false, C2SongSetPropertyOption.Silent);
+            }
+
+            FileName = string.Empty;
+            IsSaved = true;
+            undoStack.Clear();
+        }
+
+        void Load(string fileName)
+        {
+            using FileStream fs = new(fileName, FileMode.Open, FileAccess.Read);
+            using StreamReader reader = new(fs);
+            string code = reader.ReadToEnd();
+
+            JsonArray arr = JsonNode.Parse(code)!.AsArray();
+            foreach (JsonObject obj in arr.OfType<JsonObject>())
+            {
+                long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
+                C2SongViewModel? song = songs.FirstOrDefault(s => s.Song.ID == id);
+                if (song != null)
+                {
+                    bool isMM = obj["MM"]!.GetValue<bool>();
+                    decimal tp = obj["TP"]!.GetValue<decimal>();
+                    bool isMxm = obj["MxM"]!.GetValue<bool>();
+                    song.SetMM(isMM, C2SongSetPropertyOption.Silent);
+                    song.SetTP(tp, C2SongSetPropertyOption.Silent);
+                    song.SetMxm(isMxm, C2SongSetPropertyOption.Silent);
+                }
+            }
+
+            FileName = fileName;
+            IsSaved = true;
+            undoStack.Clear();
+        }
+
+        void Save(string fileName)
+        {
+            JsonArray arr = [];
+            foreach (var song in songs)
+            {
+                JsonObject obj = new()
+                {
+                    ["ID"] = Convert.ToHexString(BitConverter.GetBytes(song.Song.ID)),
+                    ["MM"] = song.IsMM,
+                    ["TP"] = song.Song.TP,
+                    ["MxM"] = song.IsMxm
+                };
+                arr.Add(obj);
+            }
+
+            using FileStream fs = new(fileName, FileMode.Create, FileAccess.Write);
+            using StreamWriter writer = new(fs);
+            writer.Write(arr.ToJsonString());
+
+            FileName = fileName;
+            IsSaved = true;
+        }
+
         public void QuerySaveChanges(out bool cancel)
         {
-            if (!doc.IsSaved)
+            if (!IsSaved)
             {
                 switch (dialogService.QuerySaveChangesDialog())
                 {
                     case MessageBoxResult.Yes:
-                        Save();
-                        cancel = !doc.IsSaved;
+                        ExecuteSave();
+                        cancel = !IsSaved;
                         break;
                     case MessageBoxResult.No:
                         cancel = false;
@@ -227,8 +312,13 @@ namespace C2SR.ViewModels
                 undoStack.AddUndoCommand(commands);
                 UndoCommand.NotifyCanExecuteChanged();
                 RedoCommand.NotifyCanExecuteChanged();
-                doc.IsSaved = false;
+                IsSaved = false;
             }
+        }
+
+        public void ApplySelection(IList selectedItems)
+        {
+            SelectedSongs = selectedItems.Cast<C2SongViewModel>();
         }
 
         #endregion
@@ -260,17 +350,17 @@ namespace C2SR.ViewModels
 
         private void C2SongViewModel_PropertyChanged(object sender, C2MMChangedEventArgs e)
         {
-            doc.IsSaved = false;
+            IsSaved = false;
         }
 
         private void C2SongViewModel_TPChanged(object sender, C2TPChangedEventArgs e)
         {
-            doc.IsSaved = false;
+            IsSaved = false;
         }
 
         private void C2SongViewModel_MxmChanged(object sender, C2MxmChangedEventArgs e)
         {
-            doc.IsSaved = false;
+            IsSaved = false;
         }
 
         #endregion
@@ -299,23 +389,15 @@ namespace C2SR.ViewModels
         bool CanRedo() => undoStack.CanRedo;
         bool CanPaste() => CanEdit() && clipboard.Length > 0;
 
-        void NewDocument()
+        void ExecuteNewDocument()
         {
             QuerySaveChanges(out bool cancel);
-            if (!cancel)
-            {
-                doc.FileName = string.Empty;
-                doc.IsSaved = false;
-                foreach (var song in Songs)
-                {
-                    song.SetMM(false, C2SongSetPropertyOption.Silent);
-                    song.SetTP(0, C2SongSetPropertyOption.Silent);
-                    song.SetMxm(false, C2SongSetPropertyOption.Silent);
-                }
-            }
+            if (cancel) return;
+
+            NewDocument();
         }
 
-        void Load()
+        void ExecuteLoad()
         {
             QuerySaveChanges(out bool cancel);
             if (cancel) return;
@@ -324,36 +406,27 @@ namespace C2SR.ViewModels
             {
                 try
                 {
-                    var fileData = doc.Load(fileName);
-                    foreach (var data in fileData)
-                    {
-                        var song = Songs.FirstOrDefault(s => s.Song.ID == data.ID);
-                        if (song != null)
-                        {
-                            song.SetMM(data.IsMM, C2SongSetPropertyOption.Silent);
-                            song.SetTP(data.TP, C2SongSetPropertyOption.Silent);
-                            song.SetMxm(data.IsMxm, C2SongSetPropertyOption.Silent);
-                        }
-                    }
+                    Load(fileName);
                 }
                 catch
                 {
                     dialogService.ShowOpenErrorDialog();
+                    NewDocument();
                 }
             }
         }
 
-        void Save()
+        void ExecuteSave()
         {
-            if (string.IsNullOrEmpty(doc.FileName))
+            if (string.IsNullOrEmpty(FileName))
             {
-                SaveAs();
+                ExecuteSaveAs();
             }
             else
             {
                 try
                 {
-                    doc.Save(doc.FileName, [.. Songs.Select(s => s.Song)]);
+                    Save(FileName);
                 }
                 catch
                 {
@@ -362,13 +435,13 @@ namespace C2SR.ViewModels
             }
         }
 
-        void SaveAs()
+        void ExecuteSaveAs()
         {
             if (dialogService.ShowSaveFileDialog(out string fileName) == true)
             {
                 try
                 {
-                    doc.Save(fileName, [.. Songs.Select(s => s.Song)]);
+                    Save(fileName);
                 }
                 catch
                 {
@@ -377,38 +450,38 @@ namespace C2SR.ViewModels
             }
         }
 
-        void Settings()
+        void ExecuteSettings()
         {
             MessageBox.Show("Settings command executed");
         }
 
-        void Undo()
+        void ExecuteUndo()
         {
             undoStack.Undo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
         }
 
-        void Redo()
+        void ExecuteRedo()
         {
             undoStack.Redo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
         }
 
-        void Cut()
+        void ExecuteCut()
         {
-            Copy();
-            DeleteSelection();
+            ExecuteCopy();
+            ExecuteDeleteSelection();
         }
 
-        void Copy()
+        void ExecuteCopy()
         {
             clipboard = [.. SelectedSongs.Select(song => new C2ClipboardField() { IsMM = song.IsMM, TP = song.Song.TP, IsMxm = song.IsMxm })];
             PasteCommand.NotifyCanExecuteChanged();
         }
 
-        void Paste()
+        void ExecutePaste()
         {
             int index = 0;
             UndoableCommandCollection commands = [];
@@ -448,48 +521,48 @@ namespace C2SR.ViewModels
                 undoStack.AddUndoCommand(commands);
                 UndoCommand.NotifyCanExecuteChanged();
                 RedoCommand.NotifyCanExecuteChanged();
-                doc.IsSaved = false;
+                IsSaved = false;
             }
         }
 
-        void SetSelection()
+        void ExecuteSetSelection()
         {
-            SetValueDialog dialog = new();
-            if (dialog.ShowDialog() == true)
+            SetValueDialogResult result = dialogService.ShowSetValueDialog();
+            if (result.DialogResult)
             {
                 SetValue(SelectedSongs,
-                    dialog.SetsMM ? dialog.IsMM : null,
-                    dialog.SetsTP ? dialog.TPValue : null,
-                    dialog.SetsMxm ? dialog.IsMxm : null);
+                    result.SetsMM ? result.IsMM : null,
+                    result.SetsTP ? result.TP : null,
+                    result.SetsMxm ? result.IsMxm : null);
             }
         }
 
-        void DeleteSelection()
+        void ExecuteDeleteSelection()
         {
             SetValue(SelectedSongs, isMM: false, tp: 0, isMxm: false);
         }
 
-        void SelectAll()
+        void ExecuteSelectAll()
         {
             SelectAllExecuted?.Invoke(this, EventArgs.Empty);
         }
 
-        void Clear()
+        void ExecuteClear()
         {
             SetValue(Songs, isMM: false, tp: 0, isMxm: false);
         }
 
-        void ViewStatistics()
+        void ExecuteViewStatistics()
         {
-
+            
         }
 
-        void About()
+        void ExecuteAbout()
         {
-
+            dialogService.ShowAboutDialog();
         }
 
-        void Exit()
+        void ExecuteExit()
         {
             ExitExecuted?.Invoke(this, EventArgs.Empty);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using C2SR.Views;
+using Microsoft.Win32;
 using System.Windows;
 
 namespace C2SR.Services
@@ -64,6 +65,34 @@ namespace C2SR.Services
 
         public void ShowOpenErrorDialog() => MessageBox.Show(Owner, MSG_OPEN_ERROR, TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
         public void ShowSaveErrorDialog() => MessageBox.Show(Owner, MSG_SAVE_ERROR, TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
+
+        public SetValueDialogResult ShowSetValueDialog()
+        {
+            SetValueDialog dialog = new() { Owner = Owner };
+            if (dialog.ShowDialog() == true)
+            {
+                return new SetValueDialogResult
+                {
+                    DialogResult = true,
+                    SetsMM = dialog.SetsMM,
+                    SetsTP = dialog.SetsTP,
+                    SetsMxm = dialog.SetsMxm,
+                    IsMM = dialog.IsMM,
+                    TP = dialog.TPValue,
+                    IsMxm = dialog.IsMxm
+                };
+            }
+            else
+            {
+                return new SetValueDialogResult { DialogResult = false };
+            }
+        }
+
+        public void ShowAboutDialog()
+        {
+            AboutDialog dialog = new() { Owner = Owner };
+            dialog.ShowDialog();
+        }
 
         // Constants
         const string TITLE = "Cytus II Rating";

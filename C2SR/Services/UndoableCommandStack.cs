@@ -43,6 +43,12 @@
             }
         }
 
+        public void Clear()
+        {
+            undoStack.Clear();
+            redoStack.Clear();
+        }
+
         // Singleton (lazy initialization)
         static readonly Lazy<UndoableCommandStack> lazy = new(() => new());
         public static UndoableCommandStack Instance => lazy.Value;

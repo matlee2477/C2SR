@@ -1,8 +1,7 @@
-﻿namespace C2SR.Models
+﻿namespace C2SR.Services
 {
-    readonly struct C2FileData
+    readonly struct C2ClipboardField
     {
-        public long ID { get; init; }
         public bool IsMM { get; init; }
         public decimal TP { get; init; }
         public bool IsMxm { get; init; }

@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:C2SR.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Width="800" Height="450" WindowStartupLocation="Manual"
-        Closing="Window_Closing" Closed="Window_Closed">
+        Title="Cytus II Skill Rate" Width="800" Height="450" WindowStartupLocation="Manual"
+        Closed="Window_Closed">
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewDocumentCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding LoadCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="{Binding SaveAsCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding ViewStatisticsCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Ctrl" Command="{Binding UndoCommand}"/>
+        <KeyBinding Key="Y" Modifiers="Ctrl" Command="{Binding RedoCommand}"/>
+        <KeyBinding Key="X" Modifiers="Ctrl" Command="{Binding CutCommand}"/>
+        <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
+        <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding PasteCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding SetSelectionCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteSelectionCommand}"/>
+        <KeyBinding Key="A" Modifiers="Ctrl" Command="{Binding SelectAllCommand}"/>
+        <KeyBinding Key="Delete" Modifiers="Ctrl" Command="{Binding ClearCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding ViewStatisticsCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">

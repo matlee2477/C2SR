@@ -1,4 +1,5 @@
 ﻿using C2SR.Services;
+using C2SR.ViewModels;
 using C2SR.Views;
 using System.Windows;
 
@@ -11,22 +12,28 @@ namespace C2SR
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            string fileName;
-            if (e.Args.Length > 0)
-            {
-                fileName = e.Args[0];
-            }
-            else
-            {
-                fileName = string.Empty;
-            }
-
+            string fileName = (e.Args.Length > 0) ? e.Args[0] : string.Empty;
             C2RegistryService reg = new();
             try
             {
                 // TODO
 
-                MainWindow view = new(fileName);
+
+                MainWindow view = new();
+                C2DialogService dialogService = new(view);
+                MainWindowViewModel vm = new(dialogService);
+                view.DataContext = vm;
+                vm.Initialize(fileName);
+                vm.ChangeTitleRequested += (sender, e) => view.HandleChangeTitleRequest(e.FileName, e.IsSaved);
+                vm.SelectAllExecuted += (sender, e) => view.SelectAll();
+                vm.ExitExecuted += (sender, e) => view.Close();
+                view.SelectionChanged += (sender, e) => vm.ApplySelection(e.SelectedItems);
+                view.Closing += (sender, e) =>
+                {
+                    vm.QuerySaveChanges(out bool cancel);
+                    e.Cancel = cancel;
+                };
+
                 view.Show();
             }
             catch

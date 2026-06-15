@@ -11,5 +11,18 @@ namespace C2SR.Services
         public bool ShowSaveFileDialog(out string fileName);
         public void ShowOpenErrorDialog();
         public void ShowSaveErrorDialog();
+        public SetValueDialogResult ShowSetValueDialog();
+        public void ShowAboutDialog();
+    }
+
+    readonly struct SetValueDialogResult
+    {
+        public bool DialogResult { get; init; }
+        public bool SetsMM { get; init; }
+        public bool SetsTP { get; init; }
+        public bool SetsMxm { get; init; }
+        public bool IsMM { get; init; }
+        public decimal TP { get; init; }
+        public bool IsMxm { get; init; }
     }
 }
