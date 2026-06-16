@@ -86,17 +86,17 @@ namespace C2SR.Services
             }
         }
 
-        public string LastOpenedFile
+        public string LastFileName
         {
             get
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                return (string)(mainKey.GetValue("LastOpenedFile") ?? string.Empty);
+                return (string)(mainKey.GetValue("LastFileName") ?? string.Empty);
             }
             set
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                mainKey.SetValue("LastOpenedFile", value, RegistryValueKind.String);
+                mainKey.SetValue("LastFileName", value, RegistryValueKind.String);
             }
         }
 
@@ -167,7 +167,7 @@ namespace C2SR.Services
 
         #endregion
 
-        // IDisposable
+        #region IDisposable
         bool isDisposed;
 
         void Dispose(bool isDisposing)
@@ -194,5 +194,7 @@ namespace C2SR.Services
         {
             Dispose(false);
         }
+
+        #endregion
     }
 }

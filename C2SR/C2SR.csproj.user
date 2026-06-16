@@ -8,6 +8,9 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SettingsDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\SetValueDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

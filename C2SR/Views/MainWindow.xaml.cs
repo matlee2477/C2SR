@@ -1,4 +1,5 @@
-﻿using C2SR.Services;
+﻿using C2SR.Resources;
+using C2SR.Services;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,15 +14,15 @@ namespace C2SR.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            // Load registry
+        // Properties
+        public string[] ColumnHeaders
+        {
+            get
             {
-                using C2RegistryService reg = new();
-                Left = reg.WindowLeft;
-                Top = reg.WindowTop;
-                Width = reg.WindowWidth;
-                Height = reg.WindowHeight;
-                WindowState = reg.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+                GridView gridView = (GridView)listView.View;
+                return [.. gridView.Columns.Select(c => c.Header.ToString() ?? string.Empty)];
             }
         }
 
@@ -43,7 +44,8 @@ namespace C2SR.Views
                 sb.Append(System.IO.Path.GetFileName(fileName));
             }
             if (!isSaved) sb.Append('*');
-            sb.Append(" - Cytus II Skill Rate");
+            sb.Append(" - ");
+            sb.Append(Strings.Title);
             Title = sb.ToString();
         }
 
@@ -51,17 +53,6 @@ namespace C2SR.Views
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectionChanged?.Invoke(this, new C2SelectionChangedEventArgs(listView.SelectedItems));
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            // Save registry
-            using C2RegistryService reg = new();
-            reg.WindowLeft = (int)Left;
-            reg.WindowTop = (int)Top;
-            reg.WindowWidth = (int)Width;
-            reg.WindowHeight = (int)Height;
-            reg.IsMaximized = WindowState == WindowState.Maximized;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace C2SR.Views
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             textBlock_Version.Text = textBlock_Version.Text.Replace("[0]", $"{version?.Major}.{version?.Minor}.{version?.Revision}");
 
-            using FileStream fs = new(".\\data\\LICENSE", FileMode.Open, FileAccess.Read);
+            using FileStream fs = new(@".\data\LICENSE", FileMode.Open, FileAccess.Read);
             using StreamReader reader = new(fs);
             textBox_License.Text = reader.ReadToEnd();
         }

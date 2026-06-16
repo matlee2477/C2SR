@@ -7,7 +7,7 @@
         public int WindowLeft { get; set; }
         public int WindowTop { get; set; }
         public bool IsMaximized { get; set; }
-        public string LastOpenedFile { get; set; }
+        public string LastFileName { get; set; }
 
         public bool GetSetting(string name, bool defaultValue);
         public int GetSetting(string name, int defaultValue);

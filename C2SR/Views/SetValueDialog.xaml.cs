@@ -81,6 +81,12 @@ namespace C2SR.Views
                     tp = 0;
                 }
                 OnPropertyChanged(nameof(TP));
+
+                if (tp == 100)
+                {
+                    SetsMM = true;
+                    IsMM = true;
+                }
             }
         }
 
@@ -91,6 +97,14 @@ namespace C2SR.Views
             {
                 field = value;
                 OnPropertyChanged(nameof(IsMxm));
+
+                if (field)
+                {
+                    SetsMM = true;
+                    IsMM = true;
+                    SetsTP = true;
+                    TP = "100";
+                }
             }
         }
 

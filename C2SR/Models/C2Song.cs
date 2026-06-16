@@ -1,4 +1,6 @@
-﻿namespace C2SR.Models
+﻿using C2SR.Converters;
+
+namespace C2SR.Models
 {
     class C2Song
     {
@@ -33,15 +35,6 @@
         public decimal TP { get; set; }
         public bool IsMxm { get; set; }
 
-        public decimal SkillRate
-        {
-            get
-            {
-                decimal rate = TP * LevelConstant / 100;
-                if (IsMM) rate += 0.3m;
-                if (TP == 100) rate += 0.2m;
-                return rate;
-            }
-        }
+        public decimal Score => C2ScoreConverter.GetScore(LevelConstant, IsMM, TP);
     }
 }

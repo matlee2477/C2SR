@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutDialog_Version" xml:space="preserve">
+    <value>バージョン [0]（ベータ）</value>
+  </data>
+  <data name="MainWindow_Menu_Help" xml:space="preserve">
+    <value>ヘルプ(_H)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit" xml:space="preserve">
+    <value>編集(_E)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Clear" xml:space="preserve">
+    <value>すべて削除(_E)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Copy" xml:space="preserve">
+    <value>コピー(_C)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Cut" xml:space="preserve">
+    <value>切り取り(_T)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_DeleteSelection" xml:space="preserve">
+    <value>削除(_D)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Paste" xml:space="preserve">
+    <value>貼り付け(_P)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Redo" xml:space="preserve">
+    <value>やり直す(_R)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_SelectAll" xml:space="preserve">
+    <value>すべて選択(_A)</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_SetSelection" xml:space="preserve">
+    <value>値を設定...(_S)...</value>
+  </data>
+  <data name="MainWindow_Menu_Edit_Undo" xml:space="preserve">
+    <value>元に戻す(_U)</value>
+  </data>
+  <data name="MainWindow_Menu_File" xml:space="preserve">
+    <value>ファイル(_F)</value>
+  </data>
+  <data name="MainWindow_Menu_File_Exit" xml:space="preserve">
+    <value>終了(_X)</value>
+  </data>
+  <data name="MainWindow_Menu_File_New" xml:space="preserve">
+    <value>新規作成(_N)</value>
+  </data>
+  <data name="MainWindow_Menu_File_Open" xml:space="preserve">
+    <value>開く(_O)...</value>
+  </data>
+  <data name="MainWindow_Menu_File_Save" xml:space="preserve">
+    <value>保存(_S)</value>
+  </data>
+  <data name="MainWindow_Menu_File_SaveAs" xml:space="preserve">
+    <value>名前を付けて保存(_A)...</value>
+  </data>
+  <data name="MainWindow_Menu_File_Settings" xml:space="preserve">
+    <value>設定(_E)...</value>
+  </data>
+  <data name="MainWindow_Menu_View" xml:space="preserve">
+    <value>表示(_V)</value>
+  </data>
+  <data name="MainWindow_Menu_View_ViewStatistics" xml:space="preserve">
+    <value>統計(_S)...</value>
+  </data>
+  <data name="MainWindow_Menu_Help_About" xml:space="preserve">
+    <value>Cytus II Skill R_ateについて...</value>
+  </data>
+  <data name="MainWindow_Header_Name" xml:space="preserve">
+    <value>曲名</value>
+  </data>
+  <data name="MainWindow_Header_Artist" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="MainWindow_Header_Bpm" xml:space="preserve">
+    <value>BPM</value>
+  </data>
+  <data name="MainWindow_Header_Version" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="MainWindow_Header_ChartType" xml:space="preserve">
+    <value>譜面</value>
+  </data>
+  <data name="MainWindow_Header_Level" xml:space="preserve">
+    <value>レベル</value>
+  </data>
+  <data name="MainWindow_Header_LevelConstant" xml:space="preserve">
+    <value>定数</value>
+  </data>
+  <data name="MainWindow_Header_IsMM" xml:space="preserve">
+    <value>MM</value>
+  </data>
+  <data name="MainWindow_Header_TP" xml:space="preserve">
+    <value>TP</value>
+  </data>
+  <data name="MainWindow_Header_IsMxm" xml:space="preserve">
+    <value>MxM</value>
+  </data>
+  <data name="MainWindow_Header_Score" xml:space="preserve">
+    <value>スコア</value>
+  </data>
+  <data name="MainWindow_Header_Chapter" xml:space="preserve">
+    <value>チャプター</value>
+  </data>
+  <data name="MessageBox_Error_Startup" xml:space="preserve">
+    <value>アプリケーションの起動中にエラーが発生しました。いくつかの重要なデータファイルが削除されているか、破損している可能性があります。</value>
+  </data>
+  <data name="MessageBox_Error_Load" xml:space="preserve">
+    <value>ファイルの読み込み中にエラーが発生しました。</value>
+  </data>
+  <data name="MessageBox_Error_Save" xml:space="preserve">
+    <value>ファイルの保存中にエラーが発生しました。</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Cytus II Skill Rate</value>
+  </data>
+  <data name="MessageBox_QuerySaveChanges" xml:space="preserve">
+    <value>現在のドキュメントの変更を保存しますか？ 未保存のデータはすべて破棄されます。</value>
+  </data>
+  <data name="OpenFileDialog_Title" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="SaveFileDialog_Title" xml:space="preserve">
+    <value>名前を付けて保存</value>
+  </data>
+  <data name="AboutDialog_Author" xml:space="preserve">
+    <value>制作: [0]</value>
+  </data>
+  <data name="AboutDialog_Title" xml:space="preserve">
+    <value>Cytus II Skill Rateについて</value>
+  </data>
+  <data name="Button_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="SetValueDialog_Title" xml:space="preserve">
+    <value>値の設定</value>
+  </data>
+  <data name="SetValueDialog_SetsMM" xml:space="preserve">
+    <value>Million Master達成を設定</value>
+  </data>
+  <data name="SetValueDialog_IsMM" xml:space="preserve">
+    <value>Million Master達成</value>
+  </data>
+  <data name="SetValueDialog_SetsTP" xml:space="preserve">
+    <value>TPを設定</value>
+  </data>
+  <data name="SetValueDialog_SetsMxm" xml:space="preserve">
+    <value>Max Master達成を設定</value>
+  </data>
+  <data name="SetValueDialog_IsMxm" xml:space="preserve">
+    <value>Max Master達成</value>
+  </data>
+  <data name="Button_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Button_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="SettingsDialog_General_Language" xml:space="preserve">
+    <value>言語:</value>
+  </data>
+  <data name="SettingsDialog_General_StartupAction" xml:space="preserve">
+    <value>起動時:</value>
+  </data>
+  <data name="SettingsDialog_General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="SettingsDialog_Title" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SettingsDialog_General_Language_enUS" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="SettingsDialog_General_Language_koKR" xml:space="preserve">
+    <value>한국어</value>
+  </data>
+  <data name="SettingsDialog_General_Language_jaJP" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="SettingsDialog_General_StartupAction_NewDocument" xml:space="preserve">
+    <value>新規ファイルを作成</value>
+  </data>
+  <data name="SettingsDialog_General_StartupAction_OpenLastDocument" xml:space="preserve">
+    <value>前回のファイルを開く</value>
+  </data>
+  <data name="SettingsDialog_UI" xml:space="preserve">
+    <value>UI</value>
+  </data>
+  <data name="MessageBox_LanguageChanged" xml:space="preserve">
+    <value>言語の変更は、アプリケーションの再起動後に適用されます。</value>
+  </data>
+</root>

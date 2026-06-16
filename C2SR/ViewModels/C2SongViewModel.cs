@@ -1,9 +1,7 @@
 ﻿using C2SR.Models;
 using C2SR.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Text;
 using System.Windows;
-using System.Windows.Media;
 
 namespace C2SR.ViewModels
 {
@@ -12,6 +10,7 @@ namespace C2SR.ViewModels
         public C2SongViewModel(C2Song song)
         {
             Song = song;
+            SkillRateFontWeight = FontWeights.Normal;
         }
 
         #region Properties
@@ -19,12 +18,13 @@ namespace C2SR.ViewModels
 
         public string Name => Song.Name;
         public string Artist => Song.Artist;
-        public string Bpm => Song.Bpm.ToString();
+        public decimal Bpm => Song.Bpm;
+        public string Version => Song.Version;
         public string Chapter => Song.Chapter;
         public string ChartType => Song.ChartType;
-        public string Level => GetLevelString();
-        public string LevelConstant => Song.LevelConstant.ToString("N1");
-        public string SkillRate => Song.SkillRate.ToString("N2");
+        public decimal Level => Song.Level;
+        public decimal LevelConstant => Song.LevelConstant;
+        public decimal Score => Song.Score;
 
         public bool IsMM
         {
@@ -32,18 +32,10 @@ namespace C2SR.ViewModels
             set => SetMM(value);
         }
 
-        public string TP
+        public decimal TP
         {
-            get => Song.TP.ToString("N2");
-            set
-            {
-                if (decimal.TryParse(value, out decimal tp))
-                {
-                    if (tp < 0) tp = 0;
-                    if (tp > 100) tp = 100;
-                    SetTP(tp);
-                }
-            }
+            get => Song.TP;
+            set => SetTP(value);
         }
 
         public bool IsMxm
@@ -52,32 +44,15 @@ namespace C2SR.ViewModels
             set => SetMxm(value);
         }
 
-        public Brush LevelConstantBrush
+        public FontWeight SkillRateFontWeight
         {
-            get
+            get;
+            set
             {
-                return (Song.LevelConstant - Song.Level) switch
-                {
-                    >= 0.3M => new SolidColorBrush(Colors.Red),
-                    <= -0.3M => new SolidColorBrush(Colors.Blue),
-                    _ => new SolidColorBrush(Colors.Black)
-                };
+                field = value;
+                OnPropertyChanged(nameof(SkillRateFontWeight));
             }
         }
-
-        public FontWeight LevelConstantFontWeight
-        {
-            get
-            {
-                return Math.Abs(Song.LevelConstant - Song.Level) switch
-                {
-                    >= 0.5M or <= -0.5M => FontWeights.Bold,
-                    _ => FontWeights.Normal
-                };
-            }
-        }
-
-        public FontWeight SkillRateFontWeight { get; set; } = FontWeights.Normal;
 
         #endregion
 
@@ -98,7 +73,7 @@ namespace C2SR.ViewModels
         {
             MMChanged?.Invoke(this, new(newValue));
             OnPropertyChanged(nameof(IsMM));
-            OnPropertyChanged(nameof(SkillRate));
+            OnPropertyChanged(nameof(Score));
         }
 
         protected void OnTPChanging(decimal oldValue, decimal newValue)
@@ -111,7 +86,7 @@ namespace C2SR.ViewModels
         {
             TPChanged?.Invoke(this, new(newValue));
             OnPropertyChanged(nameof(TP));
-            OnPropertyChanged(nameof(SkillRate));
+            OnPropertyChanged(nameof(Score));
         }
 
         protected void OnMxmChanging(bool oldValue, bool newValue)
@@ -129,14 +104,6 @@ namespace C2SR.ViewModels
         #endregion
 
         #region Methods
-        private string GetLevelString()
-        {
-            StringBuilder sb = new();
-            sb.Append(Song.Level.ToString("N0"));
-            if (Math.Floor(Song.Level) != Song.Level) sb.Append('+');
-            return sb.ToString();
-        }
-
         public void SetMM(bool isMM, C2SongSetPropertyOption option)
         {
             if (Song.IsMM != isMM)
@@ -152,7 +119,7 @@ namespace C2SR.ViewModels
                     OnPropertyChanging(nameof(IsMM));
                     Song.IsMM = isMM;
                     OnPropertyChanged(nameof(IsMM));
-                    OnPropertyChanged(nameof(SkillRate));
+                    OnPropertyChanged(nameof(Score));
                 }
             }
         }
@@ -177,7 +144,7 @@ namespace C2SR.ViewModels
                     OnPropertyChanging(nameof(TP));
                     Song.TP = tp;
                     OnPropertyChanged(nameof(TP));
-                    OnPropertyChanged(nameof(SkillRate));
+                    OnPropertyChanged(nameof(Score));
                 }
             }
         }
@@ -202,7 +169,7 @@ namespace C2SR.ViewModels
                     OnPropertyChanging(nameof(IsMxm));
                     Song.IsMxm = isMxm;
                     OnPropertyChanged(nameof(IsMxm));
-                    OnPropertyChanged(nameof(SkillRate));
+                    OnPropertyChanged(nameof(Score));
                 }
             }
         }

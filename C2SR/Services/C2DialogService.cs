@@ -1,4 +1,5 @@
-﻿using C2SR.Views;
+﻿using C2SR.Resources;
+using C2SR.Views;
 using Microsoft.Win32;
 using System.Windows;
 
@@ -14,16 +15,17 @@ namespace C2SR.Services
         // Properties
         public Window Owner { get; set; }
 
-        // Methods
-        public MessageBoxResult QuerySaveChangesDialog() => MessageBox.Show(Owner, MSG_SAVE_CHANGES, TITLE, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+        #region Methods
+        public MessageBoxResult QuerySaveChangesDialog() => MessageBox.Show(Owner, Strings.MessageBox_QuerySaveChanges, Strings.Title,
+            MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
         public bool ShowOpenFileDialog(out string fileName)
         {
             OpenFileDialog dialog = new()
             {
-                Title = TITLE_OPEN,
+                Title = Strings.OpenFileDialog_Title,
                 Filter = FILTER,
-                DefaultExt = DEF_EXT,
+                DefaultExt = DEFAULT_EXT,
                 AddExtension = true,
                 Multiselect = false
             };
@@ -44,9 +46,9 @@ namespace C2SR.Services
         {
             SaveFileDialog dialog = new()
             {
-                Title = TITLE_SAVE,
+                Title = Strings.SaveFileDialog_Title,
                 Filter = FILTER,
-                DefaultExt = DEF_EXT,
+                DefaultExt = DEFAULT_EXT,
                 AddExtension = true,
                 OverwritePrompt = true
             };
@@ -63,8 +65,26 @@ namespace C2SR.Services
             }
         }
 
-        public void ShowOpenErrorDialog() => MessageBox.Show(Owner, MSG_OPEN_ERROR, TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
-        public void ShowSaveErrorDialog() => MessageBox.Show(Owner, MSG_SAVE_ERROR, TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
+        public void ShowOpenErrorDialog() => MessageBox.Show(Owner, Strings.MessageBox_Error_Load, Strings.Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        public void ShowSaveErrorDialog() => MessageBox.Show(Owner, Strings.MessageBox_Error_Save, Strings.Title, MessageBoxButton.OK, MessageBoxImage.Error);
+
+        public SettingsDialogResult ShowSettingsDialog()
+        {
+            SettingsDialog dialog = new() { Owner = Owner };
+            if (dialog.ShowDialog() == true)
+            {
+                return new SettingsDialogResult
+                {
+                    DialogResult = true,
+                    Language = (C2Language)dialog.LanguageSetting,
+                    StartAction = (C2StartAction)dialog.StartActionSetting
+                };
+            }
+            else
+            {
+                return new SettingsDialogResult { DialogResult = false };
+            }
+        }
 
         public SetValueDialogResult ShowSetValueDialog()
         {
@@ -94,14 +114,10 @@ namespace C2SR.Services
             dialog.ShowDialog();
         }
 
+        #endregion
+
         // Constants
-        const string TITLE = "Cytus II Rating";
-        const string MSG_SAVE_CHANGES = "Save changes to the current document? All unsaved data will be discarded.";
-        const string TITLE_OPEN = "Open";
-        const string TITLE_SAVE = "Save As";
         const string FILTER = "Cytus II Rating Files (*.c2sr)|*.c2r|JSON Files|*.json|All Files (*.*)|*.*";
-        const string DEF_EXT = ".c2sr";
-        const string MSG_OPEN_ERROR = "An error occurred while loading the file.";
-        const string MSG_SAVE_ERROR = "An error occurred while saving the file.";
+        const string DEFAULT_EXT = ".c2sr";
     }
 }
