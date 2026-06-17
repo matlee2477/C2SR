@@ -18,7 +18,7 @@ namespace C2SR.Views
             SetsTP = false;
             SetsMxm = false;
             IsMM = false;
-            tp = 0;
+            TP = 0;
             IsMxm = false;
         }
 
@@ -63,26 +63,15 @@ namespace C2SR.Views
             }
         }
 
-        decimal tp;
-        public decimal TPValue => tp;
-        public string TP
+        public decimal TP
         {
-            get => tp.ToString("N2");
+            get;
             set
             {
-                if (decimal.TryParse(value, out decimal newValue))
-                {
-                    if (newValue < 0) newValue = 0;
-                    if (newValue > 100) newValue = 100;
-                    tp = newValue;
-                }
-                else
-                {
-                    tp = 0;
-                }
+                field = value;
                 OnPropertyChanged(nameof(TP));
 
-                if (tp == 100)
+                if (field == 100)
                 {
                     SetsMM = true;
                     IsMM = true;
@@ -103,7 +92,7 @@ namespace C2SR.Views
                     SetsMM = true;
                     IsMM = true;
                     SetsTP = true;
-                    TP = "100";
+                    TP = 100;
                 }
             }
         }

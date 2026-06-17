@@ -1,6 +1,6 @@
 ﻿using C2SR.ViewModels;
 
-namespace C2SR.Services
+namespace C2SR.Services.UndoServices
 {
     abstract class C2UndoableCommand : IUndoableCommand
     {

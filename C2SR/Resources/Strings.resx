@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutDialog_Version" xml:space="preserve">
-    <value>Version [0] (Beta)</value>
+    <value>Version {0} (Beta)</value>
   </data>
   <data name="MainWindow_Menu_Help" xml:space="preserve">
     <value>_Help</value>
@@ -241,7 +241,7 @@
     <value>Save As</value>
   </data>
   <data name="AboutDialog_Author" xml:space="preserve">
-    <value>By [0]</value>
+    <value>By {0}</value>
   </data>
   <data name="AboutDialog_Title" xml:space="preserve">
     <value>About Cytus II Skill Rate</value>
@@ -305,5 +305,41 @@
   </data>
   <data name="MessageBox_LanguageChanged" xml:space="preserve">
     <value>Language changes will be applied after restarting the application.</value>
+  </data>
+  <data name="MainWindow_StatusBarText_NewDocument" xml:space="preserve">
+    <value>Created a new document</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadSuccess" xml:space="preserve">
+    <value>Loaded file successfully - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadFailure" xml:space="preserve">
+    <value>Failed to load file - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveSuccess" xml:space="preserve">
+    <value>Saved file successfully - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveFailure" xml:space="preserve">
+    <value>Failed to save file - {0}</value>
+  </data>
+  <data name="StatisticsDialog_Title" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="StatisticsDialog_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="StatisticsDialog_Ranks" xml:space="preserve">
+    <value>Rank List</value>
+  </data>
+  <data name="StatisticsDialog_TopSongs" xml:space="preserve">
+    <value>Top 30 Songs</value>
+  </data>
+  <data name="StatisticsDialog_RankScore" xml:space="preserve">
+    <value>{0} or higher</value>
+  </data>
+  <data name="MainWindow_TotalScoreText" xml:space="preserve">
+    <value>Total Score: {0} ({1})</value>
+  </data>
+  <data name="Rank_Unranked" xml:space="preserve">
+    <value>Unranked</value>
   </data>
 </root>

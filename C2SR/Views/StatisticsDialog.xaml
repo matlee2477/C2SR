@@ -1,0 +1,73 @@
+﻿<Window x:Class="C2SR.Views.StatisticsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:C2SR.Views"
+        xmlns:conv="clr-namespace:C2SR.Converters"
+        xmlns:res="clr-namespace:C2SR.Resources"
+        mc:Ignorable="d"
+        Title="{x:Static res:Strings.StatisticsDialog_Title}" Width="800" Height="450" MinWidth="800" MinHeight="450" WindowStartupLocation="Manual"
+        Closed="Window_Closed">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="0" Grid.Column="0" Header="{x:Static res:Strings.StatisticsDialog_Summary}">
+                <StackPanel>
+                    <StackPanel x:Name="stackPanel_Rank" Background="LightGray" Margin="5">
+                        <TextBlock x:Name="textBlock_RankName" Padding="10 5" Text="0" FontSize="20" FontWeight="Bold"/>
+                    </StackPanel>
+                    <TextBlock x:Name="textBox_TotalScore" Margin="5" Text="Total Score:"/>
+                    <TextBlock x:Name="textBox_MMSongs" Margin="5" Text="MM Achieved Songs:"/>
+                    <TextBlock x:Name="textBox_TP100Songs" Margin="5" Text="TP100 Achieved Songs:"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Grid.Row="2" Grid.Column="0" Header="{x:Static res:Strings.StatisticsDialog_Ranks}">
+                <ScrollViewer Margin="5">
+                    <ItemsControl x:Name="itemsControl" Margin="0 0 5 0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Background="LightGray" Margin="5">
+                                    <TextBlock x:Name="textBlock_RankName" Padding="10 5" Text="{Binding Name}" FontSize="20" FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="{x:Static res:Strings.StatisticsDialog_Ranks}">
+                <ListView Margin="5">
+                    <ListView.View>
+                        <GridView>
+                            
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="button_Close" Grid.Row="2" Grid.Column="1" IsDefault="True" IsCancel="True" Content="{x:Static res:Strings.Button_Close}"
+                Click="button_Close_Click"/>
+        </Grid>
+    </Grid>
+</Window>

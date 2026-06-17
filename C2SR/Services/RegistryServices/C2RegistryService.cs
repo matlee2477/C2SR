@@ -1,19 +1,30 @@
 ﻿using Microsoft.Win32;
 
-namespace C2SR.Services
+namespace C2SR.Services.RegistryServices
 {
     class C2RegistryService : IRegistryService, IDisposable
     {
-        public C2RegistryService()
+        public C2RegistryService() : this(@"Software\Cytus II Skill Rate", "Settings", 800, 450, 200, 200) { }
+
+        protected C2RegistryService(string mainKeyPath, string settingsKeyPath, int defaultWindowWidth, int defaultWindowHeight, int defaultWindowLeft, int defaultWindowTop)
         {
-            mainKey = Registry.CurrentUser.CreateSubKey(@"Software\Cytus II Skill Rate");
-            settingsKey = mainKey.CreateSubKey("Settings");
+            mainKey = Registry.CurrentUser.CreateSubKey(mainKeyPath);
+            if (!string.IsNullOrEmpty(settingsKeyPath)) settingsKey = mainKey.CreateSubKey(settingsKeyPath); else settingsKey = mainKey;
+            this.defaultWindowWidth = defaultWindowWidth;
+            this.defaultWindowHeight = defaultWindowHeight;
+            this.defaultWindowLeft = defaultWindowLeft;
+            this.defaultWindowTop = defaultWindowTop;
             isDisposed = false;
         }
 
         // Fields
-        readonly RegistryKey mainKey;
-        readonly RegistryKey settingsKey;
+        protected readonly RegistryKey mainKey;
+        protected readonly RegistryKey settingsKey;
+
+        protected readonly int defaultWindowWidth;
+        protected readonly int defaultWindowHeight;
+        protected readonly int defaultWindowLeft;
+        protected readonly int defaultWindowTop;
 
         #region Properties
         public int WindowWidth
@@ -21,7 +32,7 @@ namespace C2SR.Services
             get
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                return (int)(mainKey.GetValue("Width") ?? 800);
+                return (int)(mainKey.GetValue("Width") ?? defaultWindowWidth);
             }
             set
             {
@@ -35,7 +46,7 @@ namespace C2SR.Services
             get
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                return (int)(mainKey.GetValue("Height") ?? 600);
+                return (int)(mainKey.GetValue("Height") ?? defaultWindowHeight);
             }
             set
             {
@@ -49,7 +60,7 @@ namespace C2SR.Services
             get
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                return (int)(mainKey.GetValue("Left") ?? 100);
+                return (int)(mainKey.GetValue("Left") ?? defaultWindowLeft);
             }
             set
             {
@@ -63,7 +74,7 @@ namespace C2SR.Services
             get
             {
                 ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-                return (int)(mainKey.GetValue("Top") ?? 100);
+                return (int)(mainKey.GetValue("Top") ?? defaultWindowTop);
             }
             set
             {

@@ -1,6 +1,6 @@
 ﻿namespace C2SR.Services
 {
-    class C2SettingService : ISettingService
+    class C2SettingService
     {
         public C2SettingService()
         {

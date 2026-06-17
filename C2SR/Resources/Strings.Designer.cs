@@ -61,7 +61,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By [0].
+        ///   Looks up a localized string similar to By {0}.
         /// </summary>
         public static string AboutDialog_Author {
             get {
@@ -79,7 +79,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version [0] (Beta).
+        ///   Looks up a localized string similar to Version {0} (Beta).
         /// </summary>
         public static string AboutDialog_Version {
             get {
@@ -412,6 +412,60 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load file - {0}.
+        /// </summary>
+        public static string MainWindow_StatusBarText_LoadFailure {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_LoadFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded file successfully - {0}.
+        /// </summary>
+        public static string MainWindow_StatusBarText_LoadSuccess {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_LoadSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created a new document.
+        /// </summary>
+        public static string MainWindow_StatusBarText_NewDocument {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_NewDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to save file - {0}.
+        /// </summary>
+        public static string MainWindow_StatusBarText_SaveFailure {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_SaveFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved file successfully - {0}.
+        /// </summary>
+        public static string MainWindow_StatusBarText_SaveSuccess {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_SaveSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Score: {0} ({1}).
+        /// </summary>
+        public static string MainWindow_TotalScoreText {
+            get {
+                return ResourceManager.GetString("MainWindow_TotalScoreText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while loading the file..
         /// </summary>
         public static string MessageBox_Error_Load {
@@ -462,6 +516,15 @@ namespace C2SR.Resources {
         public static string OpenFileDialog_Title {
             get {
                 return ResourceManager.GetString("OpenFileDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unranked.
+        /// </summary>
+        public static string Rank_Unranked {
+            get {
+                return ResourceManager.GetString("Rank_Unranked", resourceCulture);
             }
         }
         
@@ -615,6 +678,51 @@ namespace C2SR.Resources {
         public static string SetValueDialog_Title {
             get {
                 return ResourceManager.GetString("SetValueDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank List.
+        /// </summary>
+        public static string StatisticsDialog_Ranks {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Ranks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} or higher.
+        /// </summary>
+        public static string StatisticsDialog_RankScore {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_RankScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        public static string StatisticsDialog_Summary {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statistics.
+        /// </summary>
+        public static string StatisticsDialog_Title {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top 30 Songs.
+        /// </summary>
+        public static string StatisticsDialog_TopSongs {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_TopSongs", resourceCulture);
             }
         }
         

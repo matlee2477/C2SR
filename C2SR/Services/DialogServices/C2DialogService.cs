@@ -1,9 +1,11 @@
 ﻿using C2SR.Resources;
+using C2SR.ViewModels;
 using C2SR.Views;
 using Microsoft.Win32;
+using System.Collections;
 using System.Windows;
 
-namespace C2SR.Services
+namespace C2SR.Services.DialogServices
 {
     class C2DialogService : IDialogService
     {
@@ -98,7 +100,7 @@ namespace C2SR.Services
                     SetsTP = dialog.SetsTP,
                     SetsMxm = dialog.SetsMxm,
                     IsMM = dialog.IsMM,
-                    TP = dialog.TPValue,
+                    TP = dialog.TP,
                     IsMxm = dialog.IsMxm
                 };
             }
@@ -106,6 +108,12 @@ namespace C2SR.Services
             {
                 return new SetValueDialogResult { DialogResult = false };
             }
+        }
+
+        public void ShowStatisticsDialog(IEnumerable topSongs, decimal totalScore, bool isUnranked)
+        {
+            StatisticsDialog dialog = new([.. topSongs.Cast<C2SongViewModel>()], totalScore, isUnranked);
+            dialog.ShowDialog();
         }
 
         public void ShowAboutDialog()

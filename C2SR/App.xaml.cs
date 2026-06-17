@@ -1,5 +1,7 @@
 ﻿using C2SR.Resources;
 using C2SR.Services;
+using C2SR.Services.DialogServices;
+using C2SR.Services.RegistryServices;
 using C2SR.ViewModels;
 using C2SR.Views;
 using System.Globalization;
@@ -64,7 +66,6 @@ namespace C2SR
                         reg.LastFileName = vm.FileName;
                     };
 
-                    vm.ChangeTitleRequested += (sender, e) => view.HandleChangeTitleRequest(e.FileName, e.IsSaved);
                     vm.SelectAllExecuted += (sender, e) => view.SelectAll();
                     vm.ExitExecuted += (sender, e) => view.Close();
                 }
@@ -72,11 +73,13 @@ namespace C2SR
                 vm.Initialize(fileName);
                 view.Show();
             }
-            catch
+            catch (Exception ex)
             {
+#if DEBUG
+                MessageBox.Show(ex.StackTrace);
+#endif
                 MessageBox.Show(Strings.MessageBox_Error_Startup, Strings.Title, MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
-                return;
             }
             finally
             {
@@ -96,8 +99,6 @@ namespace C2SR
                 reg.WindowHeight = (int)view.Height;
                 reg.IsMaximized = view.WindowState == WindowState.Maximized;
             }
-
-            e.ApplicationExitCode = 0;
         }
 
         #endregion

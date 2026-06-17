@@ -7,12 +7,14 @@
         xmlns:conv="clr-namespace:C2SR.Converters"
         xmlns:res="clr-namespace:C2SR.Resources"
         mc:Ignorable="d"
-        Title="Cytus II Skill Rate" Width="800" Height="450" MinWidth="800" MinHeight="450" WindowStartupLocation="Manual">
+        Width="800" Height="450" MinWidth="800" MinHeight="450" WindowStartupLocation="Manual">
     <Window.Resources>
-        <conv:C2LevelConverter x:Key="LevelConverter"/>
-        <conv:C2LevelConstantForegroundConverter x:Key="LevelConstantForegroundConverter"/>
-        <conv:C2LevelConstantFontWeightConverter x:Key="LevelConstantFontWeightConverter"/>
-        <conv:C2TPConverter x:Key="TPConverter"/>
+        <conv:MainWindowTitleConverter x:Key="WindowTitleConverter"/>
+        <conv:C2LevelToStringConverter x:Key="LevelToStringConverter"/>
+        <conv:C2LevelConstantToForegroundConverter x:Key="LevelConstantToForegroundConverter"/>
+        <conv:C2LevelConstantToFontWeightConverter x:Key="LevelConstantToFontWeightConverter"/>
+        <conv:C2TPToStringConverter x:Key="TPToStringConverter"/>
+        <conv:C2TotalScoreToTextConverter x:Key="TotalScoreToTextConverter"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewDocumentCommand}"/>
@@ -32,6 +34,12 @@
         <KeyBinding Key="F5" Command="{Binding ViewStatisticsCommand}"/>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
     </Window.InputBindings>
+    <Window.Title>
+        <MultiBinding Converter="{StaticResource WindowTitleConverter}">
+            <Binding Path="FileName"/>
+            <Binding Path="IsSaved"/>
+        </MultiBinding>
+    </Window.Title>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_File}">
@@ -70,6 +78,17 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Help_About}" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem Content="{Binding StatusBarText}"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StatusBarItem.Content>
+                    <MultiBinding Converter="{StaticResource TotalScoreToTextConverter}">
+                        <Binding Path="TotalScore"/>
+                        <Binding Path="IsUnranked"/>
+                    </MultiBinding>
+                </StatusBarItem.Content>
+            </StatusBarItem>
+        </StatusBar>
         <ListView x:Name="listView" x:FieldModifier="private" ItemsSource="{Binding Songs}"
                   SelectionChanged="ListView_SelectionChanged">
             <ListView.ItemContainerStyle>
@@ -124,7 +143,7 @@
                     <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Level}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Level, Converter={StaticResource LevelConverter}}" HorizontalAlignment="Center"/>
+                                <TextBlock Padding="0 0 2 0" Text="{Binding Level, Converter={StaticResource LevelToStringConverter}}" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -133,13 +152,13 @@
                             <DataTemplate>
                                 <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
                                     <TextBlock.Foreground>
-                                        <MultiBinding Converter="{StaticResource LevelConstantForegroundConverter}">
+                                        <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
                                             <Binding Path="Level"/>
                                             <Binding Path="LevelConstant"/>
                                         </MultiBinding>
                                     </TextBlock.Foreground>
                                     <TextBlock.FontWeight>
-                                        <MultiBinding Converter="{StaticResource LevelConstantFontWeightConverter}">
+                                        <MultiBinding Converter="{StaticResource LevelConstantToFontWeightConverter}">
                                             <Binding Path="Level"/>
                                             <Binding Path="LevelConstant"/>
                                         </MultiBinding>
@@ -158,7 +177,7 @@
                     <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_TP}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Padding="0 0 2 0" Text="{Binding TP, Converter={StaticResource TPConverter}}" Width="50" HorizontalContentAlignment="Right"/>
+                                <TextBox Padding="0 0 2 0" Text="{Binding TP, Converter={StaticResource TPToStringConverter}}" Width="50" HorizontalContentAlignment="Right"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -179,6 +198,19 @@
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Cut}" Command="{Binding CutCommand}" InputGestureText="Ctrl+X"/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Copy}" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C"/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Paste}" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V"/>
+                    <Separator/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SetSelection}" Command="{Binding SetSelectionCommand}" InputGestureText="Ctrl+T"/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_DeleteSelection}" Command="{Binding DeleteSelectionCommand}" InputGestureText="Del"/>
+                    <Separator/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SelectAll}" Command="{Binding SelectAllCommand}" InputGestureText="Ctrl+A"/>
+                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Clear}" Command="{Binding ClearCommand}" InputGestureText="Ctrl+Del"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
     </DockPanel>
 </Window>

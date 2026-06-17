@@ -1,6 +1,6 @@
-﻿namespace C2SR.Services
+﻿namespace C2SR.EventHandling
 {
-    class ChangeTotalScoreRequestedEventArgs : EventArgs
+    public class ChangeTotalScoreRequestedEventArgs : EventArgs
     {
         public ChangeTotalScoreRequestedEventArgs(decimal totalScore, bool isUnranked)
         {
@@ -13,5 +13,5 @@
         public bool IsUnranked { get; }
     }
 
-    delegate void ChangeTotalScoreRequestedEventHandler(object sender, ChangeTotalScoreRequestedEventArgs e);
+    public delegate void ChangeTotalScoreRequestedEventHandler(object sender, ChangeTotalScoreRequestedEventArgs e);
 }

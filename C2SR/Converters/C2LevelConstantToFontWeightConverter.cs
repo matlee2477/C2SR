@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace C2SR.Converters
 {
-    class C2LevelConstantForegroundConverter : IMultiValueConverter
+    class C2LevelConstantToFontWeightConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -13,16 +13,15 @@ namespace C2SR.Converters
             decimal diff = levelConstant - level;
             return diff switch
             {
-                >= 0.3M => new SolidColorBrush(Colors.Red),
-                <= -0.3M => new SolidColorBrush(Colors.Blue),
-                _ => new SolidColorBrush(Colors.Black)
+                >= 0.5M or <= -0.5M => FontWeights.Bold,
+                _ => FontWeights.Normal
             };
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             // Not a two-way binding
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

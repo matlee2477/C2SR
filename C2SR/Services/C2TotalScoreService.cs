@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using C2SR.ViewModels;
+using System.Windows.Media;
 
 namespace C2SR.Services
 {
@@ -13,13 +14,39 @@ namespace C2SR.Services
         readonly List<C2TotalScoreRank> ranks;
 
         // Methods
+        public static C2TopSongResult GetTopSongs(IEnumerable<C2SongViewModel> songs)
+        {
+            List<C2SongViewModel> topSongs = [];
+            decimal totalScore = 0;
+            int count = 0;
+            foreach (var song in songs.OrderByDescending(s => s.Score))
+            {
+                if (count < TOTAL_SCORE_SONG_COUNT && song.Score > 0)
+                {
+                    topSongs.Add(song);
+                    totalScore += song.Score;
+                    count++;
+                }
+            }
+
+            return new()
+            {
+                TopSongs = [.. topSongs],
+                TotalScore = totalScore,
+                TopSongCount = count,
+                IsUnranked = count < TOTAL_SCORE_SONG_COUNT
+            };
+        }
+
+        public C2TotalScoreRank[] GetAllRanks() => [.. ranks];
+
         public void AddRank(string name, decimal criterion, Color color)
         {
             ranks.Add(new() { Name = name, Criterion = criterion, Color = color });
             ranks.Sort((a, b) => b.Criterion.CompareTo(a.Criterion));
         }
 
-        public C2TotalScoreRank GetRank(decimal totalScore)
+        public C2TotalScoreRank GetRankFromTotalScore(decimal totalScore)
         {
             foreach (var rank in ranks)
             {
@@ -32,9 +59,20 @@ namespace C2SR.Services
             return new() { Name = string.Empty, Criterion = 0, Color = Colors.White };
         }
 
+        // Constants
+        public const int TOTAL_SCORE_SONG_COUNT = 30;
+
         // Singleton
         static readonly Lazy<C2TotalScoreService> lazy = new(() => new C2TotalScoreService());
         public static C2TotalScoreService Instance => lazy.Value;
+    }
+
+    readonly struct C2TopSongResult
+    {
+        public C2SongViewModel[] TopSongs { get; init; }
+        public decimal TotalScore { get; init; }
+        public int TopSongCount { get; init; }
+        public bool IsUnranked { get; init; }
     }
 
     readonly struct C2TotalScoreRank

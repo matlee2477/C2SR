@@ -1,46 +1,48 @@
-﻿using C2SR.Models;
-using C2SR.Services;
+﻿using C2SR.EventHandling;
+using C2SR.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows;
 
 namespace C2SR.ViewModels
 {
-    class C2SongViewModel : ObservableObject
+    public class C2SongViewModel : ObservableObject
     {
         public C2SongViewModel(C2Song song)
         {
-            Song = song;
+            this.song = song;
             SkillRateFontWeight = FontWeights.Normal;
         }
 
-        #region Properties
-        public C2Song Song { get; }
+        // Fields
+        readonly C2Song song;
 
-        public string Name => Song.Name;
-        public string Artist => Song.Artist;
-        public decimal Bpm => Song.Bpm;
-        public string Version => Song.Version;
-        public string Chapter => Song.Chapter;
-        public string ChartType => Song.ChartType;
-        public decimal Level => Song.Level;
-        public decimal LevelConstant => Song.LevelConstant;
-        public decimal Score => Song.Score;
+        #region Properties
+        public long ID => song.ID;
+        public string Name => song.Name;
+        public string Artist => song.Artist;
+        public decimal Bpm => song.Bpm;
+        public string Version => song.Version;
+        public string Chapter => song.Chapter;
+        public string ChartType => song.ChartType;
+        public decimal Level => song.Level;
+        public decimal LevelConstant => song.LevelConstant;
+        public decimal Score => song.Score;
 
         public bool IsMM
         {
-            get => Song.IsMM;
+            get => song.IsMM;
             set => SetMM(value);
         }
 
         public decimal TP
         {
-            get => Song.TP;
+            get => song.TP;
             set => SetTP(value);
         }
 
         public bool IsMxm
         {
-            get => Song.IsMxm;
+            get => song.IsMxm;
             set => SetMxm(value);
         }
 
@@ -106,18 +108,18 @@ namespace C2SR.ViewModels
         #region Methods
         public void SetMM(bool isMM, C2SongSetPropertyOption option)
         {
-            if (Song.IsMM != isMM)
+            if (song.IsMM != isMM)
             {
                 if (option != C2SongSetPropertyOption.Silent)
                 {
-                    OnMMChanging(Song.IsMM, isMM);
-                    Song.IsMM = isMM;
+                    OnMMChanging(song.IsMM, isMM);
+                    song.IsMM = isMM;
                     OnMMChanged(isMM);
                 }
                 else
                 {
                     OnPropertyChanging(nameof(IsMM));
-                    Song.IsMM = isMM;
+                    song.IsMM = isMM;
                     OnPropertyChanged(nameof(IsMM));
                     OnPropertyChanged(nameof(Score));
                 }
@@ -126,12 +128,12 @@ namespace C2SR.ViewModels
 
         public void SetTP(decimal tp, C2SongSetPropertyOption option)
         {
-            if (Song.TP != tp)
+            if (song.TP != tp)
             {
                 if (option != C2SongSetPropertyOption.Silent)
                 {
-                    OnTPChanging(Song.TP, tp);
-                    Song.TP = tp;
+                    OnTPChanging(song.TP, tp);
+                    song.TP = tp;
                     OnTPChanged(tp);
 
                     if (tp == 100)
@@ -142,7 +144,7 @@ namespace C2SR.ViewModels
                 else
                 {
                     OnPropertyChanging(nameof(TP));
-                    Song.TP = tp;
+                    song.TP = tp;
                     OnPropertyChanged(nameof(TP));
                     OnPropertyChanged(nameof(Score));
                 }
@@ -151,12 +153,12 @@ namespace C2SR.ViewModels
 
         public void SetMxm(bool isMxm, C2SongSetPropertyOption option)
         {
-            if (Song.IsMxm != isMxm)
+            if (song.IsMxm != isMxm)
             {
                 if (option != C2SongSetPropertyOption.Silent)
                 {
-                    OnMxmChanging(Song.IsMxm, isMxm);
-                    Song.IsMxm = isMxm;
+                    OnMxmChanging(song.IsMxm, isMxm);
+                    song.IsMxm = isMxm;
                     OnMxmChanged(isMxm);
 
                     if (isMxm)
@@ -167,7 +169,7 @@ namespace C2SR.ViewModels
                 else
                 {
                     OnPropertyChanging(nameof(IsMxm));
-                    Song.IsMxm = isMxm;
+                    song.IsMxm = isMxm;
                     OnPropertyChanged(nameof(IsMxm));
                     OnPropertyChanged(nameof(Score));
                 }
@@ -181,7 +183,7 @@ namespace C2SR.ViewModels
         #endregion
     }
 
-    enum C2SongSetPropertyOption
+    public enum C2SongSetPropertyOption
     {
         None = 0,
         Silent = 1,

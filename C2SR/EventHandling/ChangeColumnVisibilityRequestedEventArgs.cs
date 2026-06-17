@@ -1,6 +1,6 @@
-﻿namespace C2SR.Services
+﻿namespace C2SR.EventHandling
 {
-    class ChangeColumnVisibilityRequestedEventArgs
+    public class ChangeColumnVisibilityRequestedEventArgs
     {
         public ChangeColumnVisibilityRequestedEventArgs(bool[] columnVisibililties)
         {
@@ -11,5 +11,5 @@
         public bool[] ColumnVisibililties { get; }
     }
 
-    delegate void ChangeColumnVisibilityRequestedEventHandler(object sender, ChangeColumnVisibilityRequestedEventArgs e);
+    public delegate void ChangeColumnVisibilityRequestedEventHandler(object sender, ChangeColumnVisibilityRequestedEventArgs e);
 }

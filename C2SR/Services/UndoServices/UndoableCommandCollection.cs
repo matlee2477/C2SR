@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace C2SR.Services
+namespace C2SR.Services.UndoServices
 {
     public class UndoableCommandCollection : IUndoableCommand, ICollection<IUndoableCommand>
     {

@@ -2,7 +2,7 @@
 
 namespace C2SR.Converters
 {
-    class C2TPConverter : IValueConverter
+    class C2TPToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

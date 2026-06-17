@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace C2SR.Converters
 {
-    class C2LevelConverter : IValueConverter
+    class C2LevelToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -20,7 +20,7 @@ namespace C2SR.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // Not a two-way binding
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

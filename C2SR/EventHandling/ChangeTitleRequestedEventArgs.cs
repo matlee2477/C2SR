@@ -1,6 +1,6 @@
-﻿namespace C2SR.Services
+﻿namespace C2SR.EventHandling
 {
-    class ChangeTitleRequestedEventArgs : EventArgs
+    public class ChangeTitleRequestedEventArgs : EventArgs
     {
         public ChangeTitleRequestedEventArgs(string fileName, bool isSaved)
         {
@@ -13,5 +13,5 @@
         public bool IsSaved { get; }
     }
 
-    delegate void ChangeTitleRequestedEventHandler(object sender, ChangeTitleRequestedEventArgs e);
+    public delegate void ChangeTitleRequestedEventHandler(object sender, ChangeTitleRequestedEventArgs e);
 }

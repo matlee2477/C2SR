@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Windows;
 
-namespace C2SR.Services
+namespace C2SR.Services.DialogServices
 {
     interface IDialogService
     {
@@ -13,6 +14,7 @@ namespace C2SR.Services
         public void ShowSaveErrorDialog();
         public SettingsDialogResult ShowSettingsDialog();
         public SetValueDialogResult ShowSetValueDialog();
+        public void ShowStatisticsDialog(IEnumerable topSongs, decimal totalScore, bool isUnranked);
         public void ShowAboutDialog();
     }
 

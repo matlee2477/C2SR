@@ -1,5 +1,10 @@
-﻿using C2SR.Converters;
+﻿using C2SR.EventHandling;
+using C2SR.Resources;
 using C2SR.Services;
+using C2SR.Services.DialogServices;
+using C2SR.Services.JsonServices;
+using C2SR.Services.RegistryServices;
+using C2SR.Services.UndoServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections;
@@ -18,26 +23,33 @@ namespace C2SR.ViewModels
             songs = [];
             clipboard = [];
             this.dialogService = dialogService;
+            StatusBarText = string.Empty;
             FileName = string.Empty;
             IsSaved = true;
+            StatusBarText = string.Empty;
+            TopSongs = [];
+            TotalScore = 0;
+            IsUnranked = true;
 
-            NewDocumentCommand = new(ExecuteNewDocument);
-            LoadCommand = new(ExecuteLoad);
-            SaveCommand = new(ExecuteSave);
-            SaveAsCommand = new(ExecuteSaveAs);
-            SettingsCommand = new(ExecuteSettings);
-            UndoCommand = new(ExecuteUndo, CanUndo);
-            RedoCommand = new(ExecuteRedo, CanRedo);
-            CutCommand = new(ExecuteCut, CanEdit);
-            CopyCommand = new(ExecuteCopy, CanEdit);
-            PasteCommand = new(ExecutePaste, CanPaste);
-            SetSelectionCommand = new(ExecuteSetSelection, CanEdit);
-            DeleteSelectionCommand = new(ExecuteDeleteSelection, CanEdit);
-            SelectAllCommand = new(ExecuteSelectAll);
-            ClearCommand = new(ExecuteClear);
-            ViewStatisticsCommand = new(ExecuteViewStatistics);
-            AboutCommand = new(ExecuteAbout);
-            ExitCommand = new(ExecuteExit);
+            {
+                NewDocumentCommand = new(ExecuteNewDocument);
+                LoadCommand = new(ExecuteLoad);
+                SaveCommand = new(ExecuteSave);
+                SaveAsCommand = new(ExecuteSaveAs);
+                SettingsCommand = new(ExecuteSettings);
+                UndoCommand = new(ExecuteUndo, CanUndo);
+                RedoCommand = new(ExecuteRedo, CanRedo);
+                CutCommand = new(ExecuteCut, CanEdit);
+                CopyCommand = new(ExecuteCopy, CanEdit);
+                PasteCommand = new(ExecutePaste, CanPaste);
+                SetSelectionCommand = new(ExecuteSetSelection, CanEdit);
+                DeleteSelectionCommand = new(ExecuteDeleteSelection, CanEdit);
+                SelectAllCommand = new(ExecuteSelectAll);
+                ClearCommand = new(ExecuteClear);
+                ViewStatisticsCommand = new(ExecuteViewStatistics);
+                AboutCommand = new(ExecuteAbout);
+                ExitCommand = new(ExecuteExit);
+            }
 
             SelectedSongs = [];
         }
@@ -57,7 +69,7 @@ namespace C2SR.ViewModels
             set
             {
                 field = value;
-                ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
+                OnPropertyChanged(nameof(FileName));
             }
         }
 
@@ -67,7 +79,17 @@ namespace C2SR.ViewModels
             set
             {
                 field = value;
-                ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
+                OnPropertyChanged(nameof(IsSaved));
+            }
+        }
+
+        public string StatusBarText
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(StatusBarText));
             }
         }
 
@@ -82,6 +104,36 @@ namespace C2SR.ViewModels
                 PasteCommand.NotifyCanExecuteChanged();
                 SetSelectionCommand.NotifyCanExecuteChanged();
                 DeleteSelectionCommand.NotifyCanExecuteChanged();
+            }
+        }
+
+        public C2SongViewModel[] TopSongs
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(TopSongs));
+            }
+        }
+
+        public decimal TotalScore
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(TotalScore));
+            }
+        }
+
+        public bool IsUnranked
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(IsUnranked));
             }
         }
 
@@ -126,7 +178,6 @@ namespace C2SR.ViewModels
 
         // Events
         public event ChangeTitleRequestedEventHandler? ChangeTitleRequested;
-        public event ChangeTotalScoreRequestedEventHandler? ChangeTotalScoreRequested;
         public event EventHandler? SelectAllExecuted;
         public event EventHandler? ExitExecuted;
 
@@ -135,24 +186,23 @@ namespace C2SR.ViewModels
         {
             // Load song data
             {
-                using FileStream fs = new(@".\data\songs.json", FileMode.Open, FileAccess.Read);
-                using StreamReader reader = new(fs);
-                string code = reader.ReadToEnd();
+                C2JsonService jsonService = new();
+                string code = jsonService.LoadJson(@".\data\songs.json");
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                foreach (JsonNode node in arr.OfType<JsonObject>())
+                foreach (JsonNode node in arr.OfType<JsonNode>())
                 {
                     if (node is not JsonObject obj) continue;
 
                     long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
-                    string name = obj["name"]!.GetValue<string>();
-                    string artist = obj["artist"]!.GetValue<string>();
-                    decimal bpm = obj["BPM"]!.GetValue<decimal>();
-                    string version = obj["version"]!.GetValue<string>();
-                    string chapter = obj["chapter"]!.GetValue<string>();
-                    string chartType = obj["chart"]!.GetValue<string>();
-                    decimal level = obj["level"]!.GetValue<decimal>();
-                    decimal levelConstant = obj["const"]!.GetValue<decimal>();
+                    string name = obj["name"]?.GetValue<string>() ?? string.Empty;
+                    string artist = obj["artist"]?.GetValue<string>() ?? string.Empty;
+                    decimal bpm = obj["BPM"]?.GetValue<decimal>() ?? 0;
+                    string version = obj["version"]?.GetValue<string>() ?? string.Empty;
+                    string chapter = obj["chapter"]?.GetValue<string>() ?? string.Empty;
+                    string chartType = obj["chart"]?.GetValue<string>() ?? string.Empty;
+                    decimal level = obj["level"]?.GetValue<decimal>() ?? 12;
+                    decimal levelConstant = obj["const"]?.GetValue<decimal>() ?? level;
 
                     C2SongViewModel song = new(new(id, name, artist, bpm, version, chapter, chartType, level, levelConstant));
                     song.MMChanging += C2SongViewModel_MMChanging;
@@ -161,18 +211,18 @@ namespace C2SR.ViewModels
                     song.MMChanged += C2SongViewModel_MMChanged;
                     song.TPChanged += C2SongViewModel_TPChanged;
                     song.MxmChanged += C2SongViewModel_MxmChanged;
-                    songs.Add(song);
+
+                    if (song.Level >= TARGET_LEVEL) songs.Add(song);
                 }
             }
 
             // Load total score rank criteria
             {
-                using FileStream fs = new(@$".\data\ranks.json", FileMode.Open, FileAccess.Read);
-                using StreamReader reader = new(fs);
-                string code = reader.ReadToEnd();
+                C2JsonService jsonService = new();
+                string code = jsonService.LoadJson(@".\data\ranks.json");
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                foreach (JsonNode node in arr.OfType<JsonObject>())
+                foreach (JsonNode node in arr.OfType<JsonNode>())
                 {
                     if (node is not JsonObject obj) continue;
 
@@ -180,34 +230,32 @@ namespace C2SR.ViewModels
                     {
                         // Top criterion
                         string name = obj["top"]!.GetValue<string>();
-                        byte r = obj["r"]!.GetValue<byte>();
-                        byte g = obj["g"]!.GetValue<byte>();
-                        byte b = obj["b"]!.GetValue<byte>();
+                        byte r = obj["r"]?.GetValue<byte>() ?? 0;
+                        byte g = obj["g"]?.GetValue<byte>() ?? 0;
+                        byte b = obj["b"]?.GetValue<byte>() ?? 0;
                         Color color = new() { A = 255, R = r, G = g, B = b };
 
                         // Calculate top score
-                        decimal topScore = 0;
+                        var topSongs = Songs.OrderByDescending(s => s.LevelConstant).Take(C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
+                        var topSongsWithTP100 = topSongs.Select(s =>
                         {
-                            int count = 0;
-                            foreach (var song in Songs.OrderByDescending(s => s.Score))
-                            {
-                                count++;
-                                if (count > TOTAL_SCORE_SONG_COUNT) break;
+                            C2SongViewModel newSong = new(new(s.ID, s.Name, s.Artist, s.Bpm, s.Version, s.Chapter, s.ChartType, s.Level, s.LevelConstant));
+                            newSong.IsMM = true;
+                            newSong.TP = 100;
+                            return newSong;
+                        });
+                        var result = C2TotalScoreService.GetTopSongs(topSongsWithTP100);
 
-                                topScore += C2ScoreConverter.GetScore(song.LevelConstant, true, 100);
-                            }
-                        }
-
-                        C2TotalScoreService.Instance.AddRank(name, topScore, color);
+                        C2TotalScoreService.Instance.AddRank(name, result.TotalScore, color);
                     }
                     else
                     {
                         // Normal criterion
-                        string name = obj[$"{Thread.CurrentThread.CurrentUICulture.Name}"]!.GetValue<string>();
-                        decimal score = obj["score"]!.GetValue<decimal>();
-                        byte r = obj["r"]!.GetValue<byte>();
-                        byte g = obj["g"]!.GetValue<byte>();
-                        byte b = obj["b"]!.GetValue<byte>();
+                        string name = obj[$"{Thread.CurrentThread.CurrentUICulture.Name}"]?.GetValue<string>() ?? string.Empty;
+                        decimal score = obj["score"]?.GetValue<decimal>() ?? 100;
+                        byte r = obj["r"]?.GetValue<byte>() ?? 0;
+                        byte g = obj["g"]?.GetValue<byte>() ?? 0;
+                        byte b = obj["b"]?.GetValue<byte>() ?? 0;
                         Color color = Color.FromRgb(r, g, b);
 
                         C2TotalScoreService.Instance.AddRank(name, score, color);
@@ -229,6 +277,10 @@ namespace C2SR.ViewModels
                         Load(lastFileName);
                     }
                 }
+                else
+                {
+                    NewDocument();
+                }
             }
 
             ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
@@ -245,6 +297,7 @@ namespace C2SR.ViewModels
 
             FileName = string.Empty;
             IsSaved = true;
+            StatusBarText = Strings.MainWindow_StatusBarText_NewDocument;
             UpdateTotalScore();
             undoStack.Clear();
         }
@@ -253,20 +306,19 @@ namespace C2SR.ViewModels
         {
             try
             {
-                using FileStream fs = new(fileName, FileMode.Open, FileAccess.Read);
-                using StreamReader reader = new(fs);
-                string code = reader.ReadToEnd();
+                C2JsonService jsonService = new();
+                string code = jsonService.LoadJson(fileName);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonObject obj in arr.OfType<JsonObject>())
                 {
                     long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
-                    C2SongViewModel? song = songs.FirstOrDefault(s => s.Song.ID == id);
+                    C2SongViewModel? song = songs.FirstOrDefault(s => s.ID == id);
                     if (song != null)
                     {
-                        bool isMM = obj["MM"]!.GetValue<bool>();
-                        decimal tp = obj["TP"]!.GetValue<decimal>();
-                        bool isMxm = obj["MxM"]!.GetValue<bool>();
+                        bool isMM = obj["MM"]?.GetValue<bool>() ?? false;
+                        decimal tp = obj["TP"]?.GetValue<decimal>() ?? 0;
+                        bool isMxm = obj["MxM"]?.GetValue<bool>() ?? false;
                         song.SetMM(isMM, C2SongSetPropertyOption.Silent);
                         song.SetTP(tp, C2SongSetPropertyOption.Silent);
                         song.SetMxm(isMxm, C2SongSetPropertyOption.Silent);
@@ -275,6 +327,7 @@ namespace C2SR.ViewModels
 
                 FileName = fileName;
                 IsSaved = true;
+                StatusBarText = string.Format(Strings.MainWindow_StatusBarText_LoadSuccess, fileName);
                 UpdateTotalScore();
                 undoStack.Clear();
             }
@@ -282,6 +335,7 @@ namespace C2SR.ViewModels
             {
                 dialogService.ShowOpenErrorDialog();
                 NewDocument();
+                StatusBarText = string.Format(Strings.MainWindow_StatusBarText_LoadFailure, fileName);
             }
         }
 
@@ -294,24 +348,25 @@ namespace C2SR.ViewModels
                 {
                     JsonObject obj = new()
                     {
-                        ["ID"] = Convert.ToHexString(BitConverter.GetBytes(song.Song.ID)),
+                        ["ID"] = Convert.ToHexString(BitConverter.GetBytes(song.ID)),
                         ["MM"] = song.IsMM,
-                        ["TP"] = song.Song.TP,
+                        ["TP"] = song.TP,
                         ["MxM"] = song.IsMxm
                     };
                     arr.Add(obj);
                 }
 
-                using FileStream fs = new(fileName, FileMode.Create, FileAccess.Write);
-                using StreamWriter writer = new(fs);
-                writer.Write(arr.ToJsonString());
+                C2JsonService jsonService = new();
+                jsonService.SaveJson(fileName, arr.ToJsonString());
 
                 FileName = fileName;
                 IsSaved = true;
+                StatusBarText = string.Format(Strings.MainWindow_StatusBarText_SaveSuccess, fileName);
             }
             catch
             {
                 dialogService.ShowSaveErrorDialog();
+                StatusBarText = string.Format(Strings.MainWindow_StatusBarText_SaveFailure, fileName);
             }
         }
 
@@ -355,7 +410,7 @@ namespace C2SR.ViewModels
                 }
                 if (tp.HasValue)
                 {
-                    var oldTP = song.Song.TP;
+                    var oldTP = song.TP;
                     if (oldTP != tp.Value)
                     {
                         song.SetTP(tp.Value, C2SongSetPropertyOption.Silent);
@@ -392,23 +447,20 @@ namespace C2SR.ViewModels
 
         private void UpdateTotalScore()
         {
-            decimal totalScore = 0;
-            int count = 0;
-            foreach (var song in Songs.OrderByDescending(s => s.Score))
-            {
-                count++;
-                if (count <= TOTAL_SCORE_SONG_COUNT && song.Score > 0)
-                {
-                    totalScore += song.Score;
-                    song.SkillRateFontWeight = FontWeights.Bold;
-                }
-                else
-                {
-                    song.SkillRateFontWeight = FontWeights.Normal;
-                }
-            }
+            var result = C2TotalScoreService.GetTopSongs(Songs);
 
-            ChangeTotalScoreRequested?.Invoke(this, new(totalScore, count == TOTAL_SCORE_SONG_COUNT));
+            TopSongs = result.TopSongs;
+            TotalScore = result.TotalScore;
+            IsUnranked = result.IsUnranked;
+
+            foreach (var song in Songs)
+            {
+                song.SkillRateFontWeight = FontWeights.Normal;
+            }
+            foreach (var song in TopSongs)
+            {
+                song.SkillRateFontWeight = FontWeights.Bold;
+            }
         }
 
         #endregion
@@ -540,6 +592,7 @@ namespace C2SR.ViewModels
             undoStack.Undo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
+            UpdateTotalScore();
         }
 
         void ExecuteRedo()
@@ -547,6 +600,7 @@ namespace C2SR.ViewModels
             undoStack.Redo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
+            UpdateTotalScore();
         }
 
         void ExecuteCut()
@@ -557,7 +611,7 @@ namespace C2SR.ViewModels
 
         void ExecuteCopy()
         {
-            clipboard = [.. SelectedSongs.Select(song => new C2ClipboardField() { IsMM = song.IsMM, TP = song.Song.TP, IsMxm = song.IsMxm })];
+            clipboard = [.. SelectedSongs.Select(song => new C2ClipboardField() { IsMM = song.IsMM, TP = song.TP, IsMxm = song.IsMxm })];
             PasteCommand.NotifyCanExecuteChanged();
         }
 
@@ -568,7 +622,7 @@ namespace C2SR.ViewModels
             foreach (var song in SelectedSongs)
             {
                 var oldMM = song.IsMM;
-                var oldTP = song.Song.TP;
+                var oldTP = song.TP;
                 var oldMxm = song.IsMxm;
 
                 var newMM = clipboard[index % clipboard.Length].IsMM;
@@ -602,6 +656,7 @@ namespace C2SR.ViewModels
                 UndoCommand.NotifyCanExecuteChanged();
                 RedoCommand.NotifyCanExecuteChanged();
                 IsSaved = false;
+                UpdateTotalScore();
             }
         }
 
@@ -634,7 +689,7 @@ namespace C2SR.ViewModels
 
         void ExecuteViewStatistics()
         {
-            
+            dialogService.ShowStatisticsDialog(TopSongs, TotalScore, IsUnranked);
         }
 
         void ExecuteAbout()
@@ -650,6 +705,13 @@ namespace C2SR.ViewModels
         #endregion
 
         // Constants
-        const int TOTAL_SCORE_SONG_COUNT = 10;
+        const int TARGET_LEVEL = 15;
+    }
+
+    readonly struct C2ClipboardField
+    {
+        public bool IsMM { get; init; }
+        public decimal TP { get; init; }
+        public bool IsMxm { get; init; }
     }
 }

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutDialog_Version" xml:space="preserve">
-    <value>버전 [0] (베타)</value>
+    <value>버전 {0} (베타)</value>
   </data>
   <data name="MainWindow_Menu_Help" xml:space="preserve">
     <value>도움말(_H)</value>
@@ -157,7 +157,7 @@
     <value>파일(_F)</value>
   </data>
   <data name="MainWindow_Menu_File_Exit" xml:space="preserve">
-    <value> 종료(_X)</value>
+    <value>종료(_X)</value>
   </data>
   <data name="MainWindow_Menu_File_New" xml:space="preserve">
     <value>새로 만들기(_N)</value>
@@ -241,7 +241,7 @@
     <value>다른 이름으로 저장</value>
   </data>
   <data name="AboutDialog_Author" xml:space="preserve">
-    <value>제작: [0]</value>
+    <value>제작: {0}</value>
   </data>
   <data name="AboutDialog_Title" xml:space="preserve">
     <value>Cytus II Skill Rate 정보</value>
@@ -305,5 +305,29 @@
   </data>
   <data name="MessageBox_LanguageChanged" xml:space="preserve">
     <value>언어 변경 사항은 응용 프로그램을 다시 시작한 후 적용됩니다.</value>
+  </data>
+  <data name="MainWindow_StatusBarText_NewDocument" xml:space="preserve">
+    <value>새 문서 생성</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadSuccess" xml:space="preserve">
+    <value>파일 열기 성공 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadFailure" xml:space="preserve">
+    <value>파일 열기 실패 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveSuccess" xml:space="preserve">
+    <value>파일 저장 성공 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveFailure" xml:space="preserve">
+    <value>파일 저장 실패 - {0}</value>
+  </data>
+  <data name="StatisticsDialog_Title" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="MainWindow_TotalScoreText" xml:space="preserve">
+    <value>총 점수: {0} ({1})</value>
+  </data>
+  <data name="Rank_Unranked" xml:space="preserve">
+    <value>Unranked</value>
   </data>
 </root>

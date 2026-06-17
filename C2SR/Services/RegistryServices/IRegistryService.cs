@@ -1,4 +1,4 @@
-﻿namespace C2SR.Services
+﻿namespace C2SR.Services.RegistryServices
 {
     interface IRegistryService : IDisposable
     {

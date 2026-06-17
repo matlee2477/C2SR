@@ -2,7 +2,7 @@
 
 namespace C2SR.Models
 {
-    class C2Song
+    public class C2Song
     {
         public C2Song(long id, string name, string artist, decimal bpm, string version, string chapter, string chartType, decimal level, decimal levelConstant)
         {

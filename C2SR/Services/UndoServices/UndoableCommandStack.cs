@@ -1,4 +1,4 @@
-﻿namespace C2SR.Services
+﻿namespace C2SR.Services.UndoServices
 {
     public class UndoableCommandStack
     {
@@ -49,7 +49,7 @@
             redoStack.Clear();
         }
 
-        // Singleton (lazy initialization)
+        // Singleton
         static readonly Lazy<UndoableCommandStack> lazy = new(() => new());
         public static UndoableCommandStack Instance => lazy.Value;
     }

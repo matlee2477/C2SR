@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutDialog_Version" xml:space="preserve">
-    <value>バージョン [0]（ベータ）</value>
+    <value>バージョン {0}（ベータ）</value>
   </data>
   <data name="MainWindow_Menu_Help" xml:space="preserve">
     <value>ヘルプ(_H)</value>
@@ -241,7 +241,7 @@
     <value>名前を付けて保存</value>
   </data>
   <data name="AboutDialog_Author" xml:space="preserve">
-    <value>制作: [0]</value>
+    <value>制作: {0}</value>
   </data>
   <data name="AboutDialog_Title" xml:space="preserve">
     <value>Cytus II Skill Rateについて</value>
@@ -305,5 +305,29 @@
   </data>
   <data name="MessageBox_LanguageChanged" xml:space="preserve">
     <value>言語の変更は、アプリケーションの再起動後に適用されます。</value>
+  </data>
+  <data name="MainWindow_StatusBarText_NewDocument" xml:space="preserve">
+    <value>新規ドキュメント作成</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadSuccess" xml:space="preserve">
+    <value>ファイル読み込み成功 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_LoadFailure" xml:space="preserve">
+    <value>ファイル読み込み失敗 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveSuccess" xml:space="preserve">
+    <value>ファイル保存成功 - {0}</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SaveFailure" xml:space="preserve">
+    <value>ファイル保存失敗 - {0}</value>
+  </data>
+  <data name="StatisticsDialog_Title" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="MainWindow_TotalScoreText" xml:space="preserve">
+    <value>総スコア: {0} ({1})</value>
+  </data>
+  <data name="Rank_Unranked" xml:space="preserve">
+    <value>Unranked</value>
   </data>
 </root>

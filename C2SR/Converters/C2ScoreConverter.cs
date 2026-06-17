@@ -16,15 +16,19 @@ namespace C2SR.Converters
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             // Not a two-way binding
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public static decimal GetScore(decimal levelConstant, bool isMM, decimal tp)
         {
-            decimal rate = tp * levelConstant / 100;
-            if (isMM) rate += 0.3m;
-            if (tp == 100) rate += 0.2m;
-            return rate;
+            decimal score = tp * levelConstant / 100;
+            if (isMM) score += BONUS_MM;
+            if (tp == 100) score += BONUS_TP100;
+            return score;
         }
+
+        // Constants
+        const decimal BONUS_MM = 0.3M;
+        const decimal BONUS_TP100 = 0.2M;
     }
 }

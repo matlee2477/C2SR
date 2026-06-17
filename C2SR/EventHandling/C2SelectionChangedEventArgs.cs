@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 
-namespace C2SR.Services
+namespace C2SR.EventHandling
 {
-    class C2SelectionChangedEventArgs : EventArgs
+    public class C2SelectionChangedEventArgs : EventArgs
     {
         public C2SelectionChangedEventArgs(IList selectedItems)
         {
@@ -12,5 +12,5 @@ namespace C2SR.Services
         public IList SelectedItems { get; }
     }
 
-    delegate void C2SelectionChangedEventHandler(object sender, C2SelectionChangedEventArgs e);
+    public delegate void C2SelectionChangedEventHandler(object sender, C2SelectionChangedEventArgs e);
 }
