@@ -178,7 +178,7 @@
     <value>表示(_V)</value>
   </data>
   <data name="MainWindow_Menu_View_ViewStatistics" xml:space="preserve">
-    <value>統計(_S)...</value>
+    <value>統計(_T)...</value>
   </data>
   <data name="MainWindow_Menu_Help_About" xml:space="preserve">
     <value>Cytus II Skill R_ateについて...</value>
@@ -300,9 +300,6 @@
   <data name="SettingsDialog_General_StartupAction_OpenLastDocument" xml:space="preserve">
     <value>前回のファイルを開く</value>
   </data>
-  <data name="SettingsDialog_UI" xml:space="preserve">
-    <value>UI</value>
-  </data>
   <data name="MessageBox_LanguageChanged" xml:space="preserve">
     <value>言語の変更は、アプリケーションの再起動後に適用されます。</value>
   </data>
@@ -324,10 +321,61 @@
   <data name="StatisticsDialog_Title" xml:space="preserve">
     <value>統計</value>
   </data>
+  <data name="StatisticsDialog_Summary" xml:space="preserve">
+    <value>概要</value>
+  </data>
+  <data name="StatisticsDialog_Ranks" xml:space="preserve">
+    <value>ランク一覧</value>
+  </data>
+  <data name="StatisticsDialog_TopSongs" xml:space="preserve">
+    <value>上位30曲</value>
+  </data>
+  <data name="StatisticsDialog_Ranks_Criterion" xml:space="preserve">
+    <value>{0}以上</value>
+  </data>
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
     <value>総スコア: {0} ({1})</value>
   </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
+  </data>
+  <data name="StatisticsDialog_Summary_TotalScore" xml:space="preserve">
+    <value>総スコア: {0}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_EvaluatedCount" xml:space="preserve">
+    <value>評価済み楽曲数: {0}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_MMCount" xml:space="preserve">
+    <value>MM達成楽曲数: {0} / {1}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_TP100Count" xml:space="preserve">
+    <value>TP100達成楽曲数: {0} / {1}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_MxmCount" xml:space="preserve">
+    <value>MxM達成楽曲数: {0} / {1}</value>
+  </data>
+  <data name="SettingsDialog_Editor" xml:space="preserve">
+    <value>エディター</value>
+  </data>
+  <data name="SettingsDialog_Editor_CascadesAchievements" xml:space="preserve">
+    <value>下位達成を自動設定</value>
+  </data>
+  <data name="SettingsDialog_Editor_CascadesAchievements_Tooltip" xml:space="preserve">
+    <value>有効にすると、TP100設定時にMMも設定され、MxM設定時にMMとTP100が設定されます。</value>
+  </data>
+  <data name="SettingsDialog_UI" xml:space="preserve">
+    <value>UI</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsOutlyingLevelConstants" xml:space="preserve">
+    <value>詐称譜面を強調表示</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsTopSongs" xml:space="preserve">
+    <value>上位30曲を強調表示</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip" xml:space="preserve">
+    <value>有効にすると、レベル定数が高すぎる、または低すぎる楽曲を強調表示します。</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowStatusBar" xml:space="preserve">
+    <value>상태 표시줄(_S)</value>
   </data>
 </root>

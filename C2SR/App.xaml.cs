@@ -28,6 +28,9 @@ namespace C2SR
                 C2SettingService.Instance.Language = (C2Language)reg.GetSetting("Language", 0);
                 C2SettingService.Instance.StartAction = (C2StartAction)reg.GetSetting("StartAction", 1);
                 C2SettingService.Instance.LastFileName = reg.LastFileName;
+                C2SettingService.Instance.HighlightsOutlyingLevelConstants = reg.GetSetting("HighlightsOutlyingLevelConstants", true);
+                C2SettingService.Instance.HighlightsTopSongs = reg.GetSetting("HighlightsTopSongs", true);
+                C2SettingService.Instance.CascadesAchievements = reg.GetSetting("CascadesAchievements", true);
 
                 // Set language
                 string locale = C2SettingService.Instance.Language switch
@@ -64,8 +67,10 @@ namespace C2SR
                     {
                         using C2RegistryService reg = new();
                         reg.LastFileName = vm.FileName;
+                        reg.SetVisibility("StatusBar", vm.IsStatusBarVisible);
                     };
 
+                    vm.RefreshListViewRequested += (sender, e) => view.RefreshListView();
                     vm.SelectAllExecuted += (sender, e) => view.SelectAll();
                     vm.ExitExecuted += (sender, e) => view.Close();
                 }

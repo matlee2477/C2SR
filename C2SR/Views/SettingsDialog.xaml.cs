@@ -19,6 +19,9 @@ namespace C2SR.Views
 
             LanguageSetting = (int)C2SettingService.Instance.Language;
             StartActionSetting = (int)C2SettingService.Instance.StartAction;
+            HighlightsOutlyingLevelConstants = C2SettingService.Instance.HighlightsOutlyingLevelConstants;
+            HighlightsTopSongs = C2SettingService.Instance.HighlightsTopSongs;
+            CascadesAchievements = C2SettingService.Instance.CascadesAchievements;
 
             isFirstLanguageChange = true;
         }
@@ -50,6 +53,36 @@ namespace C2SR.Views
             {
                 field = value;
                 OnPropertyChanged(nameof(StartActionSetting));
+            }
+        }
+
+        public bool HighlightsOutlyingLevelConstants
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(HighlightsOutlyingLevelConstants));
+            }
+        }
+
+        public bool HighlightsTopSongs
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(HighlightsTopSongs));
+            }
+        }
+
+        public bool CascadesAchievements
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(CascadesAchievements));
             }
         }
 

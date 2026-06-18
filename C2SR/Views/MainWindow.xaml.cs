@@ -18,6 +18,7 @@ namespace C2SR.Views
         public event C2SelectionChangedEventHandler? SelectionChanged;
 
         // Methods
+        public void RefreshListView() => listView.Items.Refresh();
         public void SelectAll() => listView.SelectAll();
 
         // Event Handlers

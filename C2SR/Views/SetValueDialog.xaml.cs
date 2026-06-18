@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using C2SR.Services;
+using System.ComponentModel;
 using System.Windows;
 
 namespace C2SR.Views
@@ -71,7 +72,7 @@ namespace C2SR.Views
                 field = value;
                 OnPropertyChanged(nameof(TP));
 
-                if (field == 100)
+                if (C2SettingService.Instance.CascadesAchievements && field == 100)
                 {
                     SetsMM = true;
                     IsMM = true;
@@ -87,7 +88,7 @@ namespace C2SR.Views
                 field = value;
                 OnPropertyChanged(nameof(IsMxm));
 
-                if (field)
+                if (C2SettingService.Instance.CascadesAchievements && field)
                 {
                     SetsMM = true;
                     IsMM = true;

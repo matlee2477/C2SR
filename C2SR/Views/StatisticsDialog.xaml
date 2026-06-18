@@ -10,6 +10,13 @@
         Title="{x:Static res:Strings.StatisticsDialog_Title}" Width="800" Height="450" MinWidth="800" MinHeight="450" WindowStartupLocation="Manual"
         Closed="Window_Closed">
     <Window.Resources>
+        <conv:C2RankColorToBrushConverter x:Key="RankColorToBrushConverter"/>
+        <conv:C2RankCriterionToTextConverter x:Key="RankCriterionToTextConverter"/>
+        <conv:C2LevelToStringConverter x:Key="LevelToStringConverter"/>
+        <conv:C2LevelConstantToForegroundConverter x:Key="LevelConstantToForegroundConverter"/>
+        <conv:C2LevelConstantToFontWeightConverter x:Key="LevelConstantToFontWeightConverter"/>
+        <conv:BooleanToOXConverter x:Key="BooleanToOXConverter"/>
+        <conv:C2TPToStringConverter x:Key="TPToStringConverter"/>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -31,11 +38,13 @@
             <GroupBox Grid.Row="0" Grid.Column="0" Header="{x:Static res:Strings.StatisticsDialog_Summary}">
                 <StackPanel>
                     <StackPanel x:Name="stackPanel_Rank" Background="LightGray" Margin="5">
-                        <TextBlock x:Name="textBlock_RankName" Padding="10 5" Text="0" FontSize="20" FontWeight="Bold"/>
+                        <TextBlock x:Name="textBlock_RankName" Padding="10 5" Text="{x:Static res:Strings.Rank_Unranked}" FontSize="20" FontWeight="Bold"/>
                     </StackPanel>
-                    <TextBlock x:Name="textBox_TotalScore" Margin="5" Text="Total Score:"/>
-                    <TextBlock x:Name="textBox_MMSongs" Margin="5" Text="MM Achieved Songs:"/>
-                    <TextBlock x:Name="textBox_TP100Songs" Margin="5" Text="TP100 Achieved Songs:"/>
+                    <TextBlock x:Name="textBlock_TotalScore" Margin="5" Text="{x:Static res:Strings.StatisticsDialog_Summary_TotalScore}"/>
+                    <TextBlock x:Name="textBlock_EvaluatedCount" Margin="5" Text="{x:Static res:Strings.StatisticsDialog_Summary_EvaluatedCount}"/>
+                    <TextBlock x:Name="textBlock_MMCount" Margin="5" Text="{x:Static res:Strings.StatisticsDialog_Summary_MMCount}"/>
+                    <TextBlock x:Name="textBlock_TP100Count" Margin="5" Text="{x:Static res:Strings.StatisticsDialog_Summary_TP100Count}"/>
+                    <TextBlock x:Name="textBlock_MxmCount" Margin="5" Text="{x:Static res:Strings.StatisticsDialog_Summary_MxmCount}"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Grid.Row="2" Grid.Column="0" Header="{x:Static res:Strings.StatisticsDialog_Ranks}">
@@ -43,19 +52,107 @@
                     <ItemsControl x:Name="itemsControl" Margin="0 0 5 0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Background="LightGray" Margin="5">
+                                <StackPanel Background="{Binding Color, Converter={StaticResource RankColorToBrushConverter}}" Margin="5">
                                     <TextBlock x:Name="textBlock_RankName" Padding="10 5" Text="{Binding Name}" FontSize="20" FontWeight="Bold"/>
+                                    <TextBlock x:Name="textBox_TotalScore" Margin="10 0 10 5" FontSize="14">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource RankCriterionToTextConverter}">
+                                                <Binding Path="Criterion"/>
+                                                <Binding Path="Name"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </GroupBox>
-            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="{x:Static res:Strings.StatisticsDialog_Ranks}">
-                <ListView Margin="5">
+            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="{x:Static res:Strings.StatisticsDialog_TopSongs}">
+                <ListView x:Name="listView" Margin="5">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Chapter}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding Chapter}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Name}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Artist}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding Artist}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_ChartType}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding ChartType}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Level}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding Level, Converter={StaticResource LevelToStringConverter}}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_LevelConstant}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
+                                                    <Binding Path="Level"/>
+                                                    <Binding Path="LevelConstant"/>
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                            <TextBlock.FontWeight>
+                                                <MultiBinding Converter="{StaticResource LevelConstantToFontWeightConverter}">
+                                                    <Binding Path="Level"/>
+                                                    <Binding Path="LevelConstant"/>
+                                                </MultiBinding>
+                                            </TextBlock.FontWeight>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_IsMM}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding IsMM, Converter={StaticResource BooleanToOXConverter}}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_TP}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding TP, StringFormat={}{0:F2}}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Score}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding Score, StringFormat={}{0:F3}}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>

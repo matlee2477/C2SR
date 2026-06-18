@@ -403,7 +403,16 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Statistics....
+        ///   Looks up a localized string similar to _Status Bar.
+        /// </summary>
+        public static string MainWindow_Menu_View_ShowStatusBar {
+            get {
+                return ResourceManager.GetString("MainWindow_Menu_View_ShowStatusBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to S_tatistics....
         /// </summary>
         public static string MainWindow_Menu_View_ViewStatistics {
             get {
@@ -538,6 +547,33 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Editor.
+        /// </summary>
+        public static string SettingsDialog_Editor {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-set lower achievements.
+        /// </summary>
+        public static string SettingsDialog_Editor_CascadesAchievements {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Editor_CascadesAchievements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When activated, setting TP100 also sets MM, and setting MxM also sets MM and TP100..
+        /// </summary>
+        public static string SettingsDialog_Editor_CascadesAchievements_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Editor_CascadesAchievements_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string SettingsDialog_General {
@@ -583,7 +619,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On Startup:.
+        ///   Looks up a localized string similar to On startup:.
         /// </summary>
         public static string SettingsDialog_General_StartupAction {
             get {
@@ -592,7 +628,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create New File.
+        ///   Looks up a localized string similar to Create new file.
         /// </summary>
         public static string SettingsDialog_General_StartupAction_NewDocument {
             get {
@@ -601,7 +637,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Last File.
+        ///   Looks up a localized string similar to Open last file.
         /// </summary>
         public static string SettingsDialog_General_StartupAction_OpenLastDocument {
             get {
@@ -624,6 +660,33 @@ namespace C2SR.Resources {
         public static string SettingsDialog_UI {
             get {
                 return ResourceManager.GetString("SettingsDialog_UI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlight outlying constants.
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsOutlyingLevelConstants {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsOutlyingLevelConstants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When activated, highlight the songs whose level constant is too high or too low..
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlight top 30 songs.
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsTopSongs {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsTopSongs", resourceCulture);
             }
         }
         
@@ -693,9 +756,9 @@ namespace C2SR.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0} or higher.
         /// </summary>
-        public static string StatisticsDialog_RankScore {
+        public static string StatisticsDialog_Ranks_Criterion {
             get {
-                return ResourceManager.GetString("StatisticsDialog_RankScore", resourceCulture);
+                return ResourceManager.GetString("StatisticsDialog_Ranks_Criterion", resourceCulture);
             }
         }
         
@@ -705,6 +768,51 @@ namespace C2SR.Resources {
         public static string StatisticsDialog_Summary {
             get {
                 return ResourceManager.GetString("StatisticsDialog_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Evaluated Songs: {0}.
+        /// </summary>
+        public static string StatisticsDialog_Summary_EvaluatedCount {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary_EvaluatedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MM Achieved Songs: {0} / {1}.
+        /// </summary>
+        public static string StatisticsDialog_Summary_MMCount {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary_MMCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MxM Achieved Songs: {0} / {1}.
+        /// </summary>
+        public static string StatisticsDialog_Summary_MxmCount {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary_MxmCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Score: {0}.
+        /// </summary>
+        public static string StatisticsDialog_Summary_TotalScore {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary_TotalScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TP100 Achieved Songs: {0} / {1}.
+        /// </summary>
+        public static string StatisticsDialog_Summary_TP100Count {
+            get {
+                return ResourceManager.GetString("StatisticsDialog_Summary_TP100Count", resourceCulture);
             }
         }
         

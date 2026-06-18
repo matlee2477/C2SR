@@ -1,7 +1,7 @@
 ﻿using C2SR.EventHandling;
 using C2SR.Models;
+using C2SR.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows;
 
 namespace C2SR.ViewModels
 {
@@ -10,7 +10,7 @@ namespace C2SR.ViewModels
         public C2SongViewModel(C2Song song)
         {
             this.song = song;
-            SkillRateFontWeight = FontWeights.Normal;
+            IsTopSong = false;
         }
 
         // Fields
@@ -46,13 +46,13 @@ namespace C2SR.ViewModels
             set => SetMxm(value);
         }
 
-        public FontWeight SkillRateFontWeight
+        public bool IsTopSong
         {
             get;
             set
             {
                 field = value;
-                OnPropertyChanged(nameof(SkillRateFontWeight));
+                OnPropertyChanged(nameof(IsTopSong));
             }
         }
 
@@ -106,6 +106,8 @@ namespace C2SR.ViewModels
         #endregion
 
         #region Methods
+        public override string ToString() => $"{Name}";
+
         public void SetMM(bool isMM, C2SongSetPropertyOption option)
         {
             if (song.IsMM != isMM)
@@ -136,7 +138,7 @@ namespace C2SR.ViewModels
                     song.TP = tp;
                     OnTPChanged(tp);
 
-                    if (tp == 100)
+                    if (C2SettingService.Instance.CascadesAchievements && tp == 100)
                     {
                         SetMM(true);
                     }
@@ -161,7 +163,7 @@ namespace C2SR.ViewModels
                     song.IsMxm = isMxm;
                     OnMxmChanged(isMxm);
 
-                    if (isMxm)
+                    if (C2SettingService.Instance.CascadesAchievements && isMxm)
                     {
                         SetTP(100);
                     }
@@ -171,7 +173,6 @@ namespace C2SR.ViewModels
                     OnPropertyChanging(nameof(IsMxm));
                     song.IsMxm = isMxm;
                     OnPropertyChanged(nameof(IsMxm));
-                    OnPropertyChanged(nameof(Score));
                 }
             }
         }

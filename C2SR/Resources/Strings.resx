@@ -178,7 +178,7 @@
     <value>_View</value>
   </data>
   <data name="MainWindow_Menu_View_ViewStatistics" xml:space="preserve">
-    <value>_Statistics...</value>
+    <value>S_tatistics...</value>
   </data>
   <data name="MainWindow_Menu_Help_About" xml:space="preserve">
     <value>_About Cytus II Skill Rate...</value>
@@ -277,7 +277,7 @@
     <value>Language:</value>
   </data>
   <data name="SettingsDialog_General_StartupAction" xml:space="preserve">
-    <value>On Startup:</value>
+    <value>On startup:</value>
   </data>
   <data name="SettingsDialog_General" xml:space="preserve">
     <value>General</value>
@@ -295,13 +295,10 @@
     <value>日本語</value>
   </data>
   <data name="SettingsDialog_General_StartupAction_NewDocument" xml:space="preserve">
-    <value>Create New File</value>
+    <value>Create new file</value>
   </data>
   <data name="SettingsDialog_General_StartupAction_OpenLastDocument" xml:space="preserve">
-    <value>Open Last File</value>
-  </data>
-  <data name="SettingsDialog_UI" xml:space="preserve">
-    <value>UI</value>
+    <value>Open last file</value>
   </data>
   <data name="MessageBox_LanguageChanged" xml:space="preserve">
     <value>Language changes will be applied after restarting the application.</value>
@@ -333,7 +330,7 @@
   <data name="StatisticsDialog_TopSongs" xml:space="preserve">
     <value>Top 30 Songs</value>
   </data>
-  <data name="StatisticsDialog_RankScore" xml:space="preserve">
+  <data name="StatisticsDialog_Ranks_Criterion" xml:space="preserve">
     <value>{0} or higher</value>
   </data>
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
@@ -341,5 +338,44 @@
   </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
+  </data>
+  <data name="StatisticsDialog_Summary_TotalScore" xml:space="preserve">
+    <value>Total Score: {0}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_EvaluatedCount" xml:space="preserve">
+    <value>Evaluated Songs: {0}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_MMCount" xml:space="preserve">
+    <value>MM Achieved Songs: {0} / {1}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_TP100Count" xml:space="preserve">
+    <value>TP100 Achieved Songs: {0} / {1}</value>
+  </data>
+  <data name="StatisticsDialog_Summary_MxmCount" xml:space="preserve">
+    <value>MxM Achieved Songs: {0} / {1}</value>
+  </data>
+  <data name="SettingsDialog_Editor" xml:space="preserve">
+    <value>Editor</value>
+  </data>
+  <data name="SettingsDialog_Editor_CascadesAchievements" xml:space="preserve">
+    <value>Auto-set lower achievements</value>
+  </data>
+  <data name="SettingsDialog_Editor_CascadesAchievements_Tooltip" xml:space="preserve">
+    <value>When activated, setting TP100 also sets MM, and setting MxM also sets MM and TP100.</value>
+  </data>
+  <data name="SettingsDialog_UI" xml:space="preserve">
+    <value>UI</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsOutlyingLevelConstants" xml:space="preserve">
+    <value>Highlight outlying constants</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsTopSongs" xml:space="preserve">
+    <value>Highlight top 30 songs</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip" xml:space="preserve">
+    <value>When activated, highlight the songs whose level constant is too high or too low.</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowStatusBar" xml:space="preserve">
+    <value>_Status Bar</value>
   </data>
 </root>

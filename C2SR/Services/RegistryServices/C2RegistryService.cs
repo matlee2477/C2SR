@@ -114,34 +114,114 @@ namespace C2SR.Services.RegistryServices
         #endregion
 
         #region Methods
+        public bool GetVisibility(string name, bool defaultValue)
+        {
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+
+            if (mainKey.GetValue(name) is int value)
+            {
+                return Convert.ToBoolean(value);
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public int GetSize(string name, int defaultValue)
+        {
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+
+            if (mainKey.GetValue(name) is int value)
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
         public bool GetSetting(string name, bool defaultValue)
         {
             ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-            return (bool)(settingsKey.GetValue(name) ?? defaultValue);
+
+            if (settingsKey.GetValue(name) is int value)
+            {
+                return Convert.ToBoolean(value);
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         public int GetSetting(string name, int defaultValue)
         {
             ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-            return (int)(settingsKey.GetValue(name) ?? defaultValue);
+
+            if (settingsKey.GetValue(name) is int value)
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         public long GetSetting(string name, long defaultValue)
         {
             ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-            return (long)(settingsKey.GetValue(name) ?? defaultValue);
+
+            if (settingsKey.GetValue(name) is long value)
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         public string GetSetting(string name, string defaultValue)
         {
             ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-            return (string)(settingsKey.GetValue(name) ?? defaultValue);
+
+            if (settingsKey.GetValue(name) is string value)
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         public byte[] GetSetting(string name, byte[] defaultValue)
         {
             ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
-            return (byte[])(settingsKey.GetValue(name) ?? defaultValue);
+
+            if (settingsKey.GetValue(name) is byte[] value)
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public void SetVisibility(string name, bool value)
+        {
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            mainKey.SetValue(name, value, RegistryValueKind.DWord);
+        }
+
+        public void SetSize(string name, int value)
+        {
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            mainKey.SetValue(name, value, RegistryValueKind.DWord);
         }
 
         public void SetSetting(string name, bool value)

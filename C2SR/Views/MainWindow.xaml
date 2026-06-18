@@ -9,12 +9,14 @@
         mc:Ignorable="d"
         Width="800" Height="450" MinWidth="800" MinHeight="450" WindowStartupLocation="Manual">
     <Window.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <conv:MainWindowTitleConverter x:Key="WindowTitleConverter"/>
         <conv:C2LevelToStringConverter x:Key="LevelToStringConverter"/>
         <conv:C2LevelConstantToForegroundConverter x:Key="LevelConstantToForegroundConverter"/>
         <conv:C2LevelConstantToFontWeightConverter x:Key="LevelConstantToFontWeightConverter"/>
         <conv:C2TPToStringConverter x:Key="TPToStringConverter"/>
         <conv:C2TotalScoreToTextConverter x:Key="TotalScoreToTextConverter"/>
+        <conv:C2IsTopSongToFontWeightConverter x:Key="IsTopSongToFontWeightConverter"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewDocumentCommand}"/>
@@ -68,9 +70,7 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Clear}" Command="{Binding ClearCommand}" InputGestureText="Ctrl+Del"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View}">
-                <MenuItem Header="Show _Filters" IsCheckable="True" IsChecked="{Binding IsFiltersVisible}"/>
-                <MenuItem Header="Show S_earch Bar" IsCheckable="True" IsChecked="{Binding IsSearchBarVisible}"/>
-                <MenuItem Header="Show S_tatus Bar" IsCheckable="True" IsChecked="{Binding IsStatusBarVisible}"/>
+                <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ShowStatusBar}" IsCheckable="True" IsChecked="{Binding IsStatusBarVisible}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ViewStatistics}" Command="{Binding ViewStatisticsCommand}" InputGestureText="F5"/>
             </MenuItem>
@@ -78,7 +78,7 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Help_About}" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Visibility="{Binding IsStatusBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StatusBarItem Content="{Binding StatusBarText}"/>
             <StatusBarItem HorizontalAlignment="Right">
                 <StatusBarItem.Content>
@@ -89,128 +89,184 @@
                 </StatusBarItem.Content>
             </StatusBarItem>
         </StatusBar>
-        <ListView x:Name="listView" x:FieldModifier="private" ItemsSource="{Binding Songs}"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="2" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <ComboBox Margin="4" Width="100" VerticalAlignment="Center"/>
+                <TextBox Margin="4" Width="150" VerticalAlignment="Center"/>
+                <Button Margin="4" Content="Search" VerticalAlignment="Center"/>
+                <CheckBox Margin="4" Content="Match case" VerticalAlignment="Center"/>
+            </StackPanel>
+            <ListView x:Name="listView" Grid.Row="1" Grid.Column="0" x:FieldModifier="private" ItemsSource="{Binding Songs}"
                   SelectionChanged="ListView_SelectionChanged">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Chapter}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Chapter}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Name}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Artist}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Artist}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Bpm}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Bpm}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Version}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Version}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_ChartType}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding ChartType}" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Level}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Level, Converter={StaticResource LevelToStringConverter}}" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_LevelConstant}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
-                                    <TextBlock.Foreground>
-                                        <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
-                                            <Binding Path="Level"/>
-                                            <Binding Path="LevelConstant"/>
-                                        </MultiBinding>
-                                    </TextBlock.Foreground>
-                                    <TextBlock.FontWeight>
-                                        <MultiBinding Converter="{StaticResource LevelConstantToFontWeightConverter}">
-                                            <Binding Path="Level"/>
-                                            <Binding Path="LevelConstant"/>
-                                        </MultiBinding>
-                                    </TextBlock.FontWeight>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_IsMM}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMM}" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_TP}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Padding="0 0 2 0" Text="{Binding TP, Converter={StaticResource TPToStringConverter}}" Width="50" HorizontalContentAlignment="Right"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_IsMxm}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMxm}" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Score}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Padding="0 0 2 0" Text="{Binding Score, StringFormat={}{0:F3}}" HorizontalAlignment="Center"
-                                           FontWeight="{Binding SkillRateFontWeight}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-            <ListView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Cut}" Command="{Binding CutCommand}" InputGestureText="Ctrl+X"/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Copy}" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C"/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Paste}" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V"/>
-                    <Separator/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SetSelection}" Command="{Binding SetSelectionCommand}" InputGestureText="Ctrl+T"/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_DeleteSelection}" Command="{Binding DeleteSelectionCommand}" InputGestureText="Del"/>
-                    <Separator/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SelectAll}" Command="{Binding SelectAllCommand}" InputGestureText="Ctrl+A"/>
-                    <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Clear}" Command="{Binding ClearCommand}" InputGestureText="Ctrl+Del"/>
-                </ContextMenu>
-            </ListView.ContextMenu>
-        </ListView>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Chapter}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Chapter}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Name}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Artist}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Artist}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Bpm}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Bpm}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Version}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Version}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_ChartType}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding ChartType}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Level}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Level, Converter={StaticResource LevelToStringConverter}}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_LevelConstant}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
+                                        <TextBlock.Foreground>
+                                            <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
+                                                <Binding Path="Level"/>
+                                                <Binding Path="LevelConstant"/>
+                                            </MultiBinding>
+                                        </TextBlock.Foreground>
+                                        <TextBlock.FontWeight>
+                                            <MultiBinding Converter="{StaticResource LevelConstantToFontWeightConverter}">
+                                                <Binding Path="Level"/>
+                                                <Binding Path="LevelConstant"/>
+                                            </MultiBinding>
+                                        </TextBlock.FontWeight>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_IsMM}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsMM}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_TP}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Padding="0 0 2 0" Text="{Binding TP, Converter={StaticResource TPToStringConverter}}" Width="50" HorizontalContentAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_IsMxm}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsMxm}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_Score}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding Score, StringFormat={}{0:F3}}" HorizontalAlignment="Center"
+                                           FontWeight="{Binding IsTopSong, Converter={StaticResource IsTopSongToFontWeightConverter}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Cut}" Command="{Binding CutCommand}" InputGestureText="Ctrl+X"/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Copy}" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C"/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Paste}" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V"/>
+                        <Separator/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SetSelection}" Command="{Binding SetSelectionCommand}" InputGestureText="Ctrl+T"/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_DeleteSelection}" Command="{Binding DeleteSelectionCommand}" InputGestureText="Del"/>
+                        <Separator/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SelectAll}" Command="{Binding SelectAllCommand}" InputGestureText="Ctrl+A"/>
+                        <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Clear}" Command="{Binding ClearCommand}" InputGestureText="Ctrl+Del"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+            <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5">
+                <GroupBox Padding="5" Header="Sort">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Margin="5" Text="Sort By:" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="comboBox_Sort" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Padding="5" Header="Filter">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Row="0" Grid.Column="0" Margin="5" Content="Filter Version:" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Row="1" Grid.Column="0" Margin="5" Content="Filter Chapter:" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Margin="5" Content="Filter Chart Type:" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Row="3" Grid.Column="0" Margin="5" Content="Filter Level:" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="comboBox_FilterVersion" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="comboBox_FilterChapter" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="comboBox_FilterChart" Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="comboBox_FilterLevel" Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
+                        </Grid>
+                        <CheckBox Margin="5" Content="MM Achieved Only" VerticalAlignment="Center"/>
+                        <CheckBox Margin="5" Content="TP100 Achieved Only" VerticalAlignment="Center"/>
+                        <CheckBox Margin="5" Content="MxM Achieved Only" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 </Window>

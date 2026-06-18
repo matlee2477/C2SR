@@ -137,28 +137,6 @@ namespace C2SR.ViewModels
             }
         }
 
-        public bool IsFiltersVisible
-        {
-            get;
-            set
-            {
-                field = value;
-                OnPropertyChanged(nameof(IsFiltersVisible));
-                OnPropertyChanged(nameof(FiltersVisibility));
-            }
-        }
-
-        public bool IsSearchBarVisible
-        {
-            get;
-            set
-            {
-                field = value;
-                OnPropertyChanged(nameof(IsSearchBarVisible));
-                OnPropertyChanged(nameof(SearchBarVisibility));
-            }
-        }
-
         public bool IsStatusBarVisible
         {
             get;
@@ -166,18 +144,14 @@ namespace C2SR.ViewModels
             {
                 field = value;
                 OnPropertyChanged(nameof(IsStatusBarVisible));
-                OnPropertyChanged(nameof(StatusBarVisibility));
             }
         }
-
-        public Visibility FiltersVisibility => IsFiltersVisible ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility SearchBarVisibility => IsSearchBarVisible ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility StatusBarVisibility => IsStatusBarVisible ? Visibility.Visible : Visibility.Collapsed;
 
         #endregion
 
         // Events
         public event ChangeTitleRequestedEventHandler? ChangeTitleRequested;
+        public event EventHandler? RefreshListViewRequested;
         public event EventHandler? SelectAllExecuted;
         public event EventHandler? ExitExecuted;
 
@@ -282,6 +256,10 @@ namespace C2SR.ViewModels
                     NewDocument();
                 }
             }
+
+            // Load registry
+            using C2RegistryService reg = new();
+            IsStatusBarVisible = reg.GetVisibility("StatusBar", true);
 
             ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
         }
@@ -455,11 +433,11 @@ namespace C2SR.ViewModels
 
             foreach (var song in Songs)
             {
-                song.SkillRateFontWeight = FontWeights.Normal;
+                song.IsTopSong = false;
             }
             foreach (var song in TopSongs)
             {
-                song.SkillRateFontWeight = FontWeights.Bold;
+                song.IsTopSong = true;
             }
         }
 
@@ -579,11 +557,19 @@ namespace C2SR.ViewModels
             {
                 C2SettingService.Instance.Language = result.Language;
                 C2SettingService.Instance.StartAction = result.StartAction;
+                C2SettingService.Instance.HighlightsOutlyingLevelConstants = result.HighlightsOutlyingLevelConstants;
+                C2SettingService.Instance.HighlightsTopSongs = result.HighlightsTopSongs;
+                C2SettingService.Instance.CascadesAchievements = result.CascadesAchievements;
 
-                // Save registry
+                // Save settings
                 using C2RegistryService reg = new();
                 reg.SetSetting("Language", (int)result.Language);
                 reg.SetSetting("StartAction", (int)result.StartAction);
+                reg.SetSetting("HighlightsOutlyingLevelConstants", result.HighlightsOutlyingLevelConstants);
+                reg.SetSetting("HighlightsTopSongs", result.HighlightsTopSongs);
+                reg.SetSetting("CascadesAchievements", result.CascadesAchievements);
+
+                RefreshListViewRequested?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -689,7 +675,7 @@ namespace C2SR.ViewModels
 
         void ExecuteViewStatistics()
         {
-            dialogService.ShowStatisticsDialog(TopSongs, TotalScore, IsUnranked);
+            dialogService.ShowStatisticsDialog(Songs);
         }
 
         void ExecuteAbout()

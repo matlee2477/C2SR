@@ -79,7 +79,10 @@ namespace C2SR.Services.DialogServices
                 {
                     DialogResult = true,
                     Language = (C2Language)dialog.LanguageSetting,
-                    StartAction = (C2StartAction)dialog.StartActionSetting
+                    StartAction = (C2StartAction)dialog.StartActionSetting,
+                    HighlightsOutlyingLevelConstants = dialog.HighlightsOutlyingLevelConstants,
+                    HighlightsTopSongs = dialog.HighlightsTopSongs,
+                    CascadesAchievements = dialog.CascadesAchievements,
                 };
             }
             else
@@ -110,9 +113,9 @@ namespace C2SR.Services.DialogServices
             }
         }
 
-        public void ShowStatisticsDialog(IEnumerable topSongs, decimal totalScore, bool isUnranked)
+        public void ShowStatisticsDialog(IEnumerable songs)
         {
-            StatisticsDialog dialog = new([.. topSongs.Cast<C2SongViewModel>()], totalScore, isUnranked);
+            StatisticsDialog dialog = new([.. songs.Cast<C2SongViewModel>()]) { Owner = Owner };
             dialog.ShowDialog();
         }
 

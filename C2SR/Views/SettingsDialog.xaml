@@ -40,7 +40,24 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{x:Static res:Strings.SettingsDialog_UI}">
-                
+                <StackPanel Margin="5">
+                    <CheckBox Margin="5" Content="{x:Static res:Strings.SettingsDialog_UI_HighlightsOutlyingLevelConstants}"
+                              ToolTip="{x:Static res:Strings.SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip}"
+                              IsChecked="{Binding HighlightsOutlyingLevelConstants}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <ToolTipService.InitialShowDelay>100</ToolTipService.InitialShowDelay>
+                    </CheckBox>
+                    <CheckBox Margin="5" Content="{x:Static res:Strings.SettingsDialog_UI_HighlightsTopSongs}"
+                                  IsChecked="{Binding HighlightsTopSongs}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{x:Static res:Strings.SettingsDialog_Editor}">
+                <StackPanel Margin="5">
+                    <CheckBox Margin="5" Content="{x:Static res:Strings.SettingsDialog_Editor_CascadesAchievements}"
+                                  ToolTip="{x:Static res:Strings.SettingsDialog_Editor_CascadesAchievements_Tooltip}"
+                                  IsChecked="{Binding CascadesAchievements}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <ToolTipService.InitialShowDelay>100</ToolTipService.InitialShowDelay>
+                    </CheckBox>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <Grid Grid.Row="2">
