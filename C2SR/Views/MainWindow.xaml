@@ -70,6 +70,8 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Clear}" Command="{Binding ClearCommand}" InputGestureText="Ctrl+Del"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View}">
+                <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ShowSearchBar}" IsCheckable="True" IsChecked="{Binding IsSearchBarVisible}"/>
+                <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ShowFilters}" IsCheckable="True" IsChecked="{Binding IsFiltersVisible}"/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ShowStatusBar}" IsCheckable="True" IsChecked="{Binding IsStatusBarVisible}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_View_ViewStatistics}" Command="{Binding ViewStatisticsCommand}" InputGestureText="F5"/>
@@ -96,16 +98,14 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Margin="2" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                <ComboBox Margin="4" Width="100" VerticalAlignment="Center"/>
-                <TextBox Margin="4" Width="150" VerticalAlignment="Center"/>
-                <Button Margin="4" Content="Search" VerticalAlignment="Center"/>
-                <CheckBox Margin="4" Content="Match case" VerticalAlignment="Center"/>
-            </StackPanel>
-            <ListView x:Name="listView" Grid.Row="1" Grid.Column="0" x:FieldModifier="private" ItemsSource="{Binding Songs}"
-                  SelectionChanged="ListView_SelectionChanged">
+            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Gray" BorderThickness="0.5" Padding="1"
+                    Visibility="{Binding IsSearchBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <local:SearchBar SearchExecuted="SearchBar_SearchExecuted"/>
+            </Border>
+            <ListView x:Name="listView" Grid.Row="1" Grid.Column="0" x:FieldModifier="private" ItemsSource="{Binding FilteredSongs}"
+                  SelectionChanged="listView_SelectionChanged">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -227,46 +227,10 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5">
-                <GroupBox Padding="5" Header="Sort">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="5" Text="Sort By:" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="comboBox_Sort" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Padding="5" Header="Filter">
-                    <StackPanel>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <CheckBox Grid.Row="0" Grid.Column="0" Margin="5" Content="Filter Version:" VerticalAlignment="Center"/>
-                            <CheckBox Grid.Row="1" Grid.Column="0" Margin="5" Content="Filter Chapter:" VerticalAlignment="Center"/>
-                            <CheckBox Grid.Row="2" Grid.Column="0" Margin="5" Content="Filter Chart Type:" VerticalAlignment="Center"/>
-                            <CheckBox Grid.Row="3" Grid.Column="0" Margin="5" Content="Filter Level:" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="comboBox_FilterVersion" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="comboBox_FilterChapter" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="comboBox_FilterChart" Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="comboBox_FilterLevel" Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center"/>
-                        </Grid>
-                        <CheckBox Margin="5" Content="MM Achieved Only" VerticalAlignment="Center"/>
-                        <CheckBox Margin="5" Content="TP100 Achieved Only" VerticalAlignment="Center"/>
-                        <CheckBox Margin="5" Content="MxM Achieved Only" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
+            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="0.5" Padding="5" Width="300"
+                    Visibility="{Binding IsFiltersVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <local:FiltersPanel FilterExecuted="FiltersPanel_FilterExecuted"/>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>

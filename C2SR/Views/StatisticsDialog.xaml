@@ -68,7 +68,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </GroupBox>
-            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="{x:Static res:Strings.StatisticsDialog_TopSongs}">
+            <GroupBox x:Name="groupBox_TopSongs" Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="{x:Static res:Strings.StatisticsDialog_TopSongs}">
                 <ListView x:Name="listView" Margin="5">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">

@@ -30,6 +30,7 @@ namespace C2SR.ViewModels
             TopSongs = [];
             TotalScore = 0;
             IsUnranked = true;
+            FilteredSongs = [];
 
             {
                 NewDocumentCommand = new(ExecuteNewDocument);
@@ -137,6 +138,26 @@ namespace C2SR.ViewModels
             }
         }
 
+        public bool IsSearchBarVisible
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(IsSearchBarVisible));
+            }
+        }
+
+        public bool IsFiltersVisible
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(IsFiltersVisible));
+            }
+        }
+
         public bool IsStatusBarVisible
         {
             get;
@@ -144,6 +165,16 @@ namespace C2SR.ViewModels
             {
                 field = value;
                 OnPropertyChanged(nameof(IsStatusBarVisible));
+            }
+        }
+
+        public IEnumerable<C2SongViewModel> FilteredSongs
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(FilteredSongs));
             }
         }
 
@@ -188,6 +219,8 @@ namespace C2SR.ViewModels
 
                     if (song.Level >= TARGET_LEVEL) songs.Add(song);
                 }
+
+                FilteredSongs = songs;
             }
 
             // Load total score rank criteria
@@ -259,6 +292,8 @@ namespace C2SR.ViewModels
 
             // Load registry
             using C2RegistryService reg = new();
+            IsSearchBarVisible = reg.GetVisibility("SearchBar", true);
+            IsFiltersVisible = reg.GetVisibility("Filters", true);
             IsStatusBarVisible = reg.GetVisibility("StatusBar", true);
 
             ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
@@ -423,7 +458,7 @@ namespace C2SR.ViewModels
             SelectedSongs = selectedItems.Cast<C2SongViewModel>();
         }
 
-        private void UpdateTotalScore()
+        public void UpdateTotalScore()
         {
             var result = C2TotalScoreService.GetTopSongs(Songs);
 
@@ -439,6 +474,76 @@ namespace C2SR.ViewModels
             {
                 song.IsTopSong = true;
             }
+        }
+
+        public void ApplyFilters(C2Filter filter)
+        {
+            IEnumerable<C2SongViewModel> filteredSongs = songs;
+
+            // Apply search
+            if (!string.IsNullOrEmpty(filter.SearchTerm))
+            {
+                filteredSongs = filteredSongs.Where(song =>
+                {
+                    string propertyValue = filter.SearchOption switch
+                    {
+                        EventHandling.SearchOption.Name => song.Name,
+                        EventHandling.SearchOption.Artist => song.Artist,
+                        _ => string.Empty
+                    };
+                    if (filter.IsCaseSensitive)
+                    {
+                        return propertyValue.Contains(filter.SearchTerm);
+                    }
+                    else
+                    {
+                        return propertyValue.Contains(filter.SearchTerm, StringComparison.CurrentCultureIgnoreCase);
+                    }
+                });
+            }
+
+            // Apply filters
+            if (filter.VersionFilter != null) filteredSongs = filteredSongs.Where(s => s.Version == filter.VersionFilter);
+            if (filter.ChapterFilter != null) filteredSongs = filteredSongs.Where(s => s.Chapter == filter.ChapterFilter);
+            if (filter.ChartTypeFilter != null) filteredSongs = filteredSongs.Where(s => s.ChartType == filter.ChartTypeFilter);
+            if (filter.LevelFilter != null) filteredSongs = filteredSongs.Where(s => s.Level == filter.LevelFilter);
+            if (filter.IsMMOnly) filteredSongs = filteredSongs.Where(s => s.IsMM);
+            if (filter.IsTP100Only) filteredSongs = filteredSongs.Where(s => s.TP == 100);
+            if (filter.IsMxmOnly) filteredSongs = filteredSongs.Where(s => s.IsMxm);
+
+            // Apply sorting
+            if (filter.SortOption != SortOption.Default)
+            {
+                Func<C2SongViewModel, object> keySelector = filter.SortOption switch
+                {
+                    SortOption.Name => song => song.Name,
+                    SortOption.Artist => song => song.Artist,
+                    SortOption.Bpm => song => song.Bpm,
+                    SortOption.Version => song => song.Version,
+                    SortOption.ChartType => song => song.ChartType,
+                    SortOption.Level => song => song.Level,
+                    SortOption.LevelConstant => song => song.LevelConstant,
+                    SortOption.Score => song => song.Score,
+                    _ => throw new ArgumentOutOfRangeException(null)
+                };
+                if (filter.IsDescending)
+                {
+                    filteredSongs = filteredSongs.OrderByDescending(keySelector);
+                }
+                else
+                {
+                    filteredSongs = filteredSongs.OrderBy(keySelector);
+                }
+            }
+            else
+            {
+                if (filter.IsDescending)
+                {
+                    filteredSongs = filteredSongs.Reverse();
+                }
+            }
+
+            FilteredSongs = filteredSongs;
         }
 
         #endregion

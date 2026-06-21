@@ -115,6 +115,87 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string MainWindow_Filters {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (All).
+        /// </summary>
+        public static string MainWindow_Filters_All {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Chapter:.
+        /// </summary>
+        public static string MainWindow_Filters_FilterChapter {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_FilterChapter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Chart:.
+        /// </summary>
+        public static string MainWindow_Filters_FilterChartType {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_FilterChartType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Level:.
+        /// </summary>
+        public static string MainWindow_Filters_FilterLevel {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_FilterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Version:.
+        /// </summary>
+        public static string MainWindow_Filters_FilterVersion {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_FilterVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MM Achieved Only.
+        /// </summary>
+        public static string MainWindow_Filters_IsMMOnly {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_IsMMOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MxM Achieved Only.
+        /// </summary>
+        public static string MainWindow_Filters_IsMxmOnly {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_IsMxmOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TP100 Achieved Only.
+        /// </summary>
+        public static string MainWindow_Filters_IsTP100Only {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_IsTP100Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Artist.
         /// </summary>
         public static string MainWindow_Header_Artist {
@@ -403,7 +484,25 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Status Bar.
+        ///   Looks up a localized string similar to _Filter Panel.
+        /// </summary>
+        public static string MainWindow_Menu_View_ShowFilters {
+            get {
+                return ResourceManager.GetString("MainWindow_Menu_View_ShowFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to S_earch Bar.
+        /// </summary>
+        public static string MainWindow_Menu_View_ShowSearchBar {
+            get {
+                return ResourceManager.GetString("MainWindow_Menu_View_ShowSearchBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to S_tatus Bar.
         /// </summary>
         public static string MainWindow_Menu_View_ShowStatusBar {
             get {
@@ -412,11 +511,65 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to S_tatistics....
+        ///   Looks up a localized string similar to Statistics....
         /// </summary>
         public static string MainWindow_Menu_View_ViewStatistics {
             get {
                 return ResourceManager.GetString("MainWindow_Menu_View_ViewStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string MainWindow_Search {
+            get {
+                return ResourceManager.GetString("MainWindow_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match case.
+        /// </summary>
+        public static string MainWindow_Search_IsCaseSensitive {
+            get {
+                return ResourceManager.GetString("MainWindow_Search_IsCaseSensitive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort.
+        /// </summary>
+        public static string MainWindow_Sort {
+            get {
+                return ResourceManager.GetString("MainWindow_Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string MainWindow_Sort_Default {
+            get {
+                return ResourceManager.GetString("MainWindow_Sort_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descending.
+        /// </summary>
+        public static string MainWindow_Sort_Descending {
+            get {
+                return ResourceManager.GetString("MainWindow_Sort_Descending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort By:.
+        /// </summary>
+        public static string MainWindow_Sort_SortBy {
+            get {
+                return ResourceManager.GetString("MainWindow_Sort_SortBy", resourceCulture);
             }
         }
         
@@ -772,7 +925,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Evaluated Songs: {0}.
+        ///   Looks up a localized string similar to Evaluated Songs: {0} / {1}.
         /// </summary>
         public static string StatisticsDialog_Summary_EvaluatedCount {
             get {
@@ -826,7 +979,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Top 30 Songs.
+        ///   Looks up a localized string similar to Top {0} Songs.
         /// </summary>
         public static string StatisticsDialog_TopSongs {
             get {

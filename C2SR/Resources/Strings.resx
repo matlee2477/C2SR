@@ -178,7 +178,7 @@
     <value>_View</value>
   </data>
   <data name="MainWindow_Menu_View_ViewStatistics" xml:space="preserve">
-    <value>S_tatistics...</value>
+    <value>Statistics...</value>
   </data>
   <data name="MainWindow_Menu_Help_About" xml:space="preserve">
     <value>_About Cytus II Skill Rate...</value>
@@ -328,7 +328,7 @@
     <value>Rank List</value>
   </data>
   <data name="StatisticsDialog_TopSongs" xml:space="preserve">
-    <value>Top 30 Songs</value>
+    <value>Top {0} Songs</value>
   </data>
   <data name="StatisticsDialog_Ranks_Criterion" xml:space="preserve">
     <value>{0} or higher</value>
@@ -343,7 +343,7 @@
     <value>Total Score: {0}</value>
   </data>
   <data name="StatisticsDialog_Summary_EvaluatedCount" xml:space="preserve">
-    <value>Evaluated Songs: {0}</value>
+    <value>Evaluated Songs: {0} / {1}</value>
   </data>
   <data name="StatisticsDialog_Summary_MMCount" xml:space="preserve">
     <value>MM Achieved Songs: {0} / {1}</value>
@@ -376,6 +376,57 @@
     <value>When activated, highlight the songs whose level constant is too high or too low.</value>
   </data>
   <data name="MainWindow_Menu_View_ShowStatusBar" xml:space="preserve">
-    <value>_Status Bar</value>
+    <value>S_tatus Bar</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowFilters" xml:space="preserve">
+    <value>_Filter Panel</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowSearchBar" xml:space="preserve">
+    <value>S_earch Bar</value>
+  </data>
+  <data name="MainWindow_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MainWindow_Search_IsCaseSensitive" xml:space="preserve">
+    <value>Match case</value>
+  </data>
+  <data name="MainWindow_Filters_All" xml:space="preserve">
+    <value>(All)</value>
+  </data>
+  <data name="MainWindow_Filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="MainWindow_Filters_FilterVersion" xml:space="preserve">
+    <value>Filter Version:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterChapter" xml:space="preserve">
+    <value>Filter Chapter:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterLevel" xml:space="preserve">
+    <value>Filter Level:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterChartType" xml:space="preserve">
+    <value>Filter Chart:</value>
+  </data>
+  <data name="MainWindow_Filters_IsMMOnly" xml:space="preserve">
+    <value>MM Achieved Only</value>
+  </data>
+  <data name="MainWindow_Filters_IsTP100Only" xml:space="preserve">
+    <value>TP100 Achieved Only</value>
+  </data>
+  <data name="MainWindow_Filters_IsMxmOnly" xml:space="preserve">
+    <value>MxM Achieved Only</value>
+  </data>
+  <data name="MainWindow_Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="MainWindow_Sort_SortBy" xml:space="preserve">
+    <value>Sort By:</value>
+  </data>
+  <data name="MainWindow_Sort_Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="MainWindow_Sort_Default" xml:space="preserve">
+    <value>Default</value>
   </data>
 </root>

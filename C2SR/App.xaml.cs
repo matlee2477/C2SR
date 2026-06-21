@@ -17,7 +17,6 @@ namespace C2SR
         // Fields
         MainWindow? view;
 
-        #region Event Handlers
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             string fileName = (e.Args.Length > 0) ? e.Args[0] : string.Empty;
@@ -58,6 +57,7 @@ namespace C2SR
                 // Add event handlers
                 {
                     view.SelectionChanged += (sender, e) => vm.ApplySelection(e.SelectedItems);
+                    view.ApplyFiltersExecuted += (sender, e) => vm.ApplyFilters(e.Filter);
                     view.Closing += (sender, e) =>
                     {
                         vm.QuerySaveChanges(out bool cancel);
@@ -67,6 +67,8 @@ namespace C2SR
                     {
                         using C2RegistryService reg = new();
                         reg.LastFileName = vm.FileName;
+                        reg.SetVisibility("SearchBar", vm.IsSearchBarVisible);
+                        reg.SetVisibility("Filters", vm.IsFiltersVisible);
                         reg.SetVisibility("StatusBar", vm.IsStatusBarVisible);
                     };
 
@@ -105,7 +107,5 @@ namespace C2SR
                 reg.IsMaximized = view.WindowState == WindowState.Maximized;
             }
         }
-
-        #endregion
     }
 }

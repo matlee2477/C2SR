@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="C2SR.Views.FiltersPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:C2SR.Views" 
+             xmlns:conv="clr-namespace:C2SR.Converters"
+             xmlns:store="clr-namespace:C2SR.Stores" 
+             xmlns:res="clr-namespace:C2SR.Resources" 
+             mc:Ignorable="d" 
+             Name="root" 
+             d:DesignWidth="350" d:DesignHeight="450">
+    <UserControl.Resources>
+        <conv:SortOptionToIntConverter x:Key="SortOptionToIntConverter"/>
+        <conv:C2LevelToStringConverter x:Key="LevelToStringConverter"/>
+    </UserControl.Resources>
+    <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+        <GroupBox Margin="5" Padding="5" Header="{x:Static res:Strings.MainWindow_Sort}">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                               Text="{x:Static res:Strings.MainWindow_Sort_SortBy}"/>
+                    <ComboBox x:Name="comboBox_SearchOption" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                              SelectedIndex="{Binding ElementName=root, Path=SortOption, Converter={StaticResource SortOptionToIntConverter}}"
+                              SelectionChanged="comboBox_SearchOption_SelectionChanged">
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Sort_Default}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Name}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Artist}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Bpm}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Version}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_ChartType}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Level}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_LevelConstant}"/>
+                        <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Score}"/>
+                    </ComboBox>
+                </Grid>
+                <CheckBox x:Name="checkBox_Sort_Descending" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Content="{x:Static res:Strings.MainWindow_Sort_Descending}"
+                          IsChecked="{Binding ElementName=root, Path=IsDescending}"
+                          Checked="FilterChanged" Unchecked="FilterChanged"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Margin="5" Padding="5" Header="{x:Static res:Strings.MainWindow_Filters}">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="{x:Static res:Strings.MainWindow_Filters_FilterVersion}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static res:Strings.MainWindow_Filters_FilterChapter}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" Text="{x:Static res:Strings.MainWindow_Filters_FilterChartType}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" Text="{x:Static res:Strings.MainWindow_Filters_FilterLevel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="comboBox_FilterVersion" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                              SelectedItem="{Binding ElementName=root, Path=VersionFilter}"
+                              SelectionChanged="FilterChanged"/>
+                    <ComboBox x:Name="comboBox_FilterChapter" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                              SelectedItem="{Binding ElementName=root, Path=ChapterFilter}"
+                              SelectionChanged="FilterChanged"/>
+                    <ComboBox x:Name="comboBox_FilterChartType" Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                              SelectedItem="{Binding ElementName=root, Path=ChartTypeFilter}"
+                              SelectionChanged="FilterChanged"/>
+                    <ComboBox x:Name="comboBox_FilterLevel" Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                              SelectedItem="{Binding ElementName=root, Path=LevelFilter, Converter={StaticResource LevelToStringConverter}}"
+                              SelectionChanged="FilterChanged"/>
+                </Grid>
+                <CheckBox Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Content="{x:Static res:Strings.MainWindow_Filters_IsMMOnly}"
+                          IsChecked="{Binding ElementName=root, Path=IsMMOnly}"
+                          Checked="FilterChanged" Unchecked="FilterChanged"/>
+                <CheckBox Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Content="{x:Static res:Strings.MainWindow_Filters_IsTP100Only}"
+                          IsChecked="{Binding ElementName=root, Path=IsTP100Only}"
+                          Checked="FilterChanged" Unchecked="FilterChanged"/>
+                <CheckBox Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Content="{x:Static res:Strings.MainWindow_Filters_IsMxmOnly}"
+                          IsChecked="{Binding ElementName=root, Path=IsMxmOnly}"
+                          Checked="FilterChanged" Unchecked="FilterChanged"/>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

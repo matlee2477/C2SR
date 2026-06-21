@@ -178,7 +178,7 @@
     <value>보기(_V)</value>
   </data>
   <data name="MainWindow_Menu_View_ViewStatistics" xml:space="preserve">
-    <value>통계(_T)...</value>
+    <value>통계(_S)...</value>
   </data>
   <data name="MainWindow_Menu_Help_About" xml:space="preserve">
     <value>Cytus II Skill R_ate 정보...</value>
@@ -328,7 +328,7 @@
     <value>랭크 목록</value>
   </data>
   <data name="StatisticsDialog_TopSongs" xml:space="preserve">
-    <value>상위 30곡</value>
+    <value>상위 {0}곡</value>
   </data>
   <data name="StatisticsDialog_Ranks_Criterion" xml:space="preserve">
     <value>{0} 이상</value>
@@ -343,7 +343,7 @@
     <value>총 점수: {0}</value>
   </data>
   <data name="StatisticsDialog_Summary_EvaluatedCount" xml:space="preserve">
-    <value>평가된 곡 수: {0}</value>
+    <value>평가된 곡 수: {0} / {1}</value>
   </data>
   <data name="StatisticsDialog_Summary_MMCount" xml:space="preserve">
     <value>MM 달성 곡 수: {0} / {1}</value>
@@ -376,6 +376,57 @@
     <value>활성화하면 레벨 상수가 너무 높거나 낮은 곡을 강조 표시합니다.</value>
   </data>
   <data name="MainWindow_Menu_View_ShowStatusBar" xml:space="preserve">
-    <value>ステータスバー(_S)</value>
+    <value>상태 표시줄(_T)</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowFilters" xml:space="preserve">
+    <value>필터 패널(_F)</value>
+  </data>
+  <data name="MainWindow_Menu_View_ShowSearchBar" xml:space="preserve">
+    <value>검색창(_E)</value>
+  </data>
+  <data name="MainWindow_Search" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="MainWindow_Search_IsCaseSensitive" xml:space="preserve">
+    <value>대소문자 구별</value>
+  </data>
+  <data name="MainWindow_Filters_All" xml:space="preserve">
+    <value>(모두)</value>
+  </data>
+  <data name="MainWindow_Filters" xml:space="preserve">
+    <value>필터</value>
+  </data>
+  <data name="MainWindow_Filters_FilterVersion" xml:space="preserve">
+    <value>다음 버전만 표시:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterChapter" xml:space="preserve">
+    <value>다음 챕터만 표시:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterLevel" xml:space="preserve">
+    <value>다음 레벨만 표시:</value>
+  </data>
+  <data name="MainWindow_Filters_FilterChartType" xml:space="preserve">
+    <value>다음 채보만 표시:</value>
+  </data>
+  <data name="MainWindow_Filters_IsMMOnly" xml:space="preserve">
+    <value>MM 달성만 표시</value>
+  </data>
+  <data name="MainWindow_Filters_IsTP100Only" xml:space="preserve">
+    <value>TP100 달성만 표시</value>
+  </data>
+  <data name="MainWindow_Filters_IsMxmOnly" xml:space="preserve">
+    <value>MxM 달성만 표시</value>
+  </data>
+  <data name="MainWindow_Sort" xml:space="preserve">
+    <value>정렬</value>
+  </data>
+  <data name="MainWindow_Sort_SortBy" xml:space="preserve">
+    <value>정렬 기준:</value>
+  </data>
+  <data name="MainWindow_Sort_Descending" xml:space="preserve">
+    <value>내림차순</value>
+  </data>
+  <data name="MainWindow_Sort_Default" xml:space="preserve">
+    <value>기본</value>
   </data>
 </root>

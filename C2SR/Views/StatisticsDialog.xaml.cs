@@ -43,10 +43,11 @@ namespace C2SR.Views
                 }
 
                 textBlock_TotalScore.Text = string.Format(Strings.StatisticsDialog_Summary_TotalScore, result.TotalScore);
-                textBlock_EvaluatedCount.Text = string.Format(Strings.StatisticsDialog_Summary_EvaluatedCount, topCount, count);
+                textBlock_EvaluatedCount.Text = string.Format(Strings.StatisticsDialog_Summary_EvaluatedCount, topCount, C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
                 textBlock_MMCount.Text = string.Format(Strings.StatisticsDialog_Summary_MMCount, mmCount, count);
                 textBlock_TP100Count.Text = string.Format(Strings.StatisticsDialog_Summary_TP100Count, tp100Count, count);
                 textBlock_MxmCount.Text = string.Format(Strings.StatisticsDialog_Summary_MxmCount, mxmCount, count);
+                groupBox_TopSongs.Header = string.Format(Strings.StatisticsDialog_TopSongs, C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
 
                 listView.ItemsSource = result.TopSongs;
             }
