@@ -13,6 +13,8 @@ namespace C2SR.Converters
             {
                 decimal level = (decimal)values[0];
                 decimal levelConstant = (decimal)values[1];
+                if (levelConstant >= 16.5M) return new SolidColorBrush(Colors.DarkViolet);
+
                 decimal diff = levelConstant - level;
                 return diff switch
                 {

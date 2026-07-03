@@ -13,10 +13,12 @@ namespace C2SR.Converters
             {
                 decimal level = (decimal)values[0];
                 decimal levelConstant = (decimal)values[1];
+                if (levelConstant >= 16.5M) return FontWeights.Bold;
+
                 decimal diff = levelConstant - level;
                 return diff switch
                 {
-                    >= 0.5M or <= -0.5M => FontWeights.Bold,
+                    >= 0.6M or <= -0.6M => FontWeights.Bold,
                     _ => FontWeights.Normal
                 };
             }

@@ -27,9 +27,6 @@ namespace C2SR.ViewModels
             FileName = string.Empty;
             IsSaved = true;
             StatusBarText = string.Empty;
-            TopSongs = [];
-            TotalScore = 0;
-            IsUnranked = true;
             FilteredSongs = [];
 
             {
@@ -94,6 +91,16 @@ namespace C2SR.ViewModels
             }
         }
 
+        public C2TopSongResult TopSongResult
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(TopSongResult));
+            }
+        }
+
         public IEnumerable<C2SongViewModel> SelectedSongs
         {
             get;
@@ -105,36 +112,6 @@ namespace C2SR.ViewModels
                 PasteCommand.NotifyCanExecuteChanged();
                 SetSelectionCommand.NotifyCanExecuteChanged();
                 DeleteSelectionCommand.NotifyCanExecuteChanged();
-            }
-        }
-
-        public C2SongViewModel[] TopSongs
-        {
-            get;
-            set
-            {
-                field = value;
-                OnPropertyChanged(nameof(TopSongs));
-            }
-        }
-
-        public decimal TotalScore
-        {
-            get;
-            set
-            {
-                field = value;
-                OnPropertyChanged(nameof(TotalScore));
-            }
-        }
-
-        public bool IsUnranked
-        {
-            get;
-            set
-            {
-                field = value;
-                OnPropertyChanged(nameof(IsUnranked));
             }
         }
 
@@ -303,9 +280,9 @@ namespace C2SR.ViewModels
         {
             foreach (var song in Songs)
             {
-                song.SetMM(false, C2SongSetPropertyOption.Silent);
-                song.SetTP(0, C2SongSetPropertyOption.Silent);
-                song.SetMxm(false, C2SongSetPropertyOption.Silent);
+                song.SetMM(false, SetPropertyOption.Silent);
+                song.SetTP(0, SetPropertyOption.Silent);
+                song.SetMxm(false, SetPropertyOption.Silent);
             }
 
             FileName = string.Empty;
@@ -332,9 +309,9 @@ namespace C2SR.ViewModels
                         bool isMM = obj["MM"]?.GetValue<bool>() ?? false;
                         decimal tp = obj["TP"]?.GetValue<decimal>() ?? 0;
                         bool isMxm = obj["MxM"]?.GetValue<bool>() ?? false;
-                        song.SetMM(isMM, C2SongSetPropertyOption.Silent);
-                        song.SetTP(tp, C2SongSetPropertyOption.Silent);
-                        song.SetMxm(isMxm, C2SongSetPropertyOption.Silent);
+                        song.SetMM(isMM, SetPropertyOption.Silent);
+                        song.SetTP(tp, SetPropertyOption.Silent);
+                        song.SetMxm(isMxm, SetPropertyOption.Silent);
                     }
                 }
 
@@ -417,7 +394,7 @@ namespace C2SR.ViewModels
                     var oldMM = song.IsMM;
                     if (oldMM != isMM.Value)
                     {
-                        song.SetMM(isMM.Value, C2SongSetPropertyOption.Silent);
+                        song.SetMM(isMM.Value, SetPropertyOption.Silent);
                         commands.Add(new C2MMUndoableCommand(song, oldMM, isMM.Value));
                     }
                 }
@@ -426,7 +403,7 @@ namespace C2SR.ViewModels
                     var oldTP = song.TP;
                     if (oldTP != tp.Value)
                     {
-                        song.SetTP(tp.Value, C2SongSetPropertyOption.Silent);
+                        song.SetTP(tp.Value, SetPropertyOption.Silent);
                         commands.Add(new C2TPUndoableCommand(song, oldTP, tp.Value));
                     }
                 }
@@ -435,7 +412,7 @@ namespace C2SR.ViewModels
                     var oldMxm = song.IsMxm;
                     if (oldMxm != isMxm.Value)
                     {
-                        song.SetMxm(isMxm.Value, C2SongSetPropertyOption.Silent);
+                        song.SetMxm(isMxm.Value, SetPropertyOption.Silent);
                         commands.Add(new C2MxmUndoableCommand(song, oldMxm, isMxm.Value));
                     }
                 }
@@ -461,16 +438,13 @@ namespace C2SR.ViewModels
         public void UpdateTotalScore()
         {
             var result = C2TotalScoreService.GetTopSongs(Songs);
-
-            TopSongs = result.TopSongs;
-            TotalScore = result.TotalScore;
-            IsUnranked = result.IsUnranked;
+            TopSongResult = result;
 
             foreach (var song in Songs)
             {
                 song.IsTopSong = false;
             }
-            foreach (var song in TopSongs)
+            foreach (var song in TopSongResult.TopSongs)
             {
                 song.IsTopSong = true;
             }
@@ -549,7 +523,7 @@ namespace C2SR.ViewModels
         #endregion
 
         #region Event Handlers
-        private void C2SongViewModel_MMChanging(object sender, C2MMChangingEventArgs e)
+        private void C2SongViewModel_MMChanging(object sender, GenericPropertyChangingEventArgs<bool> e)
         {
             C2MMUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
@@ -557,7 +531,7 @@ namespace C2SR.ViewModels
             RedoCommand.NotifyCanExecuteChanged();
         }
 
-        private void C2SongViewModel_TPChanging(object sender, C2TPChangingEventArgs e)
+        private void C2SongViewModel_TPChanging(object sender, GenericPropertyChangingEventArgs<decimal> e)
         {
             C2TPUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
@@ -565,7 +539,7 @@ namespace C2SR.ViewModels
             RedoCommand.NotifyCanExecuteChanged();
         }
 
-        private void C2SongViewModel_MxmChanging(object sender, C2MxmChangingEventArgs e)
+        private void C2SongViewModel_MxmChanging(object sender, GenericPropertyChangingEventArgs<bool> e)
         {
             C2MxmUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
@@ -573,19 +547,19 @@ namespace C2SR.ViewModels
             RedoCommand.NotifyCanExecuteChanged();
         }
 
-        private void C2SongViewModel_MMChanged(object sender, C2MMChangedEventArgs e)
+        private void C2SongViewModel_MMChanged(object sender, GenericPropertyChangedEventArgs<bool> e)
         {
             IsSaved = false;
             UpdateTotalScore();
         }
 
-        private void C2SongViewModel_TPChanged(object sender, C2TPChangedEventArgs e)
+        private void C2SongViewModel_TPChanged(object sender, GenericPropertyChangedEventArgs<decimal> e)
         {
             IsSaved = false;
             UpdateTotalScore();
         }
 
-        private void C2SongViewModel_MxmChanged(object sender, C2MxmChangedEventArgs e)
+        private void C2SongViewModel_MxmChanged(object sender, GenericPropertyChangedEventArgs<bool> e)
         {
             IsSaved = false;
         }
@@ -722,17 +696,17 @@ namespace C2SR.ViewModels
 
                 if (oldMM != newMM)
                 {
-                    song.SetMM(newMM, C2SongSetPropertyOption.Silent);
+                    song.SetMM(newMM, SetPropertyOption.Silent);
                     commands.Add(new C2MMUndoableCommand(song, oldMM, newMM));
                 }
                 if (oldTP != newTP)
                 {
-                    song.SetTP(newTP, C2SongSetPropertyOption.Silent);
+                    song.SetTP(newTP, SetPropertyOption.Silent);
                     commands.Add(new C2TPUndoableCommand(song, oldTP, newTP));
                 }
                 if (oldMxm != newMxm)
                 {
-                    song.SetMxm(newMxm, C2SongSetPropertyOption.Silent);
+                    song.SetMxm(newMxm, SetPropertyOption.Silent);
                     commands.Add(new C2MxmUndoableCommand(song, oldMxm, newMxm));
                 }
 
@@ -796,7 +770,7 @@ namespace C2SR.ViewModels
         #endregion
 
         // Constants
-        const int TARGET_LEVEL = 15;
+        const int TARGET_LEVEL = 14;
     }
 
     readonly struct C2ClipboardField

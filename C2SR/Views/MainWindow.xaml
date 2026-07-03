@@ -80,16 +80,11 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Help_About}" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom" Visibility="{Binding IsStatusBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <StatusBar DockPanel.Dock="Bottom"
+                   Visibility="{Binding IsStatusBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StatusBarItem Content="{Binding StatusBarText}"/>
-            <StatusBarItem HorizontalAlignment="Right">
-                <StatusBarItem.Content>
-                    <MultiBinding Converter="{StaticResource TotalScoreToTextConverter}">
-                        <Binding Path="TotalScore"/>
-                        <Binding Path="IsUnranked"/>
-                    </MultiBinding>
-                </StatusBarItem.Content>
-            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right"
+                           Content="{Binding TopSongResult, Converter={StaticResource TotalScoreToTextConverter}}"/>
         </StatusBar>
         <Grid>
             <Grid.RowDefinitions>
@@ -165,7 +160,7 @@
                         <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_LevelConstant}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
+                                    <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F2}}" HorizontalAlignment="Center">
                                         <TextBlock.Foreground>
                                             <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
                                                 <Binding Path="Level"/>

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:C2SR.Views" 
-             xmlns:conv="clr-namespace:C2SR.Converters"
+             xmlns:conv="clr-namespace:C2SR.Converters" 
              xmlns:store="clr-namespace:C2SR.Stores" 
              xmlns:res="clr-namespace:C2SR.Resources" 
              mc:Ignorable="d" 
@@ -72,8 +72,14 @@
                               SelectedItem="{Binding ElementName=root, Path=ChartTypeFilter}"
                               SelectionChanged="FilterChanged"/>
                     <ComboBox x:Name="comboBox_FilterLevel" Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center"
-                              SelectedItem="{Binding ElementName=root, Path=LevelFilter, Converter={StaticResource LevelToStringConverter}}"
-                              SelectionChanged="FilterChanged"/>
+                              SelectedItem="{Binding ElementName=root, Path=LevelFilter}"
+                              SelectionChanged="FilterChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource LevelToStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
                 <CheckBox Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"
                           Content="{x:Static res:Strings.MainWindow_Filters_IsMMOnly}"

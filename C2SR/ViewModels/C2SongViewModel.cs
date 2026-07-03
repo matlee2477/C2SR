@@ -59,12 +59,12 @@ namespace C2SR.ViewModels
         #endregion
 
         #region Events
-        public event C2MMChangingEventHandler? MMChanging;
-        public event C2MMChangedEventHandler? MMChanged;
-        public event C2TPChangingEventHandler? TPChanging;
-        public event C2TPChangedEventHandler? TPChanged;
-        public event C2MxmChangingEventHandler? MxmChanging;
-        public event C2MxmChangedEventHandler? MxmChanged;
+        public event GenericPropertyChangingEventHandler<bool>? MMChanging;
+        public event GenericPropertyChangedEventHandler<bool>? MMChanged;
+        public event GenericPropertyChangingEventHandler<decimal>? TPChanging;
+        public event GenericPropertyChangedEventHandler<decimal>? TPChanged;
+        public event GenericPropertyChangingEventHandler<bool>? MxmChanging;
+        public event GenericPropertyChangedEventHandler<bool>? MxmChanged;
 
         protected void OnMMChanging(bool oldValue, bool newValue)
         {
@@ -108,11 +108,11 @@ namespace C2SR.ViewModels
         #region Methods
         public override string ToString() => $"{Name}";
 
-        public void SetMM(bool isMM, C2SongSetPropertyOption option)
+        public void SetMM(bool isMM, SetPropertyOption option)
         {
             if (song.IsMM != isMM)
             {
-                if (option != C2SongSetPropertyOption.Silent)
+                if (option != SetPropertyOption.Silent)
                 {
                     OnMMChanging(song.IsMM, isMM);
                     song.IsMM = isMM;
@@ -128,11 +128,11 @@ namespace C2SR.ViewModels
             }
         }
 
-        public void SetTP(decimal tp, C2SongSetPropertyOption option)
+        public void SetTP(decimal tp, SetPropertyOption option)
         {
             if (song.TP != tp)
             {
-                if (option != C2SongSetPropertyOption.Silent)
+                if (option != SetPropertyOption.Silent)
                 {
                     OnTPChanging(song.TP, tp);
                     song.TP = tp;
@@ -153,11 +153,11 @@ namespace C2SR.ViewModels
             }
         }
 
-        public void SetMxm(bool isMxm, C2SongSetPropertyOption option)
+        public void SetMxm(bool isMxm, SetPropertyOption option)
         {
             if (song.IsMxm != isMxm)
             {
-                if (option != C2SongSetPropertyOption.Silent)
+                if (option != SetPropertyOption.Silent)
                 {
                     OnMxmChanging(song.IsMxm, isMxm);
                     song.IsMxm = isMxm;
@@ -177,14 +177,14 @@ namespace C2SR.ViewModels
             }
         }
 
-        public void SetMM(bool isMM) => SetMM(isMM, C2SongSetPropertyOption.None);
-        public void SetTP(decimal tp) => SetTP(tp, C2SongSetPropertyOption.None);
-        public void SetMxm(bool isMxm) => SetMxm(isMxm, C2SongSetPropertyOption.None);
+        public void SetMM(bool isMM) => SetMM(isMM, SetPropertyOption.None);
+        public void SetTP(decimal tp) => SetTP(tp, SetPropertyOption.None);
+        public void SetMxm(bool isMxm) => SetMxm(isMxm, SetPropertyOption.None);
 
         #endregion
     }
 
-    public enum C2SongSetPropertyOption
+    public enum SetPropertyOption
     {
         None = 0,
         Silent = 1,

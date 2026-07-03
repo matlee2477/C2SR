@@ -30,8 +30,8 @@ namespace C2SR.Services.UndoServices
         public bool NewValue { get; }
 
         // Methods
-        public override void Execute() => Song.SetMM(NewValue, C2SongSetPropertyOption.Silent);
-        public override void Unexecute() => Song.SetMM(OldValue, C2SongSetPropertyOption.Silent);
+        public override void Execute() => Song.SetMM(NewValue, SetPropertyOption.Silent);
+        public override void Unexecute() => Song.SetMM(OldValue, SetPropertyOption.Silent);
     }
 
     class C2TPUndoableCommand : C2UndoableCommand
@@ -47,8 +47,8 @@ namespace C2SR.Services.UndoServices
         public decimal NewValue { get; }
 
         // Methods
-        public override void Execute() => Song.SetTP(NewValue, C2SongSetPropertyOption.Silent);
-        public override void Unexecute() => Song.SetTP(OldValue, C2SongSetPropertyOption.Silent);
+        public override void Execute() => Song.SetTP(NewValue, SetPropertyOption.Silent);
+        public override void Unexecute() => Song.SetTP(OldValue, SetPropertyOption.Silent);
     }
 
     class C2MxmUndoableCommand : C2UndoableCommand
@@ -64,7 +64,7 @@ namespace C2SR.Services.UndoServices
         public bool NewValue { get; }
 
         // Methods
-        public override void Execute() => Song.SetMxm(NewValue, C2SongSetPropertyOption.Silent);
-        public override void Unexecute() => Song.SetMxm(OldValue, C2SongSetPropertyOption.Silent);
+        public override void Execute() => Song.SetMxm(NewValue, SetPropertyOption.Silent);
+        public override void Unexecute() => Song.SetMxm(OldValue, SetPropertyOption.Silent);
     }
 }

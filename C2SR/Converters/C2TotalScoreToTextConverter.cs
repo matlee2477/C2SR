@@ -5,27 +5,26 @@ using System.Windows.Data;
 
 namespace C2SR.Converters
 {
-    class C2TotalScoreToTextConverter : IMultiValueConverter
+    class C2TotalScoreToTextConverter : IValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            decimal totalScore = (decimal)values[0];
-            bool isUnranked = (bool)values[1];
+            C2TopSongResult result = (C2TopSongResult)value;
 
             string rankName;
-            if (isUnranked)
+            if (result.IsUnranked)
             {
                 rankName = Strings.Rank_Unranked;
             }
             else
             {
-                rankName = C2TotalScoreService.Instance.GetRankFromTotalScore(totalScore).Name;
+                rankName = C2TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore).Name;
             }
 
-            return string.Format(Strings.MainWindow_TotalScoreText, totalScore.ToString("N3"), rankName);
+            return string.Format(Strings.MainWindow_TotalScoreText, result.TotalScore.ToString("N3"), rankName);
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // Not a two-way binding
             throw new NotSupportedException();
