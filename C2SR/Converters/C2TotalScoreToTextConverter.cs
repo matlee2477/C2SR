@@ -21,7 +21,7 @@ namespace C2SR.Converters
                 rankName = C2TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore).Name;
             }
 
-            return string.Format(Strings.MainWindow_TotalScoreText, result.TotalScore.ToString("N3"), rankName);
+            return string.Format(Strings.MainWindow_TotalScoreText, result.TotalScore, rankName);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

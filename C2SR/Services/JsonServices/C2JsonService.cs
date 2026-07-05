@@ -6,16 +6,14 @@ namespace C2SR.Services.JsonServices
     {
         public string LoadJson(string fileName)
         {
-            using FileStream fs = new(fileName, FileMode.Open, FileAccess.Read);
-            using StreamReader reader = new(fs);
+            using StreamReader reader = File.OpenText(fileName);
             string code = reader.ReadToEnd();
             return code;
         }
 
         public void SaveJson(string fileName, string code)
         {
-            using FileStream fs = new(fileName, FileMode.Create, FileAccess.Write);
-            using StreamWriter writer = new(fs);
+            using StreamWriter writer = File.CreateText(fileName);
             writer.Write(code);
         }
     }

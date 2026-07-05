@@ -115,7 +115,7 @@
                             <GridViewColumn Header="{x:Static res:Strings.MainWindow_Header_LevelConstant}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F1}}" HorizontalAlignment="Center">
+                                        <TextBlock Padding="0 0 2 0" Text="{Binding LevelConstant, StringFormat={}{0:F2}}" HorizontalAlignment="Center">
                                             <TextBlock.Foreground>
                                                 <MultiBinding Converter="{StaticResource LevelConstantToForegroundConverter}">
                                                     <Binding Path="Level"/>

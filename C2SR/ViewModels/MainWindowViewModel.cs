@@ -1,6 +1,7 @@
 ﻿using C2SR.EventHandling;
 using C2SR.Resources;
 using C2SR.Services;
+using C2SR.Services.ChecksumServices;
 using C2SR.Services.DialogServices;
 using C2SR.Services.JsonServices;
 using C2SR.Services.RegistryServices;
@@ -166,10 +167,21 @@ namespace C2SR.ViewModels
         #region Methods
         public void Initialize(string fileName)
         {
+            // If debug mode, create checksum; otherwise, verify checksum
+            {
+                C2ChecksumService checksumService = new();
+                checksumService.TargetFiles = [PATH_SONGS_JSON, PATH_RANKS_JSON, PATH_DROPDOWN_JSON];
+#if DEBUG
+                checksumService.CreateChecksum(PATH_CHECKSUM);
+#else
+                Exceptions.ChecksumMismatchException.ThrowIfChecksumMismatch(() => checksumService.VerifyChecksum(PATH_CHECKSUM));
+#endif
+            }
+
             // Load song data
             {
                 C2JsonService jsonService = new();
-                string code = jsonService.LoadJson(@".\data\songs.json");
+                string code = jsonService.LoadJson(PATH_SONGS_JSON);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonNode node in arr.OfType<JsonNode>())
@@ -203,7 +215,7 @@ namespace C2SR.ViewModels
             // Load total score rank criteria
             {
                 C2JsonService jsonService = new();
-                string code = jsonService.LoadJson(@".\data\ranks.json");
+                string code = jsonService.LoadJson(PATH_RANKS_JSON);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonNode node in arr.OfType<JsonNode>())
@@ -520,7 +532,7 @@ namespace C2SR.ViewModels
             FilteredSongs = filteredSongs;
         }
 
-        #endregion
+#endregion
 
         #region Event Handlers
         private void C2SongViewModel_MMChanging(object sender, GenericPropertyChangingEventArgs<bool> e)
@@ -770,6 +782,11 @@ namespace C2SR.ViewModels
         #endregion
 
         // Constants
+        const string PATH_SONGS_JSON = @".\data\songs.json";
+        const string PATH_RANKS_JSON = @".\data\ranks.json";
+        const string PATH_DROPDOWN_JSON = @".\data\dropdownitems.json";
+        const string PATH_CHECKSUM = @".\data\checksum.dat";
+
         const int TARGET_LEVEL = 14;
     }
 

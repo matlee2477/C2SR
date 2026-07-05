@@ -28,7 +28,7 @@ namespace C2SR.Converters
         }
 
         // Constants
-        const decimal BONUS_MM = 0.3M;
-        const decimal BONUS_TP100 = 0.2M;
+        const decimal BONUS_MM = 0.25M;
+        const decimal BONUS_TP100 = 0.25M;
     }
 }

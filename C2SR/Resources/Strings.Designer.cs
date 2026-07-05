@@ -619,7 +619,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Score: {0} ({1}).
+        ///   Looks up a localized string similar to Total Score: {0:F3} ({1}).
         /// </summary>
         public static string MainWindow_TotalScoreText {
             get {
@@ -952,7 +952,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Score: {0}.
+        ///   Looks up a localized string similar to Total Score: {0:F3}.
         /// </summary>
         public static string StatisticsDialog_Summary_TotalScore {
             get {

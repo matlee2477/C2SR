@@ -334,13 +334,13 @@
     <value>{0}以上</value>
   </data>
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
-    <value>総スコア: {0} ({1})</value>
+    <value>総スコア: {0:F3} ({1})</value>
   </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
   </data>
   <data name="StatisticsDialog_Summary_TotalScore" xml:space="preserve">
-    <value>総スコア: {0}</value>
+    <value>総スコア: {0:F3}</value>
   </data>
   <data name="StatisticsDialog_Summary_EvaluatedCount" xml:space="preserve">
     <value>評価済み楽曲数: {0} / {1}</value>
