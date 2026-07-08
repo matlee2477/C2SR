@@ -25,7 +25,8 @@ namespace C2SR.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            // Not a two-way binding
+            throw new NotSupportedException();
         }
     }
 }

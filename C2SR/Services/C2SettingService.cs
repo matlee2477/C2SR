@@ -8,6 +8,7 @@
             StartAction = C2StartAction.NewDocument;
             LastFileName = string.Empty;
             HighlightsOutlyingLevelConstants = true;
+            HighlightsBossSongs = true;
             HighlightsTopSongs = true;
             CascadesAchievements = true;
         }
@@ -17,6 +18,7 @@
         public C2StartAction StartAction { get; set; }
         public string LastFileName { get; set; }
         public bool HighlightsOutlyingLevelConstants { get; set; }
+        public bool HighlightsBossSongs { get; set; }
         public bool HighlightsTopSongs { get; set; }
         public bool CascadesAchievements { get; set; }
 

@@ -20,6 +20,7 @@ namespace C2SR.Views
             LanguageSetting = (int)C2SettingService.Instance.Language;
             StartActionSetting = (int)C2SettingService.Instance.StartAction;
             HighlightsOutlyingLevelConstants = C2SettingService.Instance.HighlightsOutlyingLevelConstants;
+            HighlightsBossSongs = C2SettingService.Instance.HighlightsBossSongs;
             HighlightsTopSongs = C2SettingService.Instance.HighlightsTopSongs;
             CascadesAchievements = C2SettingService.Instance.CascadesAchievements;
 
@@ -63,6 +64,16 @@ namespace C2SR.Views
             {
                 field = value;
                 OnPropertyChanged(nameof(HighlightsOutlyingLevelConstants));
+            }
+        }
+
+        public bool HighlightsBossSongs
+        {
+            get;
+            set
+            {
+                field = value;
+                OnPropertyChanged(nameof(HighlightsBossSongs));
             }
         }
 

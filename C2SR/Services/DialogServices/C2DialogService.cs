@@ -81,6 +81,7 @@ namespace C2SR.Services.DialogServices
                     Language = (C2Language)dialog.LanguageSetting,
                     StartAction = (C2StartAction)dialog.StartActionSetting,
                     HighlightsOutlyingLevelConstants = dialog.HighlightsOutlyingLevelConstants,
+                    HighlightsBossSongs = dialog.HighlightsBossSongs,
                     HighlightsTopSongs = dialog.HighlightsTopSongs,
                     CascadesAchievements = dialog.CascadesAchievements,
                 };

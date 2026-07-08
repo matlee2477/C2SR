@@ -28,6 +28,7 @@ namespace C2SR
                 C2SettingService.Instance.StartAction = (C2StartAction)reg.GetSetting("StartAction", 1);
                 C2SettingService.Instance.LastFileName = reg.LastFileName;
                 C2SettingService.Instance.HighlightsOutlyingLevelConstants = reg.GetSetting("HighlightsOutlyingLevelConstants", true);
+                C2SettingService.Instance.HighlightsBossSongs = reg.GetSetting("HighlightsBossSongs", true);
                 C2SettingService.Instance.HighlightsTopSongs = reg.GetSetting("HighlightsTopSongs", true);
                 C2SettingService.Instance.CascadesAchievements = reg.GetSetting("CascadesAchievements", true);
 

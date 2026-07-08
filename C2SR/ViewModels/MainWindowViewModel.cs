@@ -649,6 +649,7 @@ namespace C2SR.ViewModels
                 C2SettingService.Instance.Language = result.Language;
                 C2SettingService.Instance.StartAction = result.StartAction;
                 C2SettingService.Instance.HighlightsOutlyingLevelConstants = result.HighlightsOutlyingLevelConstants;
+                C2SettingService.Instance.HighlightsBossSongs = result.HighlightsBossSongs;
                 C2SettingService.Instance.HighlightsTopSongs = result.HighlightsTopSongs;
                 C2SettingService.Instance.CascadesAchievements = result.CascadesAchievements;
 
@@ -657,6 +658,7 @@ namespace C2SR.ViewModels
                 reg.SetSetting("Language", (int)result.Language);
                 reg.SetSetting("StartAction", (int)result.StartAction);
                 reg.SetSetting("HighlightsOutlyingLevelConstants", result.HighlightsOutlyingLevelConstants);
+                reg.SetSetting("HighlightsBossSongs", result.HighlightsBossSongs);
                 reg.SetSetting("HighlightsTopSongs", result.HighlightsTopSongs);
                 reg.SetSetting("CascadesAchievements", result.CascadesAchievements);
 

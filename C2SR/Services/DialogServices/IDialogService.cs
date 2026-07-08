@@ -24,6 +24,7 @@ namespace C2SR.Services.DialogServices
         public C2Language Language { get; init; }
         public C2StartAction StartAction { get; init; }
         public bool HighlightsOutlyingLevelConstants { get; init; }
+        public bool HighlightsBossSongs { get; init; }
         public bool HighlightsTopSongs { get; init; }
         public bool CascadesAchievements { get; init; }
     }

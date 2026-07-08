@@ -372,8 +372,11 @@
   <data name="SettingsDialog_UI_HighlightsTopSongs" xml:space="preserve">
     <value>Highlight top 30 songs</value>
   </data>
+  <data name="SettingsDialog_UI_HighlightsTopSongs_Tooltip" xml:space="preserve">
+    <value>When activated, highlight the top 30 songs by your score.</value>
+  </data>
   <data name="SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip" xml:space="preserve">
-    <value>When activated, highlight the songs whose level constant is too high or too low.</value>
+    <value>When activated, highlight the songs whose constant is too high or too low.</value>
   </data>
   <data name="MainWindow_Menu_View_ShowStatusBar" xml:space="preserve">
     <value>S_tatus Bar</value>
@@ -428,5 +431,11 @@
   </data>
   <data name="MainWindow_Sort_Default" xml:space="preserve">
     <value>Default</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsBossSongs" xml:space="preserve">
+    <value>Highlight boss songs</value>
+  </data>
+  <data name="SettingsDialog_UI_HighlightsBossSongs_Tooltip" xml:space="preserve">
+    <value>When activated, highlight the songs with the highest constants.</value>
   </data>
 </root>

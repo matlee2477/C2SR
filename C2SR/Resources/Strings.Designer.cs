@@ -817,6 +817,24 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Highlight boss songs.
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsBossSongs {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsBossSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When activated, highlight the songs with the highest constants..
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsBossSongs_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsBossSongs_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Highlight outlying constants.
         /// </summary>
         public static string SettingsDialog_UI_HighlightsOutlyingLevelConstants {
@@ -826,7 +844,7 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When activated, highlight the songs whose level constant is too high or too low..
+        ///   Looks up a localized string similar to When activated, highlight the songs whose constant is too high or too low..
         /// </summary>
         public static string SettingsDialog_UI_HighlightsOutlyingLevelConstants_Tooltip {
             get {
@@ -840,6 +858,15 @@ namespace C2SR.Resources {
         public static string SettingsDialog_UI_HighlightsTopSongs {
             get {
                 return ResourceManager.GetString("SettingsDialog_UI_HighlightsTopSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When activated, highlight the top 30 songs by your score..
+        /// </summary>
+        public static string SettingsDialog_UI_HighlightsTopSongs_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UI_HighlightsTopSongs_Tooltip", resourceCulture);
             }
         }
         
