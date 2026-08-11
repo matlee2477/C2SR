@@ -444,4 +444,7 @@
   <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
     <value>{0}項目を選択中</value>
   </data>
+  <data name="MainWindow_Filters_Clear" xml:space="preserve">
+    <value>フィルターをクリア</value>
+  </data>
 </root>

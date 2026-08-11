@@ -133,6 +133,15 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Filters.
+        /// </summary>
+        public static string MainWindow_Filters_Clear {
+            get {
+                return ResourceManager.GetString("MainWindow_Filters_Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Chapter:.
         /// </summary>
         public static string MainWindow_Filters_FilterChapter {

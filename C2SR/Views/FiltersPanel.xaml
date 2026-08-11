@@ -112,5 +112,7 @@
                           Checked="FilterChanged" Unchecked="FilterChanged"/>
             </StackPanel>
         </GroupBox>
+        <Button Margin="5" Padding="5" Content="{x:Static res:Strings.MainWindow_Filters_Clear}"
+                Click="Button_Clear_Click"/>
     </StackPanel>
 </UserControl>

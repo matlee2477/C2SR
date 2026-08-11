@@ -444,4 +444,7 @@
   <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
     <value>{0} item(s) selected</value>
   </data>
+  <data name="MainWindow_Filters_Clear" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
 </root>

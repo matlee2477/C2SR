@@ -444,4 +444,7 @@
   <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
     <value>항목 {0}개 선택됨</value>
   </data>
+  <data name="MainWindow_Filters_Clear" xml:space="preserve">
+    <value>필터 초기화</value>
+  </data>
 </root>

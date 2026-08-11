@@ -20,11 +20,7 @@ namespace C2SR.Views
             comboBox_FilterLevel_Minimum.ItemsSource = DropdownItemStore.Instance.Levels;
             comboBox_FilterLevel_Maximum.ItemsSource = DropdownItemStore.Instance.Levels;
 
-            comboBox_FilterVersion.SelectedIndex = 0;
-            comboBox_FilterChapter.SelectedIndex = 0;
-            comboBox_FilterChartType.SelectedIndex = 0;
-            comboBox_FilterLevel_Minimum.SelectedIndex = 0;
-            comboBox_FilterLevel_Maximum.SelectedIndex = comboBox_FilterLevel_Maximum.Items.Count - 1;
+            ClearFilters();
 
             isFilterReady = true;
             FilterChanged(this, new());
@@ -161,6 +157,19 @@ namespace C2SR.Views
         // Events
         public event FiltersPanelEventHandler? FilterExecuted;
 
+        // Methods
+        public void ClearFilters()
+        {
+            comboBox_FilterVersion.SelectedIndex = 0;
+            comboBox_FilterChapter.SelectedIndex = 0;
+            comboBox_FilterChartType.SelectedIndex = 0;
+            comboBox_FilterLevel_Minimum.SelectedIndex = 0;
+            comboBox_FilterLevel_Maximum.SelectedIndex = comboBox_FilterLevel_Maximum.Items.Count - 1;
+            IsMMOnly = false;
+            IsTP100Only = false;
+            IsMxmOnly = false;
+        }
+
         #region Event handlers
         private void FilterChanged(object sender, RoutedEventArgs e)
         {
@@ -187,6 +196,11 @@ namespace C2SR.Views
             };
 
             FilterChanged(sender, e);
+        }
+
+        private void Button_Clear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearFilters();
         }
 
         #endregion
