@@ -12,6 +12,8 @@ namespace C2SR.Views
         public SearchBar()
         {
             InitializeComponent();
+
+            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
         }
 
         // Fields
@@ -53,12 +55,40 @@ namespace C2SR.Views
         }
 
         // Events
-        public event SearchExecutedEventHandler? SearchExecuted;
+        public event SearchBarEventHandler? SearchPropertyChanged;
+        public event SearchBarEventHandler? SearchExecuted;
 
         // Event handlers
         private void button_Search_Click(object sender, RoutedEventArgs e)
         {
-            SearchExecuted?.Invoke(this, new SearchExecutedEventArgs(SearchOption, SearchTerm, IsCaseSensitive));
+            SearchBarEventArgs e2 = new(SearchOption, SearchTerm, IsCaseSensitive);
+            SearchPropertyChanged?.Invoke(this, e2);
+            SearchExecuted?.Invoke(this, e2);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
+        }
+
+        private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                SearchBarEventArgs e2 = new(SearchOption, SearchTerm, IsCaseSensitive);
+                SearchPropertyChanged?.Invoke(this, e2);
+                SearchExecuted?.Invoke(this, e2);
+            }
         }
     }
 }

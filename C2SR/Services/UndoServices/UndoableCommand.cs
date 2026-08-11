@@ -2,9 +2,9 @@
 
 namespace C2SR.Services.UndoServices
 {
-    abstract class C2UndoableCommand : IUndoableCommand
+    abstract class UndoableCommand : IUndoableCommand
     {
-        public C2UndoableCommand(C2SongViewModel song)
+        public UndoableCommand(C2SongViewModel song)
         {
             Song = song;
         }
@@ -17,9 +17,9 @@ namespace C2SR.Services.UndoServices
         public abstract void Unexecute();
     }
 
-    class C2MMUndoableCommand : C2UndoableCommand
+    class MMUndoableCommand : UndoableCommand
     {
-        public C2MMUndoableCommand(C2SongViewModel song, bool oldValue, bool newValue) : base(song)
+        public MMUndoableCommand(C2SongViewModel song, bool oldValue, bool newValue) : base(song)
         {
             OldValue = oldValue;
             NewValue = newValue;
@@ -34,9 +34,9 @@ namespace C2SR.Services.UndoServices
         public override void Unexecute() => Song.SetMM(OldValue, SetPropertyOption.Silent);
     }
 
-    class C2TPUndoableCommand : C2UndoableCommand
+    class TPUndoableCommand : UndoableCommand
     {
-        public C2TPUndoableCommand(C2SongViewModel song, decimal oldValue, decimal newValue) : base(song)
+        public TPUndoableCommand(C2SongViewModel song, decimal oldValue, decimal newValue) : base(song)
         {
             OldValue = oldValue;
             NewValue = newValue;
@@ -51,9 +51,9 @@ namespace C2SR.Services.UndoServices
         public override void Unexecute() => Song.SetTP(OldValue, SetPropertyOption.Silent);
     }
 
-    class C2MxmUndoableCommand : C2UndoableCommand
+    class MxmUndoableCommand : UndoableCommand
     {
-        public C2MxmUndoableCommand(C2SongViewModel song, bool oldValue, bool newValue) : base(song)
+        public MxmUndoableCommand(C2SongViewModel song, bool oldValue, bool newValue) : base(song)
         {
             OldValue = oldValue;
             NewValue = newValue;

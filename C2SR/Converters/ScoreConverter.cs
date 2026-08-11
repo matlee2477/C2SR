@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
+using static C2SR.App.Constants;
 
 namespace C2SR.Converters
 {
-    class C2ScoreConverter : IMultiValueConverter
+    class ScoreConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -22,13 +23,9 @@ namespace C2SR.Converters
         public static decimal GetScore(decimal levelConstant, bool isMM, decimal tp)
         {
             decimal score = tp * levelConstant / 100;
-            if (isMM) score += BONUS_MM;
-            if (tp == 100) score += BONUS_TP100;
+            if (isMM) score += SCORE_BONUS_MM;
+            if (tp == 100) score += SCORE_BONUS_TP100;
             return score;
         }
-
-        // Constants
-        const decimal BONUS_MM = 0.25M;
-        const decimal BONUS_TP100 = 0.25M;
     }
 }

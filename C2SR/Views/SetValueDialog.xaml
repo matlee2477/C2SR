@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="{x:Static res:Strings.SetValueDialog_Title}" Width="300" Height="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <conv:C2TPToStringConverter x:Key="TPToStringConverter"/>
+        <conv:TPToStringConverter x:Key="TPToStringConverter"/>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>

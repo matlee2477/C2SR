@@ -1,5 +1,6 @@
 ﻿using C2SR.ViewModels;
 using System.Windows.Media;
+using static C2SR.App.Constants;
 
 namespace C2SR.Services
 {
@@ -58,9 +59,6 @@ namespace C2SR.Services
 
             return new() { Name = string.Empty, Criterion = 0, Color = Colors.White };
         }
-
-        // Constants
-        public const int TOTAL_SCORE_SONG_COUNT = 30;
 
         // Singleton
         static readonly Lazy<C2TotalScoreService> lazy = new(() => new C2TotalScoreService());

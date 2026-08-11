@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Windows;
+using static C2SR.App.Constants;
 
 namespace C2SR.Views
 {
@@ -19,7 +20,7 @@ namespace C2SR.Views
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             textBlock_Version.Text = string.Format(textBlock_Version.Text, $"{version?.Major}.{version?.Minor}.{version?.Revision}");
 
-            using FileStream fs = new(@".\data\LICENSE", FileMode.Open, FileAccess.Read);
+            using FileStream fs = new(PATH_LICENSE, FileMode.Open, FileAccess.Read);
             using StreamReader reader = new(fs);
             textBox_License.Text = reader.ReadToEnd();
         }

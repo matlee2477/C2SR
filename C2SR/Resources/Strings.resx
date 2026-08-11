@@ -336,6 +336,9 @@
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
     <value>Total Score: {0:F3} ({1})</value>
   </data>
+  <data name="MainWindow_Title_Untitled" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
   </data>
@@ -437,5 +440,8 @@
   </data>
   <data name="SettingsDialog_UI_HighlightsBossSongs_Tooltip" xml:space="preserve">
     <value>When activated, highlight the songs with the highest constants.</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
+    <value>{0} item(s) selected</value>
   </data>
 </root>

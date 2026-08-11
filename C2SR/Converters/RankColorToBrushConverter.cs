@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace C2SR.Converters
 {
-    class C2RankColorToBrushConverter : IValueConverter
+    class RankColorToBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

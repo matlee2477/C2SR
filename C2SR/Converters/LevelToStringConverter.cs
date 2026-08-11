@@ -1,22 +1,25 @@
-﻿using C2SR.Services;
-using System.Globalization;
-using System.Windows;
+﻿using System.Globalization;
+using System.Text;
 using System.Windows.Data;
 
 namespace C2SR.Converters
 {
-    class C2IsTopSongToFontWeightConverter : IValueConverter
+    class LevelToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (C2SettingService.Instance.HighlightsTopSongs)
+            if (value is decimal level)
             {
-                bool isTopSong = (bool)value;
-                return isTopSong ? FontWeights.Bold : FontWeights.Normal;
+                decimal levelFloor = Math.Floor(level);
+
+                StringBuilder sb = new();
+                sb.Append(levelFloor.ToString("N0"));
+                if (levelFloor != level) sb.Append('+');
+                return sb.ToString();
             }
             else
             {
-                return FontWeights.Normal;
+                return (string)value;
             }
         }
 

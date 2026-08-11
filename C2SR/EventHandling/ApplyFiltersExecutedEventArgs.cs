@@ -21,7 +21,8 @@
         public string? VersionFilter { get; init; }
         public string? ChapterFilter { get; init; }
         public string? ChartTypeFilter { get; init; }
-        public decimal? LevelFilter { get; init; }
+        public decimal MinimumLevelFilter { get; init; }
+        public decimal MaximumLevelFilter { get; init; }
         public bool IsMMOnly { get; init; }
         public bool IsTP100Only { get; init; }
         public bool IsMxmOnly { get; init; }

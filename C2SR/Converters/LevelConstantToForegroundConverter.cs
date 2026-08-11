@@ -1,11 +1,11 @@
 ﻿using C2SR.Services;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace C2SR.Converters
 {
-    class C2LevelConstantToFontWeightConverter : IMultiValueConverter
+    class LevelConstantToForegroundConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -13,7 +13,7 @@ namespace C2SR.Converters
             decimal levelConstant = (decimal)values[1];
             if (C2SettingService.Instance.HighlightsBossSongs)
             {
-                if (levelConstant >= BOSS_SONG_LEVEL_CONSTANT_THRESHOLD) return FontWeights.Bold;
+                if (levelConstant >= BOSS_SONG_LEVEL_CONSTANT_THRESHOLD) return new SolidColorBrush(Colors.DarkViolet);
             }
 
             if (C2SettingService.Instance.HighlightsOutlyingLevelConstants)
@@ -21,12 +21,13 @@ namespace C2SR.Converters
                 decimal diff = levelConstant - level;
                 return diff switch
                 {
-                    >= 0.6M or <= -0.6M => FontWeights.Bold,
-                    _ => FontWeights.Normal
+                    >= 0.3M => new SolidColorBrush(Colors.Red),
+                    <= -0.3M => new SolidColorBrush(Colors.Blue),
+                    _ => new SolidColorBrush(Colors.Black)
                 };
             }
 
-            return FontWeights.Normal;
+            return new SolidColorBrush(Colors.Black);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

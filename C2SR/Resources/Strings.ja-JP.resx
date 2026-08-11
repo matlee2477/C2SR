@@ -336,6 +336,9 @@
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
     <value>総スコア: {0:F3} ({1})</value>
   </data>
+  <data name="MainWindow_Title_Untitled" xml:space="preserve">
+    <value>無題</value>
+  </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
   </data>
@@ -437,5 +440,8 @@
   </data>
   <data name="SettingsDialog_UI_HighlightsBossSongs_Tooltip" xml:space="preserve">
     <value>有効にすると、定数が最も高い楽曲を強調表示します。</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
+    <value>{0}項目を選択中</value>
   </data>
 </root>

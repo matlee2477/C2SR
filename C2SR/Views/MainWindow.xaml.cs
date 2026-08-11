@@ -12,13 +12,30 @@ namespace C2SR.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            currentFilter = new()
+            {
+                SearchOption = SearchOption.Name,
+                SearchTerm = string.Empty,
+                IsCaseSensitive = false,
+                SortOption = SortOption.Default,
+                IsDescending = false,
+                VersionFilter = null,
+                ChapterFilter = null,
+                ChartTypeFilter = null,
+                MinimumLevelFilter = decimal.MinValue,
+                MaximumLevelFilter = decimal.MaxValue,
+                IsMMOnly = false,
+                IsTP100Only = false,
+                IsMxmOnly = false
+            };
         }
 
         // Fields
         C2Filter currentFilter;
 
         // Events
-        public event C2SelectionChangedEventHandler? SelectionChanged;
+        public event SongSelectionChangedEventHandler? SelectionChanged;
         public event C2ApplyFiltersExecutedEventHandler? ApplyFiltersExecuted;
 
         // Methods
@@ -29,10 +46,10 @@ namespace C2SR.Views
         // Event Handlers
         private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectionChanged?.Invoke(this, new C2SelectionChangedEventArgs(listView.SelectedItems));
+            SelectionChanged?.Invoke(this, new SongSelectionChangedEventArgs(listView.SelectedItems));
         }
 
-        private void SearchBar_SearchExecuted(object sender, SearchExecutedEventArgs e)
+        private void SearchBar_SearchExecuted(object sender, SearchBarEventArgs e)
         {
             currentFilter = new()
             {
@@ -44,7 +61,8 @@ namespace C2SR.Views
                 VersionFilter = currentFilter.VersionFilter,
                 ChapterFilter = currentFilter.ChapterFilter,
                 ChartTypeFilter = currentFilter.ChartTypeFilter,
-                LevelFilter = currentFilter.LevelFilter,
+                MinimumLevelFilter = currentFilter.MinimumLevelFilter,
+                MaximumLevelFilter = currentFilter.MaximumLevelFilter,
                 IsMMOnly = currentFilter.IsMMOnly,
                 IsTP100Only = currentFilter.IsTP100Only,
                 IsMxmOnly = currentFilter.IsMxmOnly
@@ -53,7 +71,7 @@ namespace C2SR.Views
             ExecuteApplyFilters();
         }
 
-        private void FiltersPanel_FilterExecuted(object sender, FilterExecutedEventArgs e)
+        private void FiltersPanel_FilterExecuted(object sender, FiltersPanelEventArgs e)
         {
             currentFilter = new()
             {
@@ -65,7 +83,8 @@ namespace C2SR.Views
                 VersionFilter = e.VersionFilter,
                 ChapterFilter = e.ChapterFilter,
                 ChartTypeFilter = e.ChartTypeFilter,
-                LevelFilter = e.LevelFilter,
+                MinimumLevelFilter = e.MinimumLevelFilter,
+                MaximumLevelFilter = e.MaximumLevelFilter,
                 IsMMOnly = e.IsMMOnly,
                 IsTP100Only = e.IsTP100Only,
                 IsMxmOnly = e.IsMxmOnly

@@ -2,6 +2,7 @@
 using C2SR.Models;
 using C2SR.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Numerics;
 
 namespace C2SR.ViewModels
 {
@@ -17,7 +18,7 @@ namespace C2SR.ViewModels
         readonly C2Song song;
 
         #region Properties
-        public long ID => song.ID;
+        public BigInteger ID => song.ID;
         public string Name => song.Name;
         public string Artist => song.Artist;
         public decimal Bpm => song.Bpm;

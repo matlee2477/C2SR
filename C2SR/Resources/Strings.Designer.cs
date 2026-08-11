@@ -619,6 +619,24 @@ namespace C2SR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} item(s) selected.
+        /// </summary>
+        public static string MainWindow_StatusBarText_SongSelection {
+            get {
+                return ResourceManager.GetString("MainWindow_StatusBarText_SongSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled.
+        /// </summary>
+        public static string MainWindow_Title_Untitled {
+            get {
+                return ResourceManager.GetString("MainWindow_Title_Untitled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Score: {0:F3} ({1}).
         /// </summary>
         public static string MainWindow_TotalScoreText {

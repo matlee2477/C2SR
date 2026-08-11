@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace C2SR.Converters
 {
-    class C2RankCriterionToTextConverter : IMultiValueConverter
+    class RankCriterionToTextConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

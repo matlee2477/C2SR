@@ -15,7 +15,7 @@ namespace C2SR.Converters
             StringBuilder sb = new();
             if (string.IsNullOrEmpty(fileName))
             {
-                sb.Append("Untitled");
+                sb.Append(Strings.MainWindow_Title_Untitled);
             }
             else
             {

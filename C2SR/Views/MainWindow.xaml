@@ -11,12 +11,13 @@
     <Window.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <conv:MainWindowTitleConverter x:Key="WindowTitleConverter"/>
-        <conv:C2LevelToStringConverter x:Key="LevelToStringConverter"/>
-        <conv:C2LevelConstantToForegroundConverter x:Key="LevelConstantToForegroundConverter"/>
-        <conv:C2LevelConstantToFontWeightConverter x:Key="LevelConstantToFontWeightConverter"/>
-        <conv:C2TPToStringConverter x:Key="TPToStringConverter"/>
-        <conv:C2TotalScoreToTextConverter x:Key="TotalScoreToTextConverter"/>
-        <conv:C2IsTopSongToFontWeightConverter x:Key="IsTopSongToFontWeightConverter"/>
+        <conv:LevelToStringConverter x:Key="LevelToStringConverter"/>
+        <conv:LevelConstantToForegroundConverter x:Key="LevelConstantToForegroundConverter"/>
+        <conv:LevelConstantToFontWeightConverter x:Key="LevelConstantToFontWeightConverter"/>
+        <conv:SelectedSongsToTextConverter x:Key="SelectedSongsToTextConverter"/>
+        <conv:TPToStringConverter x:Key="TPToStringConverter"/>
+        <conv:TotalScoreToTextConverter x:Key="TotalScoreToTextConverter"/>
+        <conv:IsTopSongToFontWeightConverter x:Key="IsTopSongToFontWeightConverter"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewDocumentCommand}"/>
@@ -83,6 +84,8 @@
         <StatusBar DockPanel.Dock="Bottom"
                    Visibility="{Binding IsStatusBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StatusBarItem Content="{Binding StatusBarText}"/>
+            <Separator/>
+            <StatusBarItem Content="{Binding SelectedSongs, Converter={StaticResource SelectedSongsToTextConverter}}"/>
             <StatusBarItem HorizontalAlignment="Right"
                            Content="{Binding TopSongResult, Converter={StaticResource TotalScoreToTextConverter}}"/>
         </StatusBar>
@@ -222,7 +225,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="0.5" Padding="5" Width="300"
+            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="0.5" Padding="5" Width="350"
                     Visibility="{Binding IsFiltersVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <local:FiltersPanel FilterExecuted="FiltersPanel_FilterExecuted"/>
             </Border>

@@ -5,6 +5,7 @@ using C2SR.Services.RegistryServices;
 using C2SR.ViewModels;
 using System.Windows;
 using System.Windows.Media;
+using static C2SR.App.Constants;
 
 namespace C2SR.Views
 {
@@ -18,7 +19,7 @@ namespace C2SR.Views
             InitializeComponent();
 
             // Load window state
-            using C2StatisticsRegistryService reg = new();
+            using StatisticsRegistryService reg = new();
             Left = reg.WindowLeft;
             Top = reg.WindowTop;
             Width = reg.WindowWidth;
@@ -37,17 +38,17 @@ namespace C2SR.Views
                 var rank = C2TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore);
                 if (!result.IsUnranked)
                 {
-                    C2RankColorToBrushConverter conv = new();
+                    RankColorToBrushConverter conv = new();
                     stackPanel_Rank.Background = (Brush)conv.Convert(rank.Color, null!, null!, null!);
                     textBlock_RankName.Text = rank.Name;
                 }
 
                 textBlock_TotalScore.Text = string.Format(Strings.StatisticsDialog_Summary_TotalScore, result.TotalScore);
-                textBlock_EvaluatedCount.Text = string.Format(Strings.StatisticsDialog_Summary_EvaluatedCount, topCount, C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
+                textBlock_EvaluatedCount.Text = string.Format(Strings.StatisticsDialog_Summary_EvaluatedCount, topCount, TOTAL_SCORE_SONG_COUNT);
                 textBlock_MMCount.Text = string.Format(Strings.StatisticsDialog_Summary_MMCount, mmCount, count);
                 textBlock_TP100Count.Text = string.Format(Strings.StatisticsDialog_Summary_TP100Count, tp100Count, count);
                 textBlock_MxmCount.Text = string.Format(Strings.StatisticsDialog_Summary_MxmCount, mxmCount, count);
-                groupBox_TopSongs.Header = string.Format(Strings.StatisticsDialog_TopSongs, C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
+                groupBox_TopSongs.Header = string.Format(Strings.StatisticsDialog_TopSongs, TOTAL_SCORE_SONG_COUNT);
 
                 listView.ItemsSource = result.TopSongs;
             }
@@ -65,7 +66,7 @@ namespace C2SR.Views
         private void Window_Closed(object sender, EventArgs e)
         {
             // Save window state
-            using C2StatisticsRegistryService reg = new();
+            using StatisticsRegistryService reg = new();
             reg.WindowLeft = (int)Left;
             reg.WindowTop = (int)Top;
             reg.WindowWidth = (int)Width;

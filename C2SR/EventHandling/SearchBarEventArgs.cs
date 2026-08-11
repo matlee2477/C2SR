@@ -1,8 +1,8 @@
 ﻿namespace C2SR.EventHandling
 {
-    public class SearchExecutedEventArgs : EventArgs
+    public class SearchBarEventArgs : EventArgs
     {
-        public SearchExecutedEventArgs(SearchOption searchTarget, string searchTerm, bool isCaseSensitive)
+        public SearchBarEventArgs(SearchOption searchTarget, string searchTerm, bool isCaseSensitive)
         {
             SearchTarget = searchTarget;
             SearchTerm = searchTerm;
@@ -21,5 +21,5 @@
         Artist,
     }
 
-    public delegate void SearchExecutedEventHandler(object sender, SearchExecutedEventArgs e);
+    public delegate void SearchBarEventHandler(object sender, SearchBarEventArgs e);
 }

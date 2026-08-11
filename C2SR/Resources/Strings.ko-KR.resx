@@ -336,6 +336,9 @@
   <data name="MainWindow_TotalScoreText" xml:space="preserve">
     <value>총 점수: {0:F3} ({1})</value>
   </data>
+  <data name="MainWindow_Title_Untitled" xml:space="preserve">
+    <value>제목 없음</value>
+  </data>
   <data name="Rank_Unranked" xml:space="preserve">
     <value>Unranked</value>
   </data>
@@ -437,5 +440,8 @@
   </data>
   <data name="SettingsDialog_UI_HighlightsBossSongs_Tooltip" xml:space="preserve">
     <value>활성화하면 레벨 상수가 가장 높은 곡을 강조 표시합니다.</value>
+  </data>
+  <data name="MainWindow_StatusBarText_SongSelection" xml:space="preserve">
+    <value>항목 {0}개 선택됨</value>
   </data>
 </root>

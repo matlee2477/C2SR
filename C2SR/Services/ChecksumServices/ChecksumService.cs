@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 
 namespace C2SR.Services.ChecksumServices
 {
-    class C2ChecksumService : IChecksumService
+    class ChecksumService : IChecksumService
     {
-        public C2ChecksumService()
+        public ChecksumService()
         {
             TargetFiles = [];
         }

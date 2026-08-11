@@ -17,14 +17,17 @@ namespace C2SR.Views
             comboBox_FilterVersion.ItemsSource = DropdownItemStore.Instance.Versions;
             comboBox_FilterChapter.ItemsSource = DropdownItemStore.Instance.Chapters;
             comboBox_FilterChartType.ItemsSource = DropdownItemStore.Instance.ChartTypes;
-            comboBox_FilterLevel.ItemsSource = DropdownItemStore.Instance.Levels;
+            comboBox_FilterLevel_Minimum.ItemsSource = DropdownItemStore.Instance.Levels;
+            comboBox_FilterLevel_Maximum.ItemsSource = DropdownItemStore.Instance.Levels;
 
             comboBox_FilterVersion.SelectedIndex = 0;
             comboBox_FilterChapter.SelectedIndex = 0;
             comboBox_FilterChartType.SelectedIndex = 0;
-            comboBox_FilterLevel.SelectedIndex = 0;
+            comboBox_FilterLevel_Minimum.SelectedIndex = 0;
+            comboBox_FilterLevel_Maximum.SelectedIndex = comboBox_FilterLevel_Maximum.Items.Count - 1;
 
             isFilterReady = true;
+            FilterChanged(this, new());
         }
 
         #region Fields
@@ -60,11 +63,17 @@ namespace C2SR.Views
             typeof(FiltersPanel),
             new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty LevelFilterProperty = DependencyProperty.Register(
-            nameof(LevelFilter),
-            typeof(object),
+        public static readonly DependencyProperty MinimumLevelFilterProperty = DependencyProperty.Register(
+            nameof(MinimumLevelFilter),
+            typeof(decimal),
             typeof(FiltersPanel),
-            new PropertyMetadata(string.Empty));
+            new PropertyMetadata(decimal.MinValue));
+
+        public static readonly DependencyProperty MaximumLevelFilterProperty = DependencyProperty.Register(
+            nameof(MaximumLevelFilter),
+            typeof(decimal),
+            typeof(FiltersPanel),
+            new PropertyMetadata(decimal.MaxValue));
 
         public static readonly DependencyProperty IsMMOnlyProperty = DependencyProperty.Register(
             nameof(IsMMOnly),
@@ -117,10 +126,16 @@ namespace C2SR.Views
             set => SetValue(ChartTypeFilterProperty, value);
         }
 
-        public object LevelFilter
+        public decimal MinimumLevelFilter
         {
-            get => GetValue(LevelFilterProperty);
-            set => SetValue(LevelFilterProperty, value);
+            get => (decimal)GetValue(MinimumLevelFilterProperty);
+            set => SetValue(MinimumLevelFilterProperty, value);
+        }
+
+        public decimal MaximumLevelFilter
+        {
+            get => (decimal)GetValue(MaximumLevelFilterProperty);
+            set => SetValue(MaximumLevelFilterProperty, value);
         }
 
         public bool IsMMOnly
@@ -144,18 +159,18 @@ namespace C2SR.Views
         #endregion
 
         // Events
-        public event FilterExecutedEventHandler? FilterExecuted;
+        public event FiltersPanelEventHandler? FilterExecuted;
 
         #region Event handlers
         private void FilterChanged(object sender, RoutedEventArgs e)
         {
             if (isFilterReady)
             {
-                FilterExecuted?.Invoke(this, new FilterExecutedEventArgs(SortOption, IsDescending,
+                FilterExecuted?.Invoke(this, new(SortOption, IsDescending,
                     comboBox_FilterVersion.SelectedIndex > 0 ? VersionFilter : null,
-                    comboBox_FilterChapter.SelectedIndex > 0 ? ChapterFilter : null,
+                    comboBox_FilterChapter.SelectedIndex > 0 ? ChapterFilter : null, 
                     comboBox_FilterChartType.SelectedIndex > 0 ? ChartTypeFilter : null,
-                    comboBox_FilterLevel.SelectedIndex > 0 ? (decimal)LevelFilter : null,
+                    MinimumLevelFilter, MaximumLevelFilter,
                     IsMMOnly, IsTP100Only, IsMxmOnly));
             }
         }

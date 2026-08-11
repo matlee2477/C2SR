@@ -1,16 +1,17 @@
 ﻿namespace C2SR.EventHandling
 {
-    public class FilterExecutedEventArgs : EventArgs
+    public class FiltersPanelEventArgs : EventArgs
     {
-        public FilterExecutedEventArgs(SortOption sortOption, bool isDescending,
-            string? versionFilter, string? chapterFilter, string? chartTypeFilter, decimal? levelFilter, bool isMMOnly, bool isTP100Only, bool isMxmOnly)
+        public FiltersPanelEventArgs(SortOption sortOption, bool isDescending,
+            string? versionFilter, string? chapterFilter, string? chartTypeFilter, decimal minimumLevelFilter, decimal maximumLevelFilter, bool isMMOnly, bool isTP100Only, bool isMxmOnly)
         {
             SortOption = sortOption;
             IsDescending = isDescending;
             VersionFilter = versionFilter;
             ChapterFilter = chapterFilter;
             ChartTypeFilter = chartTypeFilter;
-            LevelFilter = levelFilter;
+            MinimumLevelFilter = minimumLevelFilter;
+            MaximumLevelFilter = maximumLevelFilter;
             IsMMOnly = isMMOnly;
             IsTP100Only = isTP100Only;
             IsMxmOnly = isMxmOnly;
@@ -22,7 +23,8 @@
         public string? VersionFilter { get; }
         public string? ChapterFilter { get; }
         public string? ChartTypeFilter { get; }
-        public decimal? LevelFilter { get; }
+        public decimal MinimumLevelFilter { get; }
+        public decimal MaximumLevelFilter { get; }
         public bool IsMMOnly { get; }
         public bool IsTP100Only { get; }
         public bool IsMxmOnly { get; }
@@ -41,5 +43,5 @@
         Score,
     }
 
-    public delegate void FilterExecutedEventHandler(object sender, FilterExecutedEventArgs e);
+    public delegate void FiltersPanelEventHandler(object sender, FiltersPanelEventArgs e);
 }

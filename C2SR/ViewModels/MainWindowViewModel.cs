@@ -11,19 +11,20 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Numerics;
 using System.Text.Json.Nodes;
 using System.Windows;
 using System.Windows.Media;
+using static C2SR.App.Constants;
 
 namespace C2SR.ViewModels
 {
     class MainWindowViewModel : ObservableObject
     {
-        public MainWindowViewModel(IDialogService dialogService)
+        public MainWindowViewModel()
         {
             songs = [];
             clipboard = [];
-            this.dialogService = dialogService;
             StatusBarText = string.Empty;
             FileName = string.Empty;
             IsSaved = true;
@@ -57,7 +58,6 @@ namespace C2SR.ViewModels
         readonly ObservableCollection<C2SongViewModel> songs;
         readonly UndoableCommandStack undoStack = UndoableCommandStack.Instance;
         C2ClipboardField[] clipboard;
-        readonly IDialogService dialogService;
 
         #region Properties
         public IEnumerable<C2SongViewModel> Songs => songs;
@@ -102,12 +102,13 @@ namespace C2SR.ViewModels
             }
         }
 
-        public IEnumerable<C2SongViewModel> SelectedSongs
+        public C2SongViewModel[] SelectedSongs
         {
             get;
             set
             {
                 field = value;
+                OnPropertyChanged(nameof(SelectedSongs));
                 CutCommand.NotifyCanExecuteChanged();
                 CopyCommand.NotifyCanExecuteChanged();
                 PasteCommand.NotifyCanExecuteChanged();
@@ -159,7 +160,6 @@ namespace C2SR.ViewModels
         #endregion
 
         // Events
-        public event ChangeTitleRequestedEventHandler? ChangeTitleRequested;
         public event EventHandler? RefreshListViewRequested;
         public event EventHandler? SelectAllExecuted;
         public event EventHandler? ExitExecuted;
@@ -169,7 +169,7 @@ namespace C2SR.ViewModels
         {
             // If debug mode, create checksum; otherwise, verify checksum
             {
-                C2ChecksumService checksumService = new();
+                ChecksumService checksumService = new();
                 checksumService.TargetFiles = [PATH_SONGS_JSON, PATH_RANKS_JSON, PATH_DROPDOWN_JSON];
 #if DEBUG
                 checksumService.CreateChecksum(PATH_CHECKSUM);
@@ -180,7 +180,7 @@ namespace C2SR.ViewModels
 
             // Load song data
             {
-                C2JsonService jsonService = new();
+                JsonService jsonService = new();
                 string code = jsonService.LoadJson(PATH_SONGS_JSON);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
@@ -188,7 +188,7 @@ namespace C2SR.ViewModels
                 {
                     if (node is not JsonObject obj) continue;
 
-                    long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
+                    BigInteger id = new(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
                     string name = obj["name"]?.GetValue<string>() ?? string.Empty;
                     string artist = obj["artist"]?.GetValue<string>() ?? string.Empty;
                     decimal bpm = obj["BPM"]?.GetValue<decimal>() ?? 0;
@@ -206,7 +206,7 @@ namespace C2SR.ViewModels
                     song.TPChanged += C2SongViewModel_TPChanged;
                     song.MxmChanged += C2SongViewModel_MxmChanged;
 
-                    if (song.Level >= TARGET_LEVEL) songs.Add(song);
+                    if (song.Level >= LEVEL_THRESHOLD) songs.Add(song);
                 }
 
                 FilteredSongs = songs;
@@ -214,7 +214,7 @@ namespace C2SR.ViewModels
 
             // Load total score rank criteria
             {
-                C2JsonService jsonService = new();
+                JsonService jsonService = new();
                 string code = jsonService.LoadJson(PATH_RANKS_JSON);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
@@ -232,7 +232,7 @@ namespace C2SR.ViewModels
                         Color color = new() { A = 255, R = r, G = g, B = b };
 
                         // Calculate top score
-                        var topSongs = Songs.OrderByDescending(s => s.LevelConstant).Take(C2TotalScoreService.TOTAL_SCORE_SONG_COUNT);
+                        var topSongs = Songs.OrderByDescending(s => s.LevelConstant).Take(TOTAL_SCORE_SONG_COUNT);
                         var topSongsWithTP100 = topSongs.Select(s =>
                         {
                             C2SongViewModel newSong = new(new(s.ID, s.Name, s.Artist, s.Bpm, s.Version, s.Chapter, s.ChartType, s.Level, s.LevelConstant));
@@ -280,12 +280,10 @@ namespace C2SR.ViewModels
             }
 
             // Load registry
-            using C2RegistryService reg = new();
+            using RegistryService reg = new();
             IsSearchBarVisible = reg.GetVisibility("SearchBar", true);
             IsFiltersVisible = reg.GetVisibility("Filters", true);
             IsStatusBarVisible = reg.GetVisibility("StatusBar", true);
-
-            ChangeTitleRequested?.Invoke(this, new(FileName, IsSaved));
         }
 
         void NewDocument()
@@ -308,13 +306,13 @@ namespace C2SR.ViewModels
         {
             try
             {
-                C2JsonService jsonService = new();
+                JsonService jsonService = new();
                 string code = jsonService.LoadJson(fileName);
 
                 JsonArray arr = JsonNode.Parse(code)!.AsArray();
                 foreach (JsonObject obj in arr.OfType<JsonObject>())
                 {
-                    long id = BitConverter.ToInt64(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
+                    BigInteger id = new(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
                     C2SongViewModel? song = songs.FirstOrDefault(s => s.ID == id);
                     if (song != null)
                     {
@@ -335,7 +333,8 @@ namespace C2SR.ViewModels
             }
             catch
             {
-                dialogService.ShowOpenErrorDialog();
+                OpenErrorDialogService ds = new();
+                ds.ShowDialog();
                 NewDocument();
                 StatusBarText = string.Format(Strings.MainWindow_StatusBarText_LoadFailure, fileName);
             }
@@ -350,7 +349,7 @@ namespace C2SR.ViewModels
                 {
                     JsonObject obj = new()
                     {
-                        ["ID"] = Convert.ToHexString(BitConverter.GetBytes(song.ID)),
+                        ["ID"] = Convert.ToHexString(song.ID.ToByteArray()),
                         ["MM"] = song.IsMM,
                         ["TP"] = song.TP,
                         ["MxM"] = song.IsMxm
@@ -358,7 +357,7 @@ namespace C2SR.ViewModels
                     arr.Add(obj);
                 }
 
-                C2JsonService jsonService = new();
+                JsonService jsonService = new();
                 jsonService.SaveJson(fileName, arr.ToJsonString());
 
                 FileName = fileName;
@@ -367,7 +366,8 @@ namespace C2SR.ViewModels
             }
             catch
             {
-                dialogService.ShowSaveErrorDialog();
+                SaveErrorDialogService ds = new();
+                ds.ShowDialog();
                 StatusBarText = string.Format(Strings.MainWindow_StatusBarText_SaveFailure, fileName);
             }
         }
@@ -376,7 +376,9 @@ namespace C2SR.ViewModels
         {
             if (!IsSaved)
             {
-                switch (dialogService.QuerySaveChangesDialog())
+                QuerySaveChangesDialogService ds = new();
+                ds.ShowDialog(null!, out var output);
+                switch (output.DialogResult)
                 {
                     case MessageBoxResult.Yes:
                         ExecuteSave();
@@ -407,7 +409,7 @@ namespace C2SR.ViewModels
                     if (oldMM != isMM.Value)
                     {
                         song.SetMM(isMM.Value, SetPropertyOption.Silent);
-                        commands.Add(new C2MMUndoableCommand(song, oldMM, isMM.Value));
+                        commands.Add(new MMUndoableCommand(song, oldMM, isMM.Value));
                     }
                 }
                 if (tp.HasValue)
@@ -416,7 +418,7 @@ namespace C2SR.ViewModels
                     if (oldTP != tp.Value)
                     {
                         song.SetTP(tp.Value, SetPropertyOption.Silent);
-                        commands.Add(new C2TPUndoableCommand(song, oldTP, tp.Value));
+                        commands.Add(new TPUndoableCommand(song, oldTP, tp.Value));
                     }
                 }
                 if (isMxm.HasValue)
@@ -425,7 +427,7 @@ namespace C2SR.ViewModels
                     if (oldMxm != isMxm.Value)
                     {
                         song.SetMxm(isMxm.Value, SetPropertyOption.Silent);
-                        commands.Add(new C2MxmUndoableCommand(song, oldMxm, isMxm.Value));
+                        commands.Add(new MxmUndoableCommand(song, oldMxm, isMxm.Value));
                     }
                 }
             }
@@ -444,7 +446,7 @@ namespace C2SR.ViewModels
 
         public void ApplySelection(IList selectedItems)
         {
-            SelectedSongs = selectedItems.Cast<C2SongViewModel>();
+            SelectedSongs = [.. selectedItems.Cast<C2SongViewModel>()];
         }
 
         public void UpdateTotalScore()
@@ -492,7 +494,8 @@ namespace C2SR.ViewModels
             if (filter.VersionFilter != null) filteredSongs = filteredSongs.Where(s => s.Version == filter.VersionFilter);
             if (filter.ChapterFilter != null) filteredSongs = filteredSongs.Where(s => s.Chapter == filter.ChapterFilter);
             if (filter.ChartTypeFilter != null) filteredSongs = filteredSongs.Where(s => s.ChartType == filter.ChartTypeFilter);
-            if (filter.LevelFilter != null) filteredSongs = filteredSongs.Where(s => s.Level == filter.LevelFilter);
+            filteredSongs = filteredSongs.Where(s => s.Level >= filter.MinimumLevelFilter);
+            filteredSongs = filteredSongs.Where(s => s.Level <= filter.MaximumLevelFilter);
             if (filter.IsMMOnly) filteredSongs = filteredSongs.Where(s => s.IsMM);
             if (filter.IsTP100Only) filteredSongs = filteredSongs.Where(s => s.TP == 100);
             if (filter.IsMxmOnly) filteredSongs = filteredSongs.Where(s => s.IsMxm);
@@ -537,7 +540,7 @@ namespace C2SR.ViewModels
         #region Event Handlers
         private void C2SongViewModel_MMChanging(object sender, GenericPropertyChangingEventArgs<bool> e)
         {
-            C2MMUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
+            MMUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
@@ -545,7 +548,7 @@ namespace C2SR.ViewModels
 
         private void C2SongViewModel_TPChanging(object sender, GenericPropertyChangingEventArgs<decimal> e)
         {
-            C2TPUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
+            TPUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
@@ -553,7 +556,7 @@ namespace C2SR.ViewModels
 
         private void C2SongViewModel_MxmChanging(object sender, GenericPropertyChangingEventArgs<bool> e)
         {
-            C2MxmUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
+            MxmUndoableCommand command = new((C2SongViewModel)sender, e.OldValue, e.NewValue);
             undoStack.AddUndoCommand(command);
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
@@ -597,7 +600,7 @@ namespace C2SR.ViewModels
         public RelayCommand AboutCommand { get; }
         public RelayCommand ExitCommand { get; }
 
-        bool CanEdit() => SelectedSongs.Any();
+        bool CanEdit() => SelectedSongs.Length > 0;
         bool CanUndo() => undoStack.CanUndo;
         bool CanRedo() => undoStack.CanRedo;
         bool CanPaste() => CanEdit() && clipboard.Length > 0;
@@ -615,9 +618,10 @@ namespace C2SR.ViewModels
             QuerySaveChanges(out bool cancel);
             if (cancel) return;
 
-            if (dialogService.ShowOpenFileDialog(out string fileName) == true)
+            OpenFileDialogService ds = new();
+            if (ds.ShowDialog(null!, out var output) == true)
             {
-                Load(fileName);
+                Load(output.FileName);
             }
         }
 
@@ -635,32 +639,33 @@ namespace C2SR.ViewModels
 
         void ExecuteSaveAs()
         {
-            if (dialogService.ShowSaveFileDialog(out string fileName) == true)
+            SaveFileDialogService ds = new();
+            if (ds.ShowDialog(null!, out var output) == true)
             {
-                Save(fileName);
+                Save(output.FileName);
             }
         }
 
         void ExecuteSettings()
         {
-            SettingsDialogResult result = dialogService.ShowSettingsDialog();
-            if (result.DialogResult)
+            SettingsDialogService ds = new();
+            if (ds.ShowDialog(null!, out var output) == true)
             {
-                C2SettingService.Instance.Language = result.Language;
-                C2SettingService.Instance.StartAction = result.StartAction;
-                C2SettingService.Instance.HighlightsOutlyingLevelConstants = result.HighlightsOutlyingLevelConstants;
-                C2SettingService.Instance.HighlightsBossSongs = result.HighlightsBossSongs;
-                C2SettingService.Instance.HighlightsTopSongs = result.HighlightsTopSongs;
-                C2SettingService.Instance.CascadesAchievements = result.CascadesAchievements;
+                C2SettingService.Instance.Language = output.Language;
+                C2SettingService.Instance.StartAction = output.StartAction;
+                C2SettingService.Instance.HighlightsOutlyingLevelConstants = output.HighlightsOutlyingLevelConstants;
+                C2SettingService.Instance.HighlightsBossSongs = output.HighlightsBossSongs;
+                C2SettingService.Instance.HighlightsTopSongs = output.HighlightsTopSongs;
+                C2SettingService.Instance.CascadesAchievements = output.CascadesAchievements;
 
                 // Save settings
-                using C2RegistryService reg = new();
-                reg.SetSetting("Language", (int)result.Language);
-                reg.SetSetting("StartAction", (int)result.StartAction);
-                reg.SetSetting("HighlightsOutlyingLevelConstants", result.HighlightsOutlyingLevelConstants);
-                reg.SetSetting("HighlightsBossSongs", result.HighlightsBossSongs);
-                reg.SetSetting("HighlightsTopSongs", result.HighlightsTopSongs);
-                reg.SetSetting("CascadesAchievements", result.CascadesAchievements);
+                using RegistryService reg = new();
+                reg.SetSetting("Language", (int)output.Language);
+                reg.SetSetting("StartAction", (int)output.StartAction);
+                reg.SetSetting("HighlightsOutlyingLevelConstants", output.HighlightsOutlyingLevelConstants);
+                reg.SetSetting("HighlightsBossSongs", output.HighlightsBossSongs);
+                reg.SetSetting("HighlightsTopSongs", output.HighlightsTopSongs);
+                reg.SetSetting("CascadesAchievements", output.CascadesAchievements);
 
                 RefreshListViewRequested?.Invoke(this, EventArgs.Empty);
             }
@@ -711,17 +716,17 @@ namespace C2SR.ViewModels
                 if (oldMM != newMM)
                 {
                     song.SetMM(newMM, SetPropertyOption.Silent);
-                    commands.Add(new C2MMUndoableCommand(song, oldMM, newMM));
+                    commands.Add(new MMUndoableCommand(song, oldMM, newMM));
                 }
                 if (oldTP != newTP)
                 {
                     song.SetTP(newTP, SetPropertyOption.Silent);
-                    commands.Add(new C2TPUndoableCommand(song, oldTP, newTP));
+                    commands.Add(new TPUndoableCommand(song, oldTP, newTP));
                 }
                 if (oldMxm != newMxm)
                 {
                     song.SetMxm(newMxm, SetPropertyOption.Silent);
-                    commands.Add(new C2MxmUndoableCommand(song, oldMxm, newMxm));
+                    commands.Add(new MxmUndoableCommand(song, oldMxm, newMxm));
                 }
 
                 index++;
@@ -741,13 +746,14 @@ namespace C2SR.ViewModels
 
         void ExecuteSetSelection()
         {
-            SetValueDialogResult result = dialogService.ShowSetValueDialog();
-            if (result.DialogResult)
+
+            SetValueDialogService ds = new();
+            if (ds.ShowDialog(null!, out var output) == true)
             {
                 SetValue(SelectedSongs,
-                    result.SetsMM ? result.IsMM : null,
-                    result.SetsTP ? result.TP : null,
-                    result.SetsMxm ? result.IsMxm : null);
+                    output.SetsMM ? output.IsMM : null,
+                    output.SetsTP ? output.TP : null,
+                    output.SetsMxm ? output.IsMxm : null);
             }
         }
 
@@ -768,12 +774,15 @@ namespace C2SR.ViewModels
 
         void ExecuteViewStatistics()
         {
-            dialogService.ShowStatisticsDialog(Songs);
+            StatisticsDialogService ds = new();
+            StatisticsDialogInput input = new() { Songs = Songs };
+            ds.ShowDialog(input, out _);
         }
 
         void ExecuteAbout()
         {
-            dialogService.ShowAboutDialog();
+            AboutDialogService ds = new();
+            ds.ShowDialog();
         }
 
         void ExecuteExit()
@@ -782,14 +791,6 @@ namespace C2SR.ViewModels
         }
 
         #endregion
-
-        // Constants
-        const string PATH_SONGS_JSON = @".\data\songs.json";
-        const string PATH_RANKS_JSON = @".\data\ranks.json";
-        const string PATH_DROPDOWN_JSON = @".\data\dropdownitems.json";
-        const string PATH_CHECKSUM = @".\data\checksum.dat";
-
-        const int TARGET_LEVEL = 14;
     }
 
     readonly struct C2ClipboardField

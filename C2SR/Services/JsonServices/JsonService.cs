@@ -2,7 +2,7 @@
 
 namespace C2SR.Services.JsonServices
 {
-    class C2JsonService : IJsonService
+    class JsonService : IJsonService
     {
         public string LoadJson(string fileName)
         {

@@ -1,10 +1,11 @@
 ﻿using C2SR.Converters;
+using System.Numerics;
 
 namespace C2SR.Models
 {
     public class C2Song
     {
-        public C2Song(long id, string name, string artist, decimal bpm, string version, string chapter, string chartType, decimal level, decimal levelConstant)
+        public C2Song(BigInteger id, string name, string artist, decimal bpm, string version, string chapter, string chartType, decimal level, decimal levelConstant)
         {
             ID = id;
             Name = name;
@@ -21,7 +22,7 @@ namespace C2SR.Models
         }
 
         // Properties
-        public long ID { get; }
+        public BigInteger ID { get; }
         public string Name { get; }
         public string Artist { get; }
         public decimal Bpm { get; }
@@ -35,6 +36,6 @@ namespace C2SR.Models
         public decimal TP { get; set; }
         public bool IsMxm { get; set; }
 
-        public decimal Score => C2ScoreConverter.GetScore(LevelConstant, IsMM, TP);
+        public decimal Score => ScoreConverter.GetScore(LevelConstant, IsMM, TP);
     }
 }

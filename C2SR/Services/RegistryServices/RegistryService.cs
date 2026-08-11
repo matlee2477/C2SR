@@ -2,11 +2,11 @@
 
 namespace C2SR.Services.RegistryServices
 {
-    class C2RegistryService : IRegistryService, IDisposable
+    class RegistryService : IRegistryService, IDisposable
     {
-        public C2RegistryService() : this(@"Software\Cytus II Skill Rate", "Settings", 800, 450, 200, 200) { }
+        public RegistryService() : this(@"Software\Cytus II Skill Rate", "Settings", 800, 450, 200, 200) { }
 
-        protected C2RegistryService(string mainKeyPath, string settingsKeyPath, int defaultWindowWidth, int defaultWindowHeight, int defaultWindowLeft, int defaultWindowTop)
+        protected RegistryService(string mainKeyPath, string settingsKeyPath, int defaultWindowWidth, int defaultWindowHeight, int defaultWindowLeft, int defaultWindowTop)
         {
             mainKey = Registry.CurrentUser.CreateSubKey(mainKeyPath);
             if (!string.IsNullOrEmpty(settingsKeyPath)) settingsKey = mainKey.CreateSubKey(settingsKeyPath); else settingsKey = mainKey;
@@ -31,12 +31,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return (int)(mainKey.GetValue("Width") ?? defaultWindowWidth);
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("Width", value, RegistryValueKind.DWord);
             }
         }
@@ -45,12 +45,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return (int)(mainKey.GetValue("Height") ?? defaultWindowHeight);
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("Height", value, RegistryValueKind.DWord);
             }
         }
@@ -59,12 +59,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return (int)(mainKey.GetValue("Left") ?? defaultWindowLeft);
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("Left", value, RegistryValueKind.DWord);
             }
         }
@@ -73,12 +73,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return (int)(mainKey.GetValue("Top") ?? defaultWindowTop);
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("Top", value, RegistryValueKind.DWord);
             }
         }
@@ -87,12 +87,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return Convert.ToBoolean((int)(mainKey.GetValue("IsMaximized") ?? 0));
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("IsMaximized", Convert.ToInt32(value), RegistryValueKind.DWord);
             }
         }
@@ -101,12 +101,12 @@ namespace C2SR.Services.RegistryServices
         {
             get
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 return (string)(mainKey.GetValue("LastFileName") ?? string.Empty);
             }
             set
             {
-                ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+                ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
                 mainKey.SetValue("LastFileName", value, RegistryValueKind.String);
             }
         }
@@ -116,7 +116,7 @@ namespace C2SR.Services.RegistryServices
         #region Methods
         public bool GetVisibility(string name, bool defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (mainKey.GetValue(name) is int value)
             {
@@ -130,7 +130,7 @@ namespace C2SR.Services.RegistryServices
 
         public int GetSize(string name, int defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (mainKey.GetValue(name) is int value)
             {
@@ -144,7 +144,7 @@ namespace C2SR.Services.RegistryServices
 
         public bool GetSetting(string name, bool defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (settingsKey.GetValue(name) is int value)
             {
@@ -158,7 +158,7 @@ namespace C2SR.Services.RegistryServices
 
         public int GetSetting(string name, int defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (settingsKey.GetValue(name) is int value)
             {
@@ -172,7 +172,7 @@ namespace C2SR.Services.RegistryServices
 
         public long GetSetting(string name, long defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (settingsKey.GetValue(name) is long value)
             {
@@ -186,7 +186,7 @@ namespace C2SR.Services.RegistryServices
 
         public string GetSetting(string name, string defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (settingsKey.GetValue(name) is string value)
             {
@@ -200,7 +200,7 @@ namespace C2SR.Services.RegistryServices
 
         public byte[] GetSetting(string name, byte[] defaultValue)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
 
             if (settingsKey.GetValue(name) is byte[] value)
             {
@@ -214,43 +214,43 @@ namespace C2SR.Services.RegistryServices
 
         public void SetVisibility(string name, bool value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             mainKey.SetValue(name, value, RegistryValueKind.DWord);
         }
 
         public void SetSize(string name, int value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             mainKey.SetValue(name, value, RegistryValueKind.DWord);
         }
 
         public void SetSetting(string name, bool value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             settingsKey.SetValue(name, value, RegistryValueKind.DWord);
         }
 
         public void SetSetting(string name, int value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             settingsKey.SetValue(name, value, RegistryValueKind.DWord);
         }
 
         public void SetSetting(string name, long value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             settingsKey.SetValue(name, value, RegistryValueKind.QWord);
         }
 
         public void SetSetting(string name, string value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             settingsKey.SetValue(name, value, RegistryValueKind.String);
         }
 
         public void SetSetting(string name, byte[] value)
         {
-            ObjectDisposedException.ThrowIf(isDisposed, typeof(C2RegistryService));
+            ObjectDisposedException.ThrowIf(isDisposed, typeof(RegistryService));
             settingsKey.SetValue(name, value, RegistryValueKind.Binary);
         }
 
@@ -281,7 +281,7 @@ namespace C2SR.Services.RegistryServices
             GC.SuppressFinalize(this);
         }
 
-        ~C2RegistryService()
+        ~RegistryService()
         {
             Dispose(false);
         }

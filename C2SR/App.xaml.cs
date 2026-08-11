@@ -1,6 +1,5 @@
 ﻿using C2SR.Resources;
 using C2SR.Services;
-using C2SR.Services.DialogServices;
 using C2SR.Services.RegistryServices;
 using C2SR.ViewModels;
 using C2SR.Views;
@@ -10,17 +9,18 @@ using System.Windows;
 namespace C2SR
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for xaml
     /// </summary>
     public partial class App : Application
     {
-        // Fields
+        // Properties
         MainWindow? view;
 
+        #region Event Handlers
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             string fileName = (e.Args.Length > 0) ? e.Args[0] : string.Empty;
-            C2RegistryService reg = new();
+            RegistryService reg = new();
             try
             {
                 // Load settings
@@ -35,17 +35,15 @@ namespace C2SR
                 // Set language
                 string locale = C2SettingService.Instance.Language switch
                 {
-                    C2Language.English => "en-US",
                     C2Language.Korean => "ko-KR",
                     C2Language.Japanese => "ja-JP",
-                    _ => "en-US",
+                    C2Language.English or _ => "en-US",
                 };
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo(locale);
 
-                // Define services and view models
+                // Define views and view models
                 view = new();
-                C2DialogService dialogService = new(view);
-                MainWindowViewModel vm = new(dialogService);
+                MainWindowViewModel vm = new();
                 view.DataContext = vm;
 
                 // Load window state
@@ -66,7 +64,7 @@ namespace C2SR
                     };
                     view.Closed += (sender, e) =>
                     {
-                        using C2RegistryService reg = new();
+                        using RegistryService reg = new();
                         reg.LastFileName = vm.FileName;
                         reg.SetVisibility("SearchBar", vm.IsSearchBarVisible);
                         reg.SetVisibility("Filters", vm.IsFiltersVisible);
@@ -100,13 +98,31 @@ namespace C2SR
             // Save window state
             if (view != null)
             {
-                using C2RegistryService reg = new();
+                using RegistryService reg = new();
                 reg.WindowLeft = (int)view.Left;
                 reg.WindowTop = (int)view.Top;
                 reg.WindowWidth = (int)view.Width;
                 reg.WindowHeight = (int)view.Height;
                 reg.IsMaximized = view.WindowState == WindowState.Maximized;
             }
+        }
+
+        #endregion
+
+        // Global Constants
+        public static class Constants
+        {
+            public const string PATH_SONGS_JSON = @".\data\songs.json";
+            public const string PATH_RANKS_JSON = @".\data\ranks.json";
+            public const string PATH_DROPDOWN_JSON = @".\data\dropdownitems.json";
+            public const string PATH_CHECKSUM = @".\data\checksum.dat";
+            public const string PATH_LICENSE = @".\data\LICENSE";
+            public const string FILE_FILTER = "Cytus II Skill Rate Document|*.c2sr|All Files|*.*";
+            public const string FILE_DEFAULT_EXT = ".c2sr";
+            public const int LEVEL_THRESHOLD = 14;
+            public const int TOTAL_SCORE_SONG_COUNT = 30;
+            public const decimal SCORE_BONUS_MM = 0.25M;
+            public const decimal SCORE_BONUS_TP100 = 0.25M;
         }
     }
 }
