@@ -22,7 +22,7 @@ namespace C2SR.ViewModels
         public string Name => song.Name;
         public string Artist => song.Artist;
         public decimal Bpm => song.Bpm;
-        public string Version => song.Version;
+        public C2SongVersion Version => song.Version;
         public string Chapter => song.Chapter;
         public string ChartType => song.ChartType;
         public decimal Level => song.Level;

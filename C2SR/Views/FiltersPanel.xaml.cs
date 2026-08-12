@@ -1,4 +1,5 @@
 ﻿using C2SR.EventHandling;
+using C2SR.Models;
 using C2SR.Stores;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,21 +44,21 @@ namespace C2SR.Views
 
         public static readonly DependencyProperty VersionFilterProperty = DependencyProperty.Register(
             nameof(VersionFilter),
-            typeof(string),
+            typeof(C2SongVersion),
             typeof(FiltersPanel),
-            new PropertyMetadata(string.Empty));
+            new PropertyMetadata());
 
         public static readonly DependencyProperty ChapterFilterProperty = DependencyProperty.Register(
             nameof(ChapterFilter),
             typeof(string),
             typeof(FiltersPanel),
-            new PropertyMetadata(string.Empty));
+            new PropertyMetadata());
 
         public static readonly DependencyProperty ChartTypeFilterProperty = DependencyProperty.Register(
             nameof(ChartTypeFilter),
             typeof(string),
             typeof(FiltersPanel),
-            new PropertyMetadata(string.Empty));
+            new PropertyMetadata());
 
         public static readonly DependencyProperty MinimumLevelFilterProperty = DependencyProperty.Register(
             nameof(MinimumLevelFilter),
@@ -104,9 +105,9 @@ namespace C2SR.Views
             set => SetValue(IsDescendingProperty, value);
         }
 
-        public string VersionFilter
+        public C2SongVersion VersionFilter
         {
-            get => (string)GetValue(VersionFilterProperty);
+            get => (C2SongVersion)GetValue(VersionFilterProperty);
             set => SetValue(VersionFilterProperty, value);
         }
 
@@ -176,9 +177,9 @@ namespace C2SR.Views
             if (isFilterReady)
             {
                 FilterExecuted?.Invoke(this, new(SortOption, IsDescending,
-                    comboBox_FilterVersion.SelectedIndex > 0 ? VersionFilter : null,
-                    comboBox_FilterChapter.SelectedIndex > 0 ? ChapterFilter : null, 
-                    comboBox_FilterChartType.SelectedIndex > 0 ? ChartTypeFilter : null,
+                    comboBox_FilterVersion.SelectedIndex > 0 ? VersionFilter : C2SongVersion.Empty,
+                    comboBox_FilterChapter.SelectedIndex > 0 ? ChapterFilter : string.Empty, 
+                    comboBox_FilterChartType.SelectedIndex > 0 ? ChartTypeFilter : string.Empty,
                     MinimumLevelFilter, MaximumLevelFilter,
                     IsMMOnly, IsTP100Only, IsMxmOnly));
             }

@@ -12,6 +12,9 @@
              d:DesignWidth="350" d:DesignHeight="450">
     <UserControl.Resources>
         <conv:SortOptionToIntConverter x:Key="SortOptionToIntConverter"/>
+        <conv:VersionFilterToStringConverter x:Key="VersionFilterToStringConverter"/>
+        <conv:ChapterFilterToStringConverter x:Key="ChapterFilterToStringConverter"/>
+        <conv:ChartTypeFilterToStringConverter x:Key="ChartTypeFilterToStringConverter"/>
         <conv:LevelToStringConverter x:Key="LevelToStringConverter"/>
     </UserControl.Resources>
     <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
@@ -64,13 +67,31 @@
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" Text="{x:Static res:Strings.MainWindow_Filters_FilterLevel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <ComboBox x:Name="comboBox_FilterVersion" Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center"
                               SelectedItem="{Binding ElementName=root, Path=VersionFilter}"
-                              SelectionChanged="FilterChanged"/>
+                              SelectionChanged="FilterChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource VersionFilterToStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ComboBox x:Name="comboBox_FilterChapter" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center"
                               SelectedItem="{Binding ElementName=root, Path=ChapterFilter}"
-                              SelectionChanged="FilterChanged"/>
+                              SelectionChanged="FilterChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ChapterFilterToStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ComboBox x:Name="comboBox_FilterChartType" Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center"
                               SelectedItem="{Binding ElementName=root, Path=ChartTypeFilter}"
-                              SelectionChanged="FilterChanged"/>
+                              SelectionChanged="FilterChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ChartTypeFilterToStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <Grid Grid.Row="3" Grid.Column="1" Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

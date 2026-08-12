@@ -14,7 +14,7 @@
     <Company>matlee2477</Company>
     <Copyright>Copyright (c) 2024 matlee2477</Copyright>
     <ApplicationIcon>Resources\Icons\C2SR.ico</ApplicationIcon>
-    <Version>0.0.0</Version>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

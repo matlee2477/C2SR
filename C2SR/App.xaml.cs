@@ -121,8 +121,8 @@ namespace C2SR
             public const string FILE_DEFAULT_EXT = ".c2sr";
             public const int LEVEL_THRESHOLD = 14;
             public const int TOTAL_SCORE_SONG_COUNT = 30;
-            public const decimal SCORE_BONUS_MM = 0.25M;
-            public const decimal SCORE_BONUS_TP100 = 0.25M;
+            public const decimal SCORE_BONUS_MM = 0.5M;
+            public const decimal SCORE_BONUS_TP100 = 0.5M;
         }
     }
 }

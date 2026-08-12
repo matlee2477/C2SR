@@ -13,22 +13,7 @@ namespace C2SR.Views
         {
             InitializeComponent();
 
-            currentFilter = new()
-            {
-                SearchOption = SearchOption.Name,
-                SearchTerm = string.Empty,
-                IsCaseSensitive = false,
-                SortOption = SortOption.Default,
-                IsDescending = false,
-                VersionFilter = null,
-                ChapterFilter = null,
-                ChartTypeFilter = null,
-                MinimumLevelFilter = decimal.MinValue,
-                MaximumLevelFilter = decimal.MaxValue,
-                IsMMOnly = false,
-                IsTP100Only = false,
-                IsMxmOnly = false
-            };
+            currentFilter = C2Filter.Default;
         }
 
         // Fields

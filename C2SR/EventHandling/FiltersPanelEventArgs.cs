@@ -1,9 +1,12 @@
-﻿namespace C2SR.EventHandling
+﻿using C2SR.Models;
+
+namespace C2SR.EventHandling
 {
     public class FiltersPanelEventArgs : EventArgs
     {
         public FiltersPanelEventArgs(SortOption sortOption, bool isDescending,
-            string? versionFilter, string? chapterFilter, string? chartTypeFilter, decimal minimumLevelFilter, decimal maximumLevelFilter, bool isMMOnly, bool isTP100Only, bool isMxmOnly)
+            C2SongVersion versionFilter, string chapterFilter, string chartTypeFilter, decimal minimumLevelFilter, decimal maximumLevelFilter,
+            bool isMMOnly, bool isTP100Only, bool isMxmOnly)
         {
             SortOption = sortOption;
             IsDescending = isDescending;
@@ -20,9 +23,9 @@
         // Properties
         public SortOption SortOption { get; }
         public bool IsDescending { get; }
-        public string? VersionFilter { get; }
-        public string? ChapterFilter { get; }
-        public string? ChartTypeFilter { get; }
+        public C2SongVersion VersionFilter { get; }
+        public string ChapterFilter { get; }
+        public string ChartTypeFilter { get; }
         public decimal MinimumLevelFilter { get; }
         public decimal MaximumLevelFilter { get; }
         public bool IsMMOnly { get; }

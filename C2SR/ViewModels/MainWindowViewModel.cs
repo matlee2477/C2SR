@@ -1,4 +1,5 @@
 ﻿using C2SR.EventHandling;
+using C2SR.Models;
 using C2SR.Resources;
 using C2SR.Services;
 using C2SR.Services.ChecksumServices;
@@ -192,11 +193,16 @@ namespace C2SR.ViewModels
                     string name = obj["name"]?.GetValue<string>() ?? string.Empty;
                     string artist = obj["artist"]?.GetValue<string>() ?? string.Empty;
                     decimal bpm = obj["BPM"]?.GetValue<decimal>() ?? 0;
-                    string version = obj["version"]?.GetValue<string>() ?? string.Empty;
+                    string versionString = obj["version"]?.GetValue<string>() ?? string.Empty;
                     string chapter = obj["chapter"]?.GetValue<string>() ?? string.Empty;
                     string chartType = obj["chart"]?.GetValue<string>() ?? string.Empty;
                     decimal level = obj["level"]?.GetValue<decimal>() ?? 12;
                     decimal levelConstant = obj["const"]?.GetValue<decimal>() ?? level;
+
+                    if (!C2SongVersion.TryParse(versionString, out C2SongVersion version))
+                    {
+                        version = C2SongVersion.Empty;
+                    }
 
                     C2SongViewModel song = new(new(id, name, artist, bpm, version, chapter, chartType, level, levelConstant));
                     song.MMChanging += C2SongViewModel_MMChanging;
@@ -491,9 +497,9 @@ namespace C2SR.ViewModels
             }
 
             // Apply filters
-            if (filter.VersionFilter != null) filteredSongs = filteredSongs.Where(s => s.Version == filter.VersionFilter);
-            if (filter.ChapterFilter != null) filteredSongs = filteredSongs.Where(s => s.Chapter == filter.ChapterFilter);
-            if (filter.ChartTypeFilter != null) filteredSongs = filteredSongs.Where(s => s.ChartType == filter.ChartTypeFilter);
+            if (filter.VersionFilter != C2SongVersion.Empty) filteredSongs = filteredSongs.Where(s => s.Version.Equals(filter.VersionFilter));
+            if (filter.ChapterFilter != string.Empty) filteredSongs = filteredSongs.Where(s => s.Chapter == filter.ChapterFilter);
+            if (filter.ChartTypeFilter != string.Empty) filteredSongs = filteredSongs.Where(s => s.ChartType == filter.ChartTypeFilter);
             filteredSongs = filteredSongs.Where(s => s.Level >= filter.MinimumLevelFilter);
             filteredSongs = filteredSongs.Where(s => s.Level <= filter.MaximumLevelFilter);
             if (filter.IsMMOnly) filteredSongs = filteredSongs.Where(s => s.IsMM);

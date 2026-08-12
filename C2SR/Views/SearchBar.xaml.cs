@@ -1,4 +1,5 @@
 ﻿using C2SR.EventHandling;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -61,34 +62,19 @@ namespace C2SR.Views
         // Event handlers
         private void button_Search_Click(object sender, RoutedEventArgs e)
         {
+            ExecuteSearch();
+        }
+
+        #region Commands
+        public RelayCommand SearchCommand => new(ExecuteSearch);
+
+        public void ExecuteSearch()
+        {
             SearchBarEventArgs e2 = new(SearchOption, SearchTerm, IsCaseSensitive);
             SearchPropertyChanged?.Invoke(this, e2);
             SearchExecuted?.Invoke(this, e2);
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            SearchPropertyChanged?.Invoke(this, new(SearchOption, SearchTerm, IsCaseSensitive));
-        }
-
-        private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                SearchBarEventArgs e2 = new(SearchOption, SearchTerm, IsCaseSensitive);
-                SearchPropertyChanged?.Invoke(this, e2);
-                SearchExecuted?.Invoke(this, e2);
-            }
-        }
+        #endregion
     }
 }

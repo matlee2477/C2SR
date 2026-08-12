@@ -14,18 +14,20 @@
     </UserControl.Resources>
     <StackPanel Margin="2" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
         <ComboBox Margin="4" Width="100" VerticalAlignment="Center"
-                  SelectedIndex="{Binding ElementName=root, Path=SearchOption, Converter={StaticResource SearchOptionToIntConverter}}"
-                  SelectionChanged="ComboBox_SelectionChanged">
+                  SelectedIndex="{Binding ElementName=root, Path=SearchOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                          Converter={StaticResource SearchOptionToIntConverter}}">
             <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Name}"/>
             <ComboBoxItem Content="{x:Static res:Strings.MainWindow_Header_Artist}"/>
         </ComboBox>
         <TextBox Margin="4" Width="200" VerticalAlignment="Center"
-                 Text="{Binding ElementName=root, Path=SearchTerm}"
-                 KeyDown="TextBox_KeyDown" LostFocus="TextBox_LostFocus"/>
+                 Text="{Binding ElementName=root, Path=SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding ElementName=root, Path=SearchCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
         <Button Margin="4" Padding="5 2" Content="{x:Static res:Strings.MainWindow_Search}" VerticalAlignment="Center"
                         Click="button_Search_Click"/>
         <CheckBox Margin="4" Content="{x:Static res:Strings.MainWindow_Search_IsCaseSensitive}" VerticalAlignment="Center"
-                  IsChecked="{Binding ElementName=root, Path=IsCaseSensitive}"
-                  Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+                  IsChecked="{Binding ElementName=root, Path=IsCaseSensitive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </StackPanel>
 </UserControl>
