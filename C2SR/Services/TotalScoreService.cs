@@ -4,9 +4,9 @@ using static C2SR.App.Constants;
 
 namespace C2SR.Services
 {
-    class C2TotalScoreService
+    class TotalScoreService
     {
-        C2TotalScoreService()
+        TotalScoreService()
         {
             ranks = [];
         }
@@ -41,10 +41,20 @@ namespace C2SR.Services
 
         public C2TotalScoreRank[] GetAllRanks() => [.. ranks];
 
+        public void AddRank(C2TotalScoreRank rank)
+        {
+            ranks.Add(rank);
+            ranks.Sort((a, b) => b.Criterion.CompareTo(a.Criterion));
+        }
+
         public void AddRank(string name, decimal criterion, Color color)
         {
-            ranks.Add(new() { Name = name, Criterion = criterion, Color = color });
-            ranks.Sort((a, b) => b.Criterion.CompareTo(a.Criterion));
+            AddRank(new()
+            {
+                Name = name,
+                Criterion = criterion,
+                Color = color
+            });
         }
 
         public C2TotalScoreRank GetRankFromTotalScore(decimal totalScore)
@@ -61,8 +71,8 @@ namespace C2SR.Services
         }
 
         // Singleton
-        static readonly Lazy<C2TotalScoreService> lazy = new(() => new C2TotalScoreService());
-        public static C2TotalScoreService Instance => lazy.Value;
+        static readonly Lazy<TotalScoreService> lazy = new(() => new TotalScoreService());
+        public static TotalScoreService Instance => lazy.Value;
     }
 
     readonly struct C2TopSongResult

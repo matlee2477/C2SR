@@ -18,7 +18,7 @@ namespace C2SR.Converters
             }
             else
             {
-                rankName = C2TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore).Name;
+                rankName = TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore).Name;
             }
 
             return string.Format(Strings.MainWindow_TotalScoreText, result.TotalScore, rankName);

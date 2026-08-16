@@ -72,7 +72,7 @@ namespace C2SR.Views
                 field = value;
                 OnPropertyChanged(nameof(TP));
 
-                if (C2SettingService.Instance.CascadesAchievements && field == 100)
+                if (SettingService.Instance.CascadesAchievements && field == 100)
                 {
                     SetsMM = true;
                     IsMM = true;
@@ -88,7 +88,7 @@ namespace C2SR.Views
                 field = value;
                 OnPropertyChanged(nameof(IsMxm));
 
-                if (C2SettingService.Instance.CascadesAchievements && field)
+                if (SettingService.Instance.CascadesAchievements && field)
                 {
                     SetsMM = true;
                     IsMM = true;

@@ -22,7 +22,7 @@ namespace C2SR.Converters
 
         public static decimal GetScore(decimal levelConstant, bool isMM, decimal tp)
         {
-            decimal score = tp * levelConstant / 100;
+            decimal score = levelConstant * (tp / 100) * (tp / 100);
             if (isMM) score += SCORE_BONUS_MM;
             if (tp == 100) score += SCORE_BONUS_TP100;
             return score;

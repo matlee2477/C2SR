@@ -9,7 +9,7 @@ namespace C2SR.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (C2SettingService.Instance.HighlightsTopSongs)
+            if (SettingService.Instance.HighlightsTopSongs)
             {
                 bool isTopSong = (bool)value;
                 return isTopSong ? FontWeights.Bold : FontWeights.Normal;

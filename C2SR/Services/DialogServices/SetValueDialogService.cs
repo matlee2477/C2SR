@@ -25,7 +25,7 @@ namespace C2SR.Services.DialogServices
             }
             else
             {
-                output = null!;
+                output = new();
             }
 
             return result;

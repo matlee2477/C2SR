@@ -1,6 +1,5 @@
 ﻿using C2SR.Models;
 using C2SR.Services.JsonServices;
-using System.Text.Json.Nodes;
 using static C2SR.App.Constants;
 
 namespace C2SR.Stores
@@ -9,13 +8,12 @@ namespace C2SR.Stores
     {
         public DropdownItemStore()
         {
-            JsonService jsonService = new();
-            string code = jsonService.LoadJson(PATH_DROPDOWN_JSON);
-            JsonObject obj = JsonNode.Parse(code)!.AsObject();
+            DropdownItemDataJsonService js = new();
+            DropdownItemData data = js.Load(PATH_DROPDOWN_JSON);
 
-            var versions = obj["version"]!.AsArray().Select(x =>
+            var versions = data.Versions.Select(x =>
             {
-                if (C2SongVersion.TryParse(x?.GetValue<string>() ?? string.Empty, out C2SongVersion version))
+                if (C2SongVersion.TryParse(x, out C2SongVersion version))
                 {
                     return version;
                 }
@@ -24,15 +22,12 @@ namespace C2SR.Stores
                     return C2SongVersion.Empty;
                 }
             });
-            var chapters = obj["chapter"]!.AsArray().Select(x => x?.GetValue<string>() ?? string.Empty);
-            var chartTypes = obj["chart"]!.AsArray().Select(x => x?.GetValue<string>() ?? string.Empty);
-            var levels = obj["level"]!.AsArray().Select(x => x?.GetValue<decimal>() ?? 0);
-            versions = versions.Prepend(C2SongVersion.Empty);
-            chapters = chapters.Prepend(string.Empty);
-            chartTypes = chartTypes.Prepend(string.Empty);
-            Versions = [.. versions];
-            Chapters = [.. chapters];
-            ChartTypes = [.. chartTypes];
+            var chapters = data.Chapters;
+            var chartTypes = data.ChartTypes;
+            var levels = data.Levels;
+            Versions = [C2SongVersion.Empty, .. versions];
+            Chapters = [string.Empty, .. chapters];
+            ChartTypes = [string.Empty, .. chartTypes];
             Levels = [.. levels];
         }
 

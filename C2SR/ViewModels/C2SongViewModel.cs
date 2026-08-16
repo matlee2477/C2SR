@@ -139,7 +139,7 @@ namespace C2SR.ViewModels
                     song.TP = tp;
                     OnTPChanged(tp);
 
-                    if (C2SettingService.Instance.CascadesAchievements && tp == 100)
+                    if (SettingService.Instance.CascadesAchievements && tp == 100)
                     {
                         SetMM(true);
                     }
@@ -164,7 +164,7 @@ namespace C2SR.ViewModels
                     song.IsMxm = isMxm;
                     OnMxmChanged(isMxm);
 
-                    if (C2SettingService.Instance.CascadesAchievements && isMxm)
+                    if (SettingService.Instance.CascadesAchievements && isMxm)
                     {
                         SetTP(100);
                     }

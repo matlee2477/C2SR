@@ -27,7 +27,7 @@ namespace C2SR.Services.DialogServices
             }
             else
             {
-                output = null!;
+                output = new();
             }
 
             return result;
@@ -42,6 +42,6 @@ namespace C2SR.Services.DialogServices
 
     record SaveFileDialogServiceOutput : IDialogServiceOutput
     {
-        public required string FileName { get; init; }
+        public string FileName { get; init; } = string.Empty;
     }
 }

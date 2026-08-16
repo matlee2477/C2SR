@@ -28,14 +28,14 @@ namespace C2SR.Views
 
             // Load summary screen
             {
-                var result = C2TotalScoreService.GetTopSongs(songs);
+                var result = TotalScoreService.GetTopSongs(songs);
                 var count = songs.Count();
                 var topCount = result.TopSongCount;
                 var mmCount = songs.Count(s => s.IsMM);
                 var tp100Count = songs.Count(s => s.TP == 100);
                 var mxmCount = songs.Count(s => s.IsMxm);
 
-                var rank = C2TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore);
+                var rank = TotalScoreService.Instance.GetRankFromTotalScore(result.TotalScore);
                 if (!result.IsUnranked)
                 {
                     RankColorToBrushConverter conv = new();
@@ -54,7 +54,7 @@ namespace C2SR.Views
             }
 
             // Load rank information
-            itemsControl.ItemsSource = C2TotalScoreService.Instance.GetAllRanks();
+            itemsControl.ItemsSource = TotalScoreService.Instance.GetAllRanks();
         }
 
         #region Event Handlers

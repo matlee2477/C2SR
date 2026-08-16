@@ -64,7 +64,7 @@
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Copy}" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C"/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_Paste}" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V"/>
                 <Separator/>
-                <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SetSelection}" Command="{Binding SetSelectionCommand}" InputGestureText="Ctrl+T"/>
+                <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SetSelection}" Command="{Binding SetSelectionCommand}" InputGestureText="F2"/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_DeleteSelection}" Command="{Binding DeleteSelectionCommand}" InputGestureText="Del"/>
                 <Separator/>
                 <MenuItem Header="{x:Static res:Strings.MainWindow_Menu_Edit_SelectAll}" Command="{Binding SelectAllCommand}" InputGestureText="Ctrl+A"/>

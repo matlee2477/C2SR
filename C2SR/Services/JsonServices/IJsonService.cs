@@ -1,8 +1,8 @@
 ﻿namespace C2SR.Services.JsonServices
 {
-    interface IJsonService
+    interface IJsonService<T>
     {
-        public string LoadJson(string fileName);
-        public void SaveJson(string fileName, string code);
+        public T Load(string fileName);
+        public void Save(string fileName, T records);
     }
 }

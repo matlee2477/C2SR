@@ -12,7 +12,7 @@ namespace C2SR.Converters
             decimal criterion = (decimal)values[0];
             string rankName = (string)values[1];
 
-            if (rankName == C2TotalScoreService.Instance.GetAllRanks().First().Name)
+            if (rankName == TotalScoreService.Instance.GetAllRanks().First().Name)
             {
                 return criterion.ToString("N3");
             }

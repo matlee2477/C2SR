@@ -17,12 +17,12 @@ namespace C2SR.Views
             DataContext = this;
             isFirstLanguageChange = false;
 
-            LanguageSetting = (int)C2SettingService.Instance.Language;
-            StartActionSetting = (int)C2SettingService.Instance.StartAction;
-            HighlightsOutlyingLevelConstants = C2SettingService.Instance.HighlightsOutlyingLevelConstants;
-            HighlightsBossSongs = C2SettingService.Instance.HighlightsBossSongs;
-            HighlightsTopSongs = C2SettingService.Instance.HighlightsTopSongs;
-            CascadesAchievements = C2SettingService.Instance.CascadesAchievements;
+            LanguageSetting = (int)SettingService.Instance.Language;
+            StartActionSetting = (int)SettingService.Instance.StartAction;
+            HighlightsOutlyingLevelConstants = SettingService.Instance.HighlightsOutlyingLevelConstants;
+            HighlightsBossSongs = SettingService.Instance.HighlightsBossSongs;
+            HighlightsTopSongs = SettingService.Instance.HighlightsTopSongs;
+            CascadesAchievements = SettingService.Instance.CascadesAchievements;
 
             isFirstLanguageChange = true;
         }

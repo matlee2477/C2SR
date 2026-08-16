@@ -26,14 +26,14 @@ namespace C2SR.Services.DialogServices
                 }
                 else
                 {
-                    output = null!;
+                    output = new();
                 }
 
                 return result;
             }
             catch
             {
-                output = null!;
+                output = new();
                 return null;
             }
         }
@@ -46,12 +46,12 @@ namespace C2SR.Services.DialogServices
 
     record SettingsDialogServiceOutput : IDialogServiceOutput
     {
-        public required C2Language Language { get; init; }
-        public required C2StartAction StartAction { get; init; }
-        public required bool HighlightsOutlyingLevelConstants { get; init; }
-        public required bool HighlightsBossSongs { get; init; }
-        public required bool HighlightsTopSongs { get; init; }
-        public required bool CascadesAchievements { get; init; }
+        public C2Language Language { get; init; }
+        public C2StartAction StartAction { get; init; }
+        public bool HighlightsOutlyingLevelConstants { get; init; }
+        public bool HighlightsBossSongs { get; init; }
+        public bool HighlightsTopSongs { get; init; }
+        public bool CascadesAchievements { get; init; }
     }
 
 }

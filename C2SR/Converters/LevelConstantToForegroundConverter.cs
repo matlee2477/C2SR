@@ -11,12 +11,12 @@ namespace C2SR.Converters
         {
             decimal level = (decimal)values[0];
             decimal levelConstant = (decimal)values[1];
-            if (C2SettingService.Instance.HighlightsBossSongs)
+            if (SettingService.Instance.HighlightsBossSongs)
             {
                 if (levelConstant >= BOSS_SONG_LEVEL_CONSTANT_THRESHOLD) return new SolidColorBrush(Colors.DarkViolet);
             }
 
-            if (C2SettingService.Instance.HighlightsOutlyingLevelConstants)
+            if (SettingService.Instance.HighlightsOutlyingLevelConstants)
             {
                 decimal diff = levelConstant - level;
                 return diff switch

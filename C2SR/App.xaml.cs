@@ -24,16 +24,16 @@ namespace C2SR
             try
             {
                 // Load settings
-                C2SettingService.Instance.Language = (C2Language)reg.GetSetting("Language", 0);
-                C2SettingService.Instance.StartAction = (C2StartAction)reg.GetSetting("StartAction", 1);
-                C2SettingService.Instance.LastFileName = reg.LastFileName;
-                C2SettingService.Instance.HighlightsOutlyingLevelConstants = reg.GetSetting("HighlightsOutlyingLevelConstants", true);
-                C2SettingService.Instance.HighlightsBossSongs = reg.GetSetting("HighlightsBossSongs", true);
-                C2SettingService.Instance.HighlightsTopSongs = reg.GetSetting("HighlightsTopSongs", true);
-                C2SettingService.Instance.CascadesAchievements = reg.GetSetting("CascadesAchievements", true);
+                SettingService.Instance.Language = (C2Language)reg.GetSetting("Language", 0);
+                SettingService.Instance.StartAction = (C2StartAction)reg.GetSetting("StartAction", 1);
+                SettingService.Instance.LastFileName = reg.LastFileName;
+                SettingService.Instance.HighlightsOutlyingLevelConstants = reg.GetSetting("HighlightsOutlyingLevelConstants", true);
+                SettingService.Instance.HighlightsBossSongs = reg.GetSetting("HighlightsBossSongs", true);
+                SettingService.Instance.HighlightsTopSongs = reg.GetSetting("HighlightsTopSongs", true);
+                SettingService.Instance.CascadesAchievements = reg.GetSetting("CascadesAchievements", true);
 
                 // Set language
-                string locale = C2SettingService.Instance.Language switch
+                string locale = SettingService.Instance.Language switch
                 {
                     C2Language.Korean => "ko-KR",
                     C2Language.Japanese => "ja-JP",
@@ -82,7 +82,7 @@ namespace C2SR
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show(ex.StackTrace, Strings.Title, MessageBoxButton.OK, MessageBoxImage.Error);
 #endif
                 MessageBox.Show(Strings.MessageBox_Error_Startup, Strings.Title, MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
@@ -121,8 +121,8 @@ namespace C2SR
             public const string FILE_DEFAULT_EXT = ".c2sr";
             public const int LEVEL_THRESHOLD = 14;
             public const int TOTAL_SCORE_SONG_COUNT = 30;
-            public const decimal SCORE_BONUS_MM = 0.5M;
-            public const decimal SCORE_BONUS_TP100 = 0.5M;
+            public const decimal SCORE_BONUS_MM = 0.2M;
+            public const decimal SCORE_BONUS_TP100 = 0.3M;
         }
     }
 }

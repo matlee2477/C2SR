@@ -13,9 +13,6 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Numerics;
-using System.Text.Json.Nodes;
-using System.Windows;
-using System.Windows.Media;
 using static C2SR.App.Constants;
 
 namespace C2SR.ViewModels
@@ -169,120 +166,57 @@ namespace C2SR.ViewModels
         public void Initialize(string fileName)
         {
             // If debug mode, create checksum; otherwise, verify checksum
-            {
-                ChecksumService checksumService = new();
-                checksumService.TargetFiles = [PATH_SONGS_JSON, PATH_RANKS_JSON, PATH_DROPDOWN_JSON];
+            ChecksumService checksumService = new();
+            checksumService.TargetFiles = [PATH_SONGS_JSON, PATH_RANKS_JSON, PATH_DROPDOWN_JSON];
 #if DEBUG
-                checksumService.CreateChecksum(PATH_CHECKSUM);
+            checksumService.CreateChecksum(PATH_CHECKSUM);
 #else
-                Exceptions.ChecksumMismatchException.ThrowIfChecksumMismatch(() => checksumService.VerifyChecksum(PATH_CHECKSUM));
+            Exceptions.ChecksumMismatchException.ThrowIfChecksumMismatch(() => checksumService.VerifyChecksum(PATH_CHECKSUM));
 #endif
-            }
 
             // Load song data
+            SongDataJsonService sjs = new();
+            sjs.LevelThreshold = LEVEL_THRESHOLD;
+            var songs = sjs.Load(PATH_SONGS_JSON);
+            foreach (var song in songs)
             {
-                JsonService jsonService = new();
-                string code = jsonService.LoadJson(PATH_SONGS_JSON);
-
-                JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                foreach (JsonNode node in arr.OfType<JsonNode>())
-                {
-                    if (node is not JsonObject obj) continue;
-
-                    BigInteger id = new(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
-                    string name = obj["name"]?.GetValue<string>() ?? string.Empty;
-                    string artist = obj["artist"]?.GetValue<string>() ?? string.Empty;
-                    decimal bpm = obj["BPM"]?.GetValue<decimal>() ?? 0;
-                    string versionString = obj["version"]?.GetValue<string>() ?? string.Empty;
-                    string chapter = obj["chapter"]?.GetValue<string>() ?? string.Empty;
-                    string chartType = obj["chart"]?.GetValue<string>() ?? string.Empty;
-                    decimal level = obj["level"]?.GetValue<decimal>() ?? 12;
-                    decimal levelConstant = obj["const"]?.GetValue<decimal>() ?? level;
-
-                    if (!C2SongVersion.TryParse(versionString, out C2SongVersion version))
-                    {
-                        version = C2SongVersion.Empty;
-                    }
-
-                    C2SongViewModel song = new(new(id, name, artist, bpm, version, chapter, chartType, level, levelConstant));
-                    song.MMChanging += C2SongViewModel_MMChanging;
-                    song.TPChanging += C2SongViewModel_TPChanging;
-                    song.MxmChanging += C2SongViewModel_MxmChanging;
-                    song.MMChanged += C2SongViewModel_MMChanged;
-                    song.TPChanged += C2SongViewModel_TPChanged;
-                    song.MxmChanged += C2SongViewModel_MxmChanged;
-
-                    if (song.Level >= LEVEL_THRESHOLD) songs.Add(song);
-                }
-
-                FilteredSongs = songs;
+                song.MMChanging += C2SongViewModel_MMChanging;
+                song.MMChanged += C2SongViewModel_MMChanged;
+                song.TPChanging += C2SongViewModel_TPChanging;
+                song.TPChanged += C2SongViewModel_TPChanged;
+                song.MxmChanging += C2SongViewModel_MxmChanging;
+                song.MxmChanged += C2SongViewModel_MxmChanged;
+                this.songs.Add(song);
             }
 
+            FilteredSongs = this.songs;
+
             // Load total score rank criteria
+            RankDataJsonService rjs = new();
+            rjs.Songs = this.songs;
+            rjs.TotalScoreSongCount = TOTAL_SCORE_SONG_COUNT;
+            var ranks = rjs.Load(PATH_RANKS_JSON);
+            foreach (var rank in ranks)
             {
-                JsonService jsonService = new();
-                string code = jsonService.LoadJson(PATH_RANKS_JSON);
-
-                JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                foreach (JsonNode node in arr.OfType<JsonNode>())
-                {
-                    if (node is not JsonObject obj) continue;
-
-                    if (obj.ContainsKey("top"))
-                    {
-                        // Top criterion
-                        string name = obj["top"]!.GetValue<string>();
-                        byte r = obj["r"]?.GetValue<byte>() ?? 0;
-                        byte g = obj["g"]?.GetValue<byte>() ?? 0;
-                        byte b = obj["b"]?.GetValue<byte>() ?? 0;
-                        Color color = new() { A = 255, R = r, G = g, B = b };
-
-                        // Calculate top score
-                        var topSongs = Songs.OrderByDescending(s => s.LevelConstant).Take(TOTAL_SCORE_SONG_COUNT);
-                        var topSongsWithTP100 = topSongs.Select(s =>
-                        {
-                            C2SongViewModel newSong = new(new(s.ID, s.Name, s.Artist, s.Bpm, s.Version, s.Chapter, s.ChartType, s.Level, s.LevelConstant));
-                            newSong.IsMM = true;
-                            newSong.TP = 100;
-                            return newSong;
-                        });
-                        var result = C2TotalScoreService.GetTopSongs(topSongsWithTP100);
-
-                        C2TotalScoreService.Instance.AddRank(name, result.TotalScore, color);
-                    }
-                    else
-                    {
-                        // Normal criterion
-                        string name = obj[$"{Thread.CurrentThread.CurrentUICulture.Name}"]?.GetValue<string>() ?? string.Empty;
-                        decimal score = obj["score"]?.GetValue<decimal>() ?? 100;
-                        byte r = obj["r"]?.GetValue<byte>() ?? 0;
-                        byte g = obj["g"]?.GetValue<byte>() ?? 0;
-                        byte b = obj["b"]?.GetValue<byte>() ?? 0;
-                        Color color = Color.FromRgb(r, g, b);
-
-                        C2TotalScoreService.Instance.AddRank(name, score, color);
-                    }
-                }
+                TotalScoreService.Instance.AddRank(rank);
             }
 
             // Load document if necessary
+            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
             {
-                if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+                Load(fileName);
+            }
+            else if (SettingService.Instance.StartAction == C2StartAction.OpenLastDocument)
+            {
+                string lastFileName = SettingService.Instance.LastFileName;
+                if (!string.IsNullOrEmpty(lastFileName) && File.Exists(lastFileName))
                 {
-                    Load(fileName);
+                    Load(lastFileName);
                 }
-                else if (C2SettingService.Instance.StartAction == C2StartAction.OpenLastDocument)
-                {
-                    string lastFileName = C2SettingService.Instance.LastFileName;
-                    if (!string.IsNullOrEmpty(lastFileName) && File.Exists(lastFileName))
-                    {
-                        Load(lastFileName);
-                    }
-                }
-                else
-                {
-                    NewDocument();
-                }
+            }
+            else
+            {
+                NewDocument();
             }
 
             // Load registry
@@ -312,19 +246,18 @@ namespace C2SR.ViewModels
         {
             try
             {
-                JsonService jsonService = new();
-                string code = jsonService.LoadJson(fileName);
+                SongRecordJsonService js = new();
+                var records = js.Load(fileName);
 
-                JsonArray arr = JsonNode.Parse(code)!.AsArray();
-                foreach (JsonObject obj in arr.OfType<JsonObject>())
+                foreach (var record in records)
                 {
-                    BigInteger id = new(Convert.FromHexString(obj["ID"]!.GetValue<string>()));
+                    BigInteger id = new(Convert.FromHexString(record.ID));
                     C2SongViewModel? song = songs.FirstOrDefault(s => s.ID == id);
                     if (song != null)
                     {
-                        bool isMM = obj["MM"]?.GetValue<bool>() ?? false;
-                        decimal tp = obj["TP"]?.GetValue<decimal>() ?? 0;
-                        bool isMxm = obj["MxM"]?.GetValue<bool>() ?? false;
+                        bool isMM = record.IsMM;
+                        decimal tp = record.TP;
+                        bool isMxm = record.IsMxm;
                         song.SetMM(isMM, SetPropertyOption.Silent);
                         song.SetTP(tp, SetPropertyOption.Silent);
                         song.SetMxm(isMxm, SetPropertyOption.Silent);
@@ -350,21 +283,14 @@ namespace C2SR.ViewModels
         {
             try
             {
-                JsonArray arr = [];
-                foreach (var song in songs)
+                SongRecordJsonService js = new();
+                js.Save(fileName, Songs.Select(s => new C2SongRecord()
                 {
-                    JsonObject obj = new()
-                    {
-                        ["ID"] = Convert.ToHexString(song.ID.ToByteArray()),
-                        ["MM"] = song.IsMM,
-                        ["TP"] = song.TP,
-                        ["MxM"] = song.IsMxm
-                    };
-                    arr.Add(obj);
-                }
-
-                JsonService jsonService = new();
-                jsonService.SaveJson(fileName, arr.ToJsonString());
+                    ID = Convert.ToHexString(s.ID.ToByteArray()),
+                    IsMM = s.IsMM,
+                    TP = s.TP,
+                    IsMxm = s.IsMxm
+                }));
 
                 FileName = fileName;
                 IsSaved = true;
@@ -386,11 +312,11 @@ namespace C2SR.ViewModels
                 ds.ShowDialog(null!, out var output);
                 switch (output.DialogResult)
                 {
-                    case MessageBoxResult.Yes:
+                    case System.Windows.MessageBoxResult.Yes:
                         ExecuteSave();
                         cancel = !IsSaved;
                         break;
-                    case MessageBoxResult.No:
+                    case System.Windows.MessageBoxResult.No:
                         cancel = false;
                         break;
                     default:
@@ -457,7 +383,7 @@ namespace C2SR.ViewModels
 
         public void UpdateTotalScore()
         {
-            var result = C2TotalScoreService.GetTopSongs(Songs);
+            var result = TotalScoreService.GetTopSongs(Songs);
             TopSongResult = result;
 
             foreach (var song in Songs)
@@ -657,12 +583,12 @@ namespace C2SR.ViewModels
             SettingsDialogService ds = new();
             if (ds.ShowDialog(null!, out var output) == true)
             {
-                C2SettingService.Instance.Language = output.Language;
-                C2SettingService.Instance.StartAction = output.StartAction;
-                C2SettingService.Instance.HighlightsOutlyingLevelConstants = output.HighlightsOutlyingLevelConstants;
-                C2SettingService.Instance.HighlightsBossSongs = output.HighlightsBossSongs;
-                C2SettingService.Instance.HighlightsTopSongs = output.HighlightsTopSongs;
-                C2SettingService.Instance.CascadesAchievements = output.CascadesAchievements;
+                SettingService.Instance.Language = output.Language;
+                SettingService.Instance.StartAction = output.StartAction;
+                SettingService.Instance.HighlightsOutlyingLevelConstants = output.HighlightsOutlyingLevelConstants;
+                SettingService.Instance.HighlightsBossSongs = output.HighlightsBossSongs;
+                SettingService.Instance.HighlightsTopSongs = output.HighlightsTopSongs;
+                SettingService.Instance.CascadesAchievements = output.CascadesAchievements;
 
                 // Save settings
                 using RegistryService reg = new();
@@ -682,6 +608,7 @@ namespace C2SR.ViewModels
             undoStack.Undo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
+            IsSaved = false;
             UpdateTotalScore();
         }
 
@@ -690,6 +617,7 @@ namespace C2SR.ViewModels
             undoStack.Redo();
             UndoCommand.NotifyCanExecuteChanged();
             RedoCommand.NotifyCanExecuteChanged();
+            IsSaved = false;
             UpdateTotalScore();
         }
 

@@ -1,8 +1,8 @@
 ﻿namespace C2SR.Services
 {
-    class C2SettingService
+    class SettingService
     {
-        public C2SettingService()
+        public SettingService()
         {
             Language = C2Language.English;
             StartAction = C2StartAction.NewDocument;
@@ -23,8 +23,8 @@
         public bool CascadesAchievements { get; set; }
 
         // Singleton
-        static readonly Lazy<C2SettingService> lazy = new(() => new C2SettingService());
-        public static C2SettingService Instance => lazy.Value;
+        static readonly Lazy<SettingService> lazy = new(() => new SettingService());
+        public static SettingService Instance => lazy.Value;
     }
 
     enum C2Language
